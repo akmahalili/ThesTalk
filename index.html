@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6fc">
+  <meta name="description" content="ThesTalk — Just Talk. Build Your Thesis. Turn everyday ideas into a structured thesis writing workspace.">
+  <title>ThesTalk AI — Just Talk. Build Your Thesis.</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-row">
+        <div class="brand-logo"><span class="logo-quotes">“</span><span class="logo-spark">✦</span></div>
+        <div><div class="brand-name">ThesTalk<span class="brand-ai">AI</span></div><div class="brand-tag">Just Talk. Build Your Thesis.</div></div>
+      </div>
+      <button id="newProject" class="new-project btn-reset"><span class="plus">＋</span> New thesis project</button>
+      <div class="sidebar-label">MY WORKSPACE</div>
+      <button id="projectSummary" class="project-tile btn-reset" aria-label="Edit project information"><span class="project-tile-icon">▤</span><span class="project-tile-text"><strong id="sidebarProjectTitle">My First Thesis</strong><small id="sidebarProjectMeta">Thesis workspace</small></span><span class="chevron">›</span></button>
+      <div class="sidebar-label chapters-label"><span>THESIS CHAPTERS</span><button id="addChapter" class="icon-btn small" title="Add chapter" aria-label="Add chapter">＋</button></div>
+      <nav id="chaptersNav" class="chapters-nav" aria-label="Thesis chapters"></nav>
+      <div class="sidebar-bottom"><div class="security-info"><span class="dot-green"></span> <strong>Saved on this device</strong><p>Your content stays in this browser unless you export it. No cloud sync.</p></div><button id="settingsBtn" class="sidebar-settings btn-reset">⚙ &nbsp; Project settings</button></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button id="mobileMenu" class="icon-btn mobile-menu" aria-label="Open chapter navigation">☰</button>
+        <div class="topbar-heading"><div class="breadcrumb">WORKSPACE <span>/</span> <strong id="crumbChapter">Chapter 1</strong></div><h1 id="workspaceHeading">From thoughts to thesis.</h1></div>
+        <div class="top-actions"><span id="saveStatus" class="save-indicator">✓ Saved locally</span><button id="exportBtn" class="btn btn-primary top-export">↓ &nbsp; Export DOCX</button></div>
+      </header>
+
+      <div class="welcome-strip" id="welcomeStrip"><span class="welcome-icon">✦</span><div><strong>Your research journey starts with a conversation.</strong><span>Write naturally, convert your thoughts into a draft, and decide what belongs in your thesis.</span></div><button id="dismissWelcome" aria-label="Dismiss welcome information" class="btn-reset welcome-dismiss">×</button></div>
+
+      <div class="mobile-tabs" role="tablist" aria-label="Workspace view"><button id="tabChat" class="mobile-tab active" role="tab" aria-selected="true">◉ &nbsp; Talk & Draft</button><button id="tabThesis" class="mobile-tab" role="tab" aria-selected="false">▤ &nbsp; My Thesis</button></div>
+
+      <div class="work-area" id="workArea">
+        <section class="panel chat-panel" id="chatPanel" aria-labelledby="chatTitle">
+          <div class="panel-heading"><div><div class="eyebrow"><span class="eyebrow-dot"></span> YOUR THINKING SPACE</div><h2 id="chatTitle">Let's talk research <span class="emoji-wave">✳</span></h2><p>Don't worry about academic language. Just explain your ideas.</p></div><button id="clearChat" class="icon-btn" title="Clear conversation" aria-label="Clear conversation">↺</button></div>
+          <div id="messages" class="messages" aria-live="polite"></div>
+          <div class="chat-bottom"><div id="selectedIdea" class="idea-selection" hidden></div><form id="chatForm" class="chat-form"><label class="sr-only" for="chatInput">What is on your mind?</label><textarea id="chatInput" rows="2" placeholder="e.g. I think product images influence buyers because..." maxlength="6000"></textarea><div class="compose-actions"><div class="compose-left"><button id="voiceBtn" type="button" class="icon-btn voice-btn" title="Speak your idea" aria-label="Speak your idea">🎙</button><select id="voiceLang" class="language-select" aria-label="Speech language"><option value="ms-MY">BM</option><option value="en-US">EN</option></select><span class="compose-hint">Enter to send · Shift+Enter for new line</span></div><button type="submit" class="send-btn" id="sendBtn">Send <span>↗</span></button></div></form><div class="chat-disclaimer">✦ AI is a writing assistant, not a source of verified references.</div></div>
+        </section>
+
+        <section class="panel editor-panel" id="thesisPanel" aria-labelledby="thesisPanelTitle">
+          <div class="panel-heading editor-header"><div><div class="eyebrow">YOUR ACADEMIC WORKSPACE</div><h2 id="thesisPanelTitle">Thesis Builder <span class="builder-mark">✦</span></h2><p id="activeChapterSubtitle">Organize and refine your writing.</p></div><div class="header-tools"><button id="addSection" class="btn btn-outline">＋ Section</button><button id="saveSection" class="btn btn-soft">Save</button></div></div>
+          <div class="editor-body">
+            <div id="thesisOverview" class="thesis-overview"><div class="overview-top"><div><div class="eyebrow">YOUR DOCUMENT</div><h3 id="documentHeading">Chapter 1: Introduction</h3><div id="documentMeta" class="document-meta">Choose a section to start writing.</div></div><span class="draft-pill">DRAFT</span></div><div id="sectionsTabs" class="sections-tabs"></div></div>
+            <div class="draft-area" id="draftArea">
+              <div class="draft-top"><label for="sectionEditor" id="sectionTitleLabel">Selected section</label><span id="wordCount">0 words</span></div>
+              <textarea id="sectionEditor" class="section-editor" placeholder="Your thesis section begins here. You can type directly or insert an academic draft from your conversation..."></textarea>
+              <div class="editor-footer"><div class="editor-help">Changes are saved automatically in this browser.</div><button class="btn btn-outline btn-mini" id="historyBtn">↶ History</button></div>
+            </div>
+            <div class="conversion-panel" id="conversionPanel"><div class="conversion-head"><div><div class="eyebrow">ACADEMIC WRITING ASSISTANT</div><h3>Turn your thoughts into research writing</h3></div><span id="aiMode" class="status-chip">Checking AI…</span></div><p class="conversion-helper">Choose a message in the chat and press Convert. Your academic draft appears here for your review—nothing is inserted automatically.</p><div id="conversionEmpty" class="conversion-empty"><div class="conversion-graphic">❝ <span>✦</span></div><strong>Your next idea starts here</strong><span>Pick a message from your conversation to create a draft.</span></div><div id="conversionResult" class="conversion-result" hidden><div class="draft-result-heading"><span id="draftModeBadge" class="status-chip">DRAFT</span><button id="copyDraft" class="btn-reset text-action">⧉ Copy</button></div><textarea id="academicOutput" aria-label="Academic draft (editable)" rows="8"></textarea><div class="result-notes" id="draftNotes"></div><div class="conversion-buttons"><button id="insertDraft" class="btn btn-primary">Insert into selected section ↗</button><button id="regenerateDraft" class="btn btn-outline">Regenerate</button></div></div></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="modalBackdrop" class="modal-backdrop" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-top"><div><div class="eyebrow">THESIS PROFILE</div><h2 id="modalTitle">Project settings</h2></div><button class="icon-btn" id="closeModal" aria-label="Close dialog">×</button></div><form id="projectForm"><div class="form-grid"><label class="form-field span2">Thesis title<input id="projectTitle" required maxlength="250" placeholder="Enter your research title"></label><label class="form-field">University / institution<input id="projectUniversity" maxlength="120" placeholder="e.g. Universiti Teknologi MARA"></label><label class="form-field">Degree<select id="projectDegree"><option>PhD</option><option>Master's</option><option>Bachelor's</option><option>Other</option></select></label><label class="form-field span2">Research objectives (one per line)<textarea id="projectObjectives" rows="3" placeholder="RO1 ...&#10;RO2 ..."></textarea></label><label class="form-field span2">Research questions (one per line)<textarea id="projectQuestions" rows="3" placeholder="RQ1 ...&#10;RQ2 ..."></textarea></label><label class="form-field span2">Theories / methodology / important context<textarea id="projectContext" rows="3" placeholder="Communication theory, quantitative survey..."></textarea></label><label class="form-field">Draft language<select id="projectLanguage"><option value="English">English</option><option value="Bahasa Melayu">Bahasa Melayu</option></select></label><label class="form-field">Citation style<select id="projectCitation"><option value="APA 7">APA 7</option><option value="Harvard">Harvard</option><option value="IEEE">IEEE</option></select></label></div><div class="modal-actions"><button id="cancelSettings" type="button" class="btn btn-outline">Cancel</button><button type="submit" class="btn btn-primary">Save project</button></div></form></div></div>
+  <div id="historyBackdrop" class="modal-backdrop" hidden><div class="modal small-modal" role="dialog" aria-modal="true" aria-labelledby="historyTitle"><div class="modal-top"><div><div class="eyebrow">VERSION HISTORY</div><h2 id="historyTitle">Restore a draft</h2></div><button class="icon-btn" id="closeHistory" aria-label="Close history">×</button></div><div id="historyItems" class="history-items"></div><div class="modal-actions"><button id="closeHistoryBottom" class="btn btn-outline">Close</button></div></div></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="./docx.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
