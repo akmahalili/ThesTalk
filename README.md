@@ -1,84 +1,35 @@
-# ThesTalk AI
+# ThesTalk AI — Installable PWA
 
-> **Just Talk. Build Your Thesis.**
+**Just Talk. Build Your Thesis.**
 
-**Working MVP (November 2026)** — a browser-based thesis-writing workspace where casual Malay/English conversations can be used as source ideas for academic drafts. The app has a polished responsive interface, editable chapter structure, local persistence, browser-based voice input where supported, and a **real DOCX export**.
+A responsive, installable web application for voice/text brainstorming, thesis chapter management, academic conversion, version history and real editable DOCX export. Browser storage is **local-only**: it does not synchronize between devices.
 
-## ⚡ Try it immediately (no installation)
+## Deploy to Vercel (from GitHub)
 
-Open **`ThesTalk_Prototype.html`** (included in this ZIP and also available separately) in Chrome, Edge, or another modern browser. You can chat, manage the thesis, create structured *local preview notes*, and export DOCX **without an API key**. The local preview is **not AI-generated prose**, and this is clearly labeled in the interface.
+1. Push **these folder contents** into the repository root at https://github.com/akmahalili/ThesTalk (keep `.env` out of Git).
+2. In Vercel, **Add New → Project → Import Git Repository → `akmahalili/ThesTalk` → Deploy**. Choose framework **Other** if prompted. The app has root-level static assets and API serverless functions.
+3. It will have an HTTPS `*.vercel.app` link. On Android Chrome, use **⋮ → Add to Home screen / Install app** for an app icon and standalone experience.
+4. For **actual AI**, go to Vercel → Project → Settings → Environment Variables and configure the following **directly in Vercel**, not in source code:
+   - `OPENAI_API_KEY` — paid API account key; keep private.
+   - `THESTALK_AI_ACCESS_CODE` — a **unique randomly generated code of at least 12 characters**. **Do not use your API key** as the access code. Share only with trusted users.
+   - `OPENAI_MODEL` — optionally set a model you have permission to use; default `gpt-4.1-mini`.
+   - `OPENAI_TRANSCRIPTION_MODEL` — optionally set a supported transcription model; default `gpt-4o-mini-transcribe`.
+5. Redeploy after adding environment variables. In the app, press **Connect AI**, enter the access code and verify the badge changes to **AI connected**.
 
-## Full AI conversion with your own API key
+Until both secrets are configured, the app runs in transparent **AI not enabled** mode. Conversation, notes, thesis editor and DOCX export still function locally. The code is **not** a hosted SaaS multi-user account system. All users share an access code for AI; change it whenever access should be revoked. A robust public multi-user product will need actual authentication, durable database, budget/quotas, secure storage, audit logs and rate limiting beyond a single serverless instance.
 
-1. Install **Node.js 20 or newer**.
-2. Unzip this project and open a terminal inside `ThesTalk_App`.
-3. Configure `OPENAI_API_KEY` as a **server environment variable** (never paste it into frontend source code or GitHub).
-4. Run `npm start` (no `npm install` needed; the server uses built-in Node modules only).
-5. Open <http://127.0.0.1:3000>.
-6. The academic conversion badge changes to **AI connected** if a key is configured.
+**Important:** Do not put confidential thesis contents into an unlocked public shared device. Research material remains in that device's localStorage. The service worker caches only static app assets, not messages or AI API responses. Back up thesis contents by exporting DOCX.
 
-**macOS / Linux:**
+## Local tests
+
 ```bash
-OPENAI_API_KEY='YOUR_KEY_HERE' npm start
-```
-
-**Windows PowerShell:**
-```powershell
-$env:OPENAI_API_KEY='YOUR_KEY_HERE'
+npm run check
+npm test
 npm start
 ```
 
-You can choose an API-enabled model using `OPENAI_MODEL`. It defaults to `gpt-6-luna`, but your account must have access. API usage may incur charges.
+Visit http://127.0.0.1:3000. Requires Node.js 20+. The PWA installation experience needs an HTTPS deployment.
 
-## What currently works
+### Status
 
-- Create/reset a thesis workspace and configure project title, degree, university, ROs, RQs, methodology/theory context, drafting language, and citation style.
-- Type and save chat messages, select any message to convert to a new academic draft.
-- Optional real AI rewriting using the server-side OpenAI Responses API.
-- Offline/local fallback prepares a **clearly labeled preliminary research note**, never misrepresents it as AI writing.
-- Add chapters and sections, switch between sections, edit, save, and restore recent versions.
-- Save local state automatically in the same browser (localStorage).
-- Use speech-to-text in browsers that support SpeechRecognition, including BM/EN toggle; review transcription before sending.
-- Export an editable `.docx` (ZIP/OpenXML) with thesis title, chapter headings, section headings, and body text.
-- Responsive two-panel desktop UI and mobile tabs.
-
-## Not implemented yet
-
-There is **no account/login**, cloud sync, document upload, verified literature search, bibliographic manager, cross-device backup, institution-specific formatting, plagiarism detection, or production-ready collaboration. Citation style is profile metadata only. Word styling currently uses Times New Roman 12pt, 1.5 line spacing and 1-inch margins; these are NOT a verified UiTM or other university thesis template.
-
-## Academic integrity and privacy
-
-AI writing requires a human review. It does not invent scholarly citations or findings by design, but its outputs still need verification. If a claim needs evidence, mark it `[SOURCE NEEDED]` rather than fabricating an author/year citation. Uploaded studies and verified references are a future feature.
-
-Content is stored in **localStorage** on the current device; private/incognito browsing, cleaning browser storage, and switching devices may delete or hide it. Export regularly. When using real AI, the selected idea, project metadata, and recent conversation snippets are sent to the configured external AI provider; avoid entering confidential data without approval.
-
-The included local server is built for **single-user local development only**. Do not expose it publicly as-is: add authentication, rate-limits tied to authenticated users, CSRF protection, encryption, security monitoring, and appropriate data policy before production deployment. Keep `.env` and API keys out of your public GitHub repository.
-
-## Project structure
-
-```
-ThesTalk_App/
-├── README.md
-├── .gitignore
-├── .env.example
-├── package.json
-├── server.js                 # Optional OpenAI proxy + static server
-├── public/
-│   ├── index.html           # App UI
-│   ├── styles.css           # Responsive styling
-│   ├── app.js               # Workspace logic / local persistence
-│   └── docx.js              # Dependency-free DOCX writer
-└── docs/
-    ├── PRODUCT_REQUIREMENTS.md
-    └── BUILD_PROMPT.md
-```
-
-## Next phase
-
-Add auth + private database, upload/reference library, verified citations, more advanced editor, automatic thesis template formatting, and proper model cost controls and deployment.
-
-## GitHub
-
-Existing repository: <https://github.com/akmahalili/ThesTalk>
-
-**Important:** These local project files are not yet pushed to GitHub. The GitHub integration returned a 403 error for writes. Upload the unzipped folder's contents to your repository, or push from your own local Git client.
+This source is ready for deployment but does **not** itself prove a Vercel deployment is live. The authorized tool calls to create a Vercel project and deployment currently returned **403 forbidden**. GitHub write access also returned **403**. The connected account owner must fix write/deployment permissions or manually import the repository.

@@ -1,0 +1,24 @@
+{
+  "name": "ThesTalk AI — Just Talk. Build Your Thesis.",
+  "short_name": "ThesTalk AI",
+  "description": "Talk naturally, build editable thesis chapters and export DOCX.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "lang": "en",
+  "background_color": "#f7f6fc",
+  "theme_color": "#7556e8",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
