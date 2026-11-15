@@ -1,4 +1,4 @@
-'use strict';const http=require('node:http'),fs=require('node:fs'),path=require('node:path');const root=__dirname;
+'use strict';const http=require('node:http'),fs=require('node:fs'),path=require('node:path');const root=path.join(__dirname,'public');
 for(const line of fs.existsSync('.env')?fs.readFileSync('.env','utf8').split(/\r?\n/):[]){const match=line.match(/^([A-Z][A-Z0-9_]*)=(.*)$/);if(match&&!process.env[match[1]])process.env[match[1]]=match[2];}
 const routes={'/api/status':'./api/status','/api/chat':'./api/chat','/api/convert':'./api/convert','/api/transcribe':'./api/transcribe'};
 const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};

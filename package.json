@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dev-server.js",
     "test": "node --test tests/*.test.js",
-    "check": "node --check app.js && node --check docx.js && node --check lib/common.js && node --check api/chat.js && node --check api/convert.js && node --check api/transcribe.js"
+    "check": "node --check public/app.js && node --check public/docx.js && node --check lib/common.js && node --check api/chat.js && node --check api/convert.js && node --check api/transcribe.js"
   },
   "engines": {
     "node": ">=20"
