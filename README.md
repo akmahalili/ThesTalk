@@ -14,7 +14,21 @@ A responsive, installable web application for voice/text brainstorming, thesis c
    - `THESTALK_AI_ACCESS_CODE` — a **unique randomly generated code of at least 12 characters**. **Do not use your API key** as the access code. Share only with trusted users.
    - `OPENAI_MODEL` — optionally set a model you have permission to use; default `gpt-4.1-mini`.
    - `OPENAI_TRANSCRIPTION_MODEL` — optionally set a supported transcription model; default `gpt-4o-mini-transcribe`.
+   - `OPENALEX_API_KEY` — free key from https://openalex.org/settings/api, needed for **Find real references** (see below).
 5. Redeploy after adding environment variables. In the app, press **Connect AI**, enter the access code and verify the badge changes to **AI connected**.
+
+## Real references (v0.4)
+
+Tick **📚 Find real references** in the Academic Writing Assistant before converting an idea. ThesTalk then:
+
+1. turns the casual idea (BM, English or mixed) into three keyword searches;
+2. searches [OpenAlex](https://openalex.org) for real papers that have abstracts (optionally 2015 onwards only);
+3. asks the AI to write one paragraph that may cite those papers **only by number**;
+4. converts the numbers into APA 7 citations on the server, removes any number that does not match a retrieved paper, and lists only the papers actually cited (with DOI links).
+
+Claims that no retrieved paper supports stay marked `[SOURCE NEEDED]`. Inserting the draft adds its cited papers to **📚 References** in the sidebar, and **Export DOCX** appends them as a References (or Rujukan) list with hanging indents. The AI reads abstracts only, so users must still check each paper.
+
+Setup: create a free OpenAlex account, copy your key from https://openalex.org/settings/api and add `OPENALEX_API_KEY` in Vercel → Settings → Environment Variables, then redeploy. A free key gives about $1 of OpenAlex usage per day (around 300 conversions with references, since each one runs three searches). Without a key, searches share a tiny allowance with everyone on the same server address and will usually fail. The endpoint is `POST /api/cite` (protected by the same access code as the other AI endpoints).
 
 Until both secrets are configured, the app runs in transparent **AI not enabled** mode. Conversation, notes, thesis editor and DOCX export still function locally. The code is **not** a hosted SaaS multi-user account system. All users share an access code for AI; change it whenever access should be revoked. A robust public multi-user product will need actual authentication, durable database, budget/quotas, secure storage, audit logs and rate limiting beyond a single serverless instance.
 
