@@ -1,14 +1,14 @@
 {
-  "name": "ThesTalk AI — Just Talk. Build Your Thesis.",
-  "short_name": "ThesTalk AI",
-  "description": "Talk naturally, build editable thesis chapters and export DOCX.",
+  "name": "ThesTalk — Sembang • Belajar • Menyelidik",
+  "short_name": "ThesTalk",
+  "description": "Sembang, belajar dan menyelidik: chat, academic writing with real references, thesis builder and DOCX export.",
   "id": "/",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "lang": "en",
-  "background_color": "#f7f6fc",
-  "theme_color": "#7556e8",
+  "lang": "ms",
+  "background_color": "#f6f4fc",
+  "theme_color": "#7a4ff0",
   "icons": [
     {
       "src": "/icon-192.png",

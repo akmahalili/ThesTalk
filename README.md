@@ -2,6 +2,8 @@
 
 **Just Talk. Build Your Thesis.**
 
+**v0.5 — Sembang • Belajar • Menyelidik.** New dashboard with Chat (casual) and Academic modes, a desktop sidebar and a mobile bottom bar, light and dark themes, a Bahasa Malaysia / English interface, first-run onboarding (language, name, mode), Casual Chat, Proofread & Style, a Projects page, a References library and local search across chats, thesis sections and references. Everything stays in the browser; there is no account system yet, so the design's sign-in screens and Data Analysis (SPSS) are not included (the SPSS tile is marked "Coming soon").
+
 A responsive, installable web application for voice/text brainstorming, thesis chapter management, academic conversion, version history and real editable DOCX export. Browser storage is **local-only**: it does not synchronize between devices.
 
 ## Deploy to Vercel (from GitHub)

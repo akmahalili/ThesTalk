@@ -1,74 +1,365 @@
 <!doctype html>
-<html lang="en">
+<html lang="ms">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7f6fc">
-  <meta name="description" content="ThesTalk — Just Talk. Build Your Thesis. Turn everyday ideas into a structured thesis writing workspace.">
-  <title>ThesTalk AI — Just Talk. Build Your Thesis.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f4fc" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f0b1e" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="ThesTalk — Sembang • Belajar • Menyelidik. Aplikasi pintar untuk kehidupan harian dan akademik.">
+  <title>ThesTalk — Sembang • Belajar • Menyelidik</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="./styles.css">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="apple-touch-icon" href="./icon-192.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <script>
+    /* Apply the saved theme and language before first paint. */
+    try { var ui = JSON.parse(localStorage.getItem('thestalk_ui_v1') || '{}'); if (ui.theme === 'dark' || ui.theme === 'light') document.documentElement.setAttribute('data-theme', ui.theme); document.documentElement.lang = ui.lang === 'en' ? 'en' : 'ms'; } catch (e) {}
+  </script>
 </head>
 <body>
+  <!-- Icon sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b08cff"/><stop offset="1" stop-color="#6a3be4"/></linearGradient>
+    </defs>
+    <symbol id="logo" viewBox="0 0 64 64">
+      <path d="M10 27c0-6 5-11 11-11h22c6 0 11 5 11 11v10c0 6-5 11-11 11H28l-9 8v-8.3C14 47 10 42.5 10 37z" fill="url(#logoGrad)"/>
+      <path d="M21 31.5h22M21 38h14" stroke="#fff" stroke-width="3.2" stroke-linecap="round" opacity=".9"/>
+      <path d="M24 17.5v6.5c0 3 5.4 5.6 12 5.6s12-2.6 12-5.6v-6.5L36 23z" fill="#2c1670"/>
+      <path d="M15 14L36 5l21 9-21 9z" fill="#3b1d93" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M56 14v10" stroke="#3b1d93" stroke-width="2.2" stroke-linecap="round"/><circle cx="56" cy="25.5" r="2.4" fill="#3b1d93"/>
+    </symbol>
+    <symbol id="ic-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+    <symbol id="ic-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></symbol>
+    <symbol id="ic-cap" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5M22 9v6"/></symbol>
+    <symbol id="ic-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="ic-book" viewBox="0 0 24 24"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2 2 2 0 0 0 2 2h13"/><path d="M8 7h7"/></symbol>
+    <symbol id="ic-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M2.5 12h3M18.5 12h3M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></symbol>
+    <symbol id="ic-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></symbol>
+    <symbol id="ic-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></symbol>
+    <symbol id="ic-film" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/></symbol>
+    <symbol id="ic-pen" viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></symbol>
+    <symbol id="ic-star" viewBox="0 0 24 24"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z"/></symbol>
+    <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+    <symbol id="ic-chart" viewBox="0 0 24 24"><path d="M5 20V11M11 20V5M17 20v-7M3 20h18"/></symbol>
+    <symbol id="ic-check" viewBox="0 0 24 24"><path d="M4 7h10M4 12h7M4 17h5M13.5 16.5l2.5 2.5 5-6"/></symbol>
+    <symbol id="ic-refs" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 12h6M9 16h4"/></symbol>
+    <symbol id="ic-thesis" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></symbol>
+    <symbol id="ic-moon" viewBox="0 0 24 24"><path d="M20.5 14A8.5 8.5 0 1 1 10 3.5a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+    <symbol id="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="ic-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="ic-send" viewBox="0 0 24 24"><path d="M5 12h13M12 5l7 7-7 7"/></symbol>
+    <symbol id="ic-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="ic-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></symbol>
+  </svg>
+
   <div id="app" class="app-shell">
-    <aside class="sidebar" id="sidebar">
+    <!-- Desktop sidebar -->
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
       <div class="brand-row">
-        <div class="brand-logo"><span class="logo-quotes">“</span><span class="logo-spark">✦</span></div>
-        <div><div class="brand-name">ThesTalk<span class="brand-ai">AI</span></div><div class="brand-tag">Just Talk. Build Your Thesis.</div></div>
+        <svg class="brand-logo" aria-hidden="true"><use href="#logo"/></svg>
+        <div><div class="brand-name">ThesTalk</div><div class="brand-tag" data-i18n="brand.tag">Sembang • Belajar • Menyelidik</div></div>
       </div>
-      <button id="newProject" class="new-project btn-reset"><span class="plus">＋</span> New thesis project</button>
-      <div class="sidebar-label">MY WORKSPACE</div>
-      <button id="projectSummary" class="project-tile btn-reset" aria-label="Edit project information"><span class="project-tile-icon">▤</span><span class="project-tile-text"><strong id="sidebarProjectTitle">My First Thesis</strong><small id="sidebarProjectMeta">Thesis workspace</small></span><span class="chevron">›</span></button>
-      <div class="sidebar-label chapters-label"><span>THESIS CHAPTERS</span><button id="addChapter" class="icon-btn small" title="Add chapter" aria-label="Add chapter">＋</button></div>
-      <nav id="chaptersNav" class="chapters-nav" aria-label="Thesis chapters"></nav>
-      <div class="sidebar-bottom"><div class="security-info"><span class="dot-green"></span> <strong>Saved on this device</strong><p>Your content stays in this browser unless you export it. No cloud sync.</p></div><button id="refsBtn" class="sidebar-settings sidebar-refs btn-reset">📚 &nbsp; References (<span id="refsCount">0</span>)</button><button id="settingsBtn" class="sidebar-settings btn-reset">⚙ &nbsp; Project settings</button></div>
+      <nav class="side-nav" aria-label="Menu">
+        <button class="nav-item" type="button" data-go="home"><svg class="ic"><use href="#ic-home"/></svg><span class="dual"><span class="l1" data-k="nav.dashboard">Dashboard</span></span></button>
+        <button class="nav-item" type="button" data-go="casual"><svg class="ic"><use href="#ic-chat"/></svg><span class="dual"><span class="l1" data-k="nav.casual">Sembang</span><small class="l2" data-k2="nav.casual">Chat</small></span></button>
+        <button class="nav-item nav-group-toggle" type="button" id="academicToggle" aria-expanded="true" aria-controls="academicGroup"><svg class="ic"><use href="#ic-cap"/></svg><span class="dual"><span class="l1" data-k="nav.academic">Akademik</span><small class="l2" data-k2="nav.academic">Academic</small></span><svg class="ic chev"><use href="#ic-down"/></svg></button>
+        <div class="nav-group" id="academicGroup">
+          <button class="nav-sub" type="button" data-go="academic" data-focus="thesis" data-k="tile.thesis">Tesis</button>
+          <button class="nav-sub" type="button" data-go="academic" data-focus="research" data-k="tile.research">Penyelidikan</button>
+          <button class="nav-sub" type="button" data-go="academic" data-focus="writing" data-k="tile.writing">Penulisan</button>
+          <button class="nav-sub" type="button" data-go="proofread" data-k="tile.proof">Semak &amp; Gaya</button>
+        </div>
+        <button class="nav-item" type="button" data-go="projects"><svg class="ic"><use href="#ic-folder"/></svg><span class="dual"><span class="l1" data-k="nav.projects">Projek Saya</span><small class="l2" data-k2="nav.projects">My Projects</small></span></button>
+        <button class="nav-item" type="button" data-go="library"><svg class="ic"><use href="#ic-book"/></svg><span class="dual"><span class="l1" data-k="nav.library">Perpustakaan</span><small class="l2" data-k2="nav.library">Library</small></span><span class="nav-count" id="refsCount">0</span></button>
+        <button class="nav-item" type="button" data-go="settings"><svg class="ic"><use href="#ic-gear"/></svg><span class="dual"><span class="l1" data-k="nav.settings">Tetapan</span><small class="l2" data-k2="nav.settings">Settings</small></span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="lang-toggle" role="group" aria-label="Bahasa / Language"><button type="button" data-lang="ms">BM</button><button type="button" data-lang="en">EN</button></div>
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Tukar tema"><svg class="ic sun"><use href="#ic-sun"/></svg><svg class="ic moon"><use href="#ic-moon"/></svg><span data-i18n="theme.toggle">Tema</span></button>
+        <div class="security-info"><span class="dot-green"></span> <strong data-i18n="saved.title">Disimpan pada peranti ini</strong><p data-i18n="saved.body">Kandungan kekal dalam pelayar ini kecuali anda eksport. Tiada penyegerakan awan.</p></div>
+      </div>
     </aside>
 
-    <main class="main-content">
+    <main class="main-content" id="main">
       <header class="topbar">
-        <button id="mobileMenu" class="icon-btn mobile-menu" aria-label="Open chapter navigation">☰</button>
-        <div class="topbar-heading"><div class="breadcrumb">WORKSPACE <span>/</span> <strong id="crumbChapter">Chapter 1</strong></div><h1 id="workspaceHeading">From thoughts to thesis.</h1></div>
-        <div class="top-actions"><span id="saveStatus" class="save-indicator">✓ Saved locally</span><button id="exportBtn" class="btn btn-primary top-export">↓ &nbsp; Export DOCX</button></div>
+        <button id="mobileMenu" class="mobile-menu" type="button" tabindex="-1" aria-hidden="true" hidden></button>
+        <button type="button" class="mobile-brand" data-go="home" aria-label="ThesTalk"><svg class="brand-logo sm" aria-hidden="true"><use href="#logo"/></svg><span>ThesTalk</span></button>
+        <div class="search-wrap" role="search">
+          <svg class="ic"><use href="#ic-search"/></svg>
+          <label class="sr-only" for="globalSearch" data-i18n="search.label">Cari dalam ThesTalk</label>
+          <input id="globalSearch" type="search" autocomplete="off" data-i18n-ph="search.ph" placeholder="Cari dalam ThesTalk…" aria-controls="searchResults">
+          <div id="searchResults" class="search-results" hidden></div>
+        </div>
+        <div class="top-right">
+          <button type="button" class="icon-btn" data-theme-toggle aria-label="Tukar tema"><svg class="ic sun"><use href="#ic-sun"/></svg><svg class="ic moon"><use href="#ic-moon"/></svg></button>
+          <button type="button" class="avatar-chip" data-go="settings" aria-label="Profil"><span class="avatar-circle" id="avatarInitials">T</span><span class="avatar-name" id="avatarName">Penyelidik</span></button>
+        </div>
       </header>
 
-      <div class="welcome-strip" id="welcomeStrip"><span class="welcome-icon">✦</span><div><strong>Your research journey starts with a conversation.</strong><span>Write naturally, convert your thoughts into a draft, and decide what belongs in your thesis.</span></div><button id="dismissWelcome" aria-label="Dismiss welcome information" class="btn-reset welcome-dismiss">×</button></div>
-
-      <div class="mobile-tabs" role="tablist" aria-label="Workspace view"><button id="tabChat" class="mobile-tab active" role="tab" aria-selected="true">◉ &nbsp; Talk & Draft</button><button id="tabThesis" class="mobile-tab" role="tab" aria-selected="false">▤ &nbsp; My Thesis</button></div>
-
-      <div class="work-area" id="workArea">
-        <section class="panel chat-panel" id="chatPanel" aria-labelledby="chatTitle">
-          <div class="panel-heading"><div><div class="eyebrow"><span class="eyebrow-dot"></span> YOUR THINKING SPACE</div><h2 id="chatTitle">Let's talk research <span class="emoji-wave">✳</span></h2><p>Don't worry about academic language. Just explain your ideas.</p></div><button id="clearChat" class="icon-btn" title="Clear conversation" aria-label="Clear conversation">↺</button></div>
-          <div id="messages" class="messages" aria-live="polite"></div>
-          <div class="chat-bottom"><div id="selectedIdea" class="idea-selection" hidden></div><form id="chatForm" class="chat-form"><label class="sr-only" for="chatInput">What is on your mind?</label><textarea id="chatInput" rows="2" placeholder="e.g. I think product images influence buyers because..." maxlength="6000"></textarea><div class="compose-actions"><div class="compose-left"><button id="voiceBtn" type="button" class="icon-btn voice-btn" title="Speak your idea" aria-label="Speak your idea">🎙</button><select id="voiceLang" class="language-select" aria-label="Speech language"><option value="ms-MY">BM</option><option value="en-US">EN</option></select><select id="voiceMode" class="language-select" aria-label="Speech recognition type"><option value="ai">AI Voice</option><option value="browser">Browser</option></select><span class="compose-hint">Enter to send · Shift+Enter for new line</span></div><button type="submit" class="send-btn" id="sendBtn">Send <span>↗</span></button></div>
-          <div class="smart-options"><label><input type="checkbox" id="autoDraft" checked> Auto academic draft</label><label><input type="checkbox" id="autoSendVoice" checked> Auto send voice</label></div>
-          <div id="chatActivity" class="chat-activity" role="status" aria-live="polite"></div>
-          </form><div class="chat-disclaimer">✦ Your thesis is saved on this device only. AI needs the owner to configure a secure server API key and access code. Validate all AI-generated citations.</div></div>
-        </section>
-
-        <section class="panel editor-panel" id="thesisPanel" aria-labelledby="thesisPanelTitle">
-          <div class="panel-heading editor-header"><div><div class="eyebrow">YOUR ACADEMIC WORKSPACE</div><h2 id="thesisPanelTitle">Thesis Builder <span class="builder-mark">✦</span></h2><p id="activeChapterSubtitle">Organize and refine your writing.</p></div><div class="header-tools"><button id="addSection" class="btn btn-outline">＋ Section</button><button id="saveSection" class="btn btn-soft">Save</button></div></div>
-          <div class="editor-body">
-            <div id="thesisOverview" class="thesis-overview"><div class="overview-top"><div><div class="eyebrow">YOUR DOCUMENT</div><h3 id="documentHeading">Chapter 1: Introduction</h3><div id="documentMeta" class="document-meta">Choose a section to start writing.</div></div><span class="draft-pill">DRAFT</span></div><div id="sectionsTabs" class="sections-tabs"></div></div>
-            <div class="draft-area" id="draftArea">
-              <div class="draft-top"><label for="sectionEditor" id="sectionTitleLabel">Selected section</label><span id="wordCount">0 words</span></div>
-              <textarea id="sectionEditor" class="section-editor" placeholder="Your thesis section begins here. You can type directly or insert an academic draft from your conversation..."></textarea>
-              <div class="editor-footer"><div class="editor-help">Changes are saved automatically in this browser.</div><button class="btn btn-outline btn-mini" id="historyBtn">↶ History</button></div>
-            </div>
-            <div class="conversion-panel" id="conversionPanel"><div class="conversion-head"><div><div class="eyebrow">ACADEMIC WRITING ASSISTANT</div><h3>Turn your thoughts into research writing</h3></div><span id="aiMode" class="status-chip">Checking AI…</span><button id="unlockAI" class="btn btn-outline btn-mini" type="button">🔐 Connect AI</button></div><p class="conversion-helper">Choose a message in the chat and press Convert. Your academic draft appears here for your review—nothing is inserted automatically.</p><div class="ref-options" id="refOptions"><label><input type="checkbox" id="withRefs"> 📚 Find real references</label><label><input type="checkbox" id="recentRefs"> 2015 onwards only</label><span id="refsHint" class="ref-hint">Searches OpenAlex for real journal papers and cites them in APA. Needs AI connected.</span></div><div id="conversionEmpty" class="conversion-empty"><div class="conversion-graphic">❝ <span>✦</span></div><strong>Your next idea starts here</strong><span>Pick a message from your conversation to create a draft.</span></div><div id="conversionResult" class="conversion-result" hidden><div class="draft-result-heading"><span id="draftModeBadge" class="status-chip">DRAFT</span><button id="copyDraft" class="btn-reset text-action">⧉ Copy</button></div><textarea id="academicOutput" aria-label="Academic draft (editable)" rows="8"></textarea><div class="result-notes" id="draftNotes"></div><div id="draftRefs" class="draft-refs" hidden><div class="eyebrow">REFERENCES CITED · OPENALEX</div><ol id="draftRefList"></ol><details id="draftFound" class="draft-found"><summary>All papers found (<span id="draftFoundCount">0</span>)</summary><ul id="draftFoundList"></ul></details></div><div class="conversion-buttons"><button id="insertDraft" class="btn btn-primary">Insert into selected section ↗</button><button id="regenerateDraft" class="btn btn-outline">Regenerate</button></div></div></div>
+      <!-- ===== Dashboard ===== -->
+      <section class="view" id="view-home" aria-labelledby="heroTitle">
+        <div class="hero">
+          <div class="hero-text">
+            <h1 id="heroTitle">Selamat datang 👋</h1>
+            <p class="hero-alt" id="heroAlt">Welcome</p>
+            <p class="hero-sub" data-i18n="home.sub">Sahabat anda untuk sembang, belajar dan menyelidik.</p>
           </div>
-        </section>
-      </div>
+          <svg class="hero-art" viewBox="0 0 240 150" aria-hidden="true">
+            <ellipse cx="128" cy="138" rx="104" ry="9" class="art-shadow"/>
+            <rect x="160" y="96" width="62" height="12" rx="3" class="art-book1"/><rect x="164" y="84" width="54" height="12" rx="3" class="art-book2"/><rect x="158" y="72" width="60" height="12" rx="3" class="art-book3"/>
+            <path d="M206 72c-4-16 2-32 14-40-2 14-6 28-14 40z" class="art-leaf"/><path d="M200 72c-12-10-16-24-12-38 8 10 12 24 12 38z" class="art-leaf2"/><path d="M212 72c6-12 16-18 26-18-6 10-14 16-26 18z" class="art-leaf2"/>
+            <rect x="54" y="30" width="100" height="70" rx="7" class="art-laptop"/><rect x="61" y="37" width="86" height="56" rx="3" class="art-screen"/>
+            <path d="M74 52h40M74 62h58M74 72h30" class="art-lines"/><circle cx="132" cy="52" r="6" class="art-dot"/>
+            <path d="M40 100h128l-10 12H50z" class="art-base"/>
+            <path d="M30 24l5-12 5 12-12-5 12-5z" class="art-spark"/><path d="M170 20l3-7 3 7-7-3 7-3z" class="art-spark"/>
+          </svg>
+        </div>
+
+        <div class="mode-switch" role="tablist" aria-label="Mod">
+          <button type="button" role="tab" data-mode="casual" aria-selected="true"><span class="l1" data-k="mode.casual">Sembang</span><small class="l2" data-k2="mode.casual">Chat</small></button>
+          <button type="button" role="tab" data-mode="academic" aria-selected="false"><span class="l1" data-k="mode.academic">Akademik</span><small class="l2" data-k2="mode.academic">Academic</small></button>
+        </div>
+        <form id="askForm" class="ask-box">
+          <svg class="ic"><use href="#ic-search"/></svg>
+          <label class="sr-only" for="askInput" data-i18n="home.askLabel">Tanya apa sahaja</label>
+          <input id="askInput" maxlength="6000" autocomplete="off" data-i18n-ph="home.ask" placeholder="Tanya apa sahaja…">
+          <button type="submit" class="ask-send" data-i18n-aria="home.askSend" aria-label="Hantar"><svg class="ic"><use href="#ic-send"/></svg></button>
+        </form>
+
+        <div class="mode-cards">
+          <button type="button" class="mode-card" data-go="casual">
+            <span class="mc-icon"><svg class="ic"><use href="#ic-chat"/></svg></span>
+            <span class="mc-text"><strong><span data-k="card.casual">Sembang Santai</span> <small data-k2="card.casual">Casual Chat</small></strong><span data-i18n="card.casual.d">Tanya apa sahaja, kongsi idea, atau berbual santai.</span></span>
+            <svg class="ic mc-arrow"><use href="#ic-arrow"/></svg>
+          </button>
+          <button type="button" class="mode-card" data-go="academic" data-focus="research">
+            <span class="mc-icon"><svg class="ic"><use href="#ic-cap"/></svg></span>
+            <span class="mc-text"><strong><span data-k="card.academic">Pembantu Akademik</span> <small data-k2="card.academic">Academic Assistant</small></strong><span data-i18n="card.academic.d">Sokongan untuk penyelidikan, penulisan, tesis dan rujukan.</span></span>
+            <svg class="ic mc-arrow"><use href="#ic-arrow"/></svg>
+          </button>
+        </div>
+
+        <h2 class="section-title"><span data-k="home.quick">Akses Pantas</span> <small data-k2="home.quick">Quick Access</small></h2>
+        <div class="tiles" id="tilesCasual">
+          <button type="button" class="tile" data-prompt="idea"><svg class="ic"><use href="#ic-bulb"/></svg><span class="l1" data-k="tile.idea">Idea</span><small class="l2" data-k2="tile.idea">Ideas</small></button>
+          <button type="button" class="tile" data-prompt="fun"><svg class="ic"><use href="#ic-film"/></svg><span class="l1" data-k="tile.fun">Hiburan</span><small class="l2" data-k2="tile.fun">Entertainment</small></button>
+          <button type="button" class="tile" data-prompt="write"><svg class="ic"><use href="#ic-pen"/></svg><span class="l1" data-k="tile.writing">Penulisan</span><small class="l2" data-k2="tile.writing">Writing</small></button>
+          <button type="button" class="tile" data-prompt="suggest"><svg class="ic"><use href="#ic-star"/></svg><span class="l1" data-k="tile.suggest">Saranan</span><small class="l2" data-k2="tile.suggest">Suggestions</small></button>
+        </div>
+        <div class="tiles" id="tilesAcademic" hidden>
+          <button type="button" class="tile" data-go="academic" data-focus="thesis"><svg class="ic"><use href="#ic-thesis"/></svg><span class="l1" data-k="tile.thesis">Tesis</span><small class="l2" data-k2="tile.thesis">Thesis</small></button>
+          <button type="button" class="tile" data-go="academic" data-focus="research"><svg class="ic"><use href="#ic-search"/></svg><span class="l1" data-k="tile.research">Penyelidikan</span><small class="l2" data-k2="tile.research">Research</small></button>
+          <button type="button" class="tile" data-go="academic" data-focus="writing"><svg class="ic"><use href="#ic-pen"/></svg><span class="l1" data-k="tile.writing">Penulisan</span><small class="l2" data-k2="tile.writing">Writing</small></button>
+          <button type="button" class="tile soon" disabled aria-disabled="true"><svg class="ic"><use href="#ic-chart"/></svg><span class="l1" data-k="tile.data">Analisis Data</span><small class="l2" data-k2="tile.data">Data Analysis</small><em class="soon-badge" data-i18n="soon">Akan datang</em></button>
+          <button type="button" class="tile" data-go="proofread"><svg class="ic"><use href="#ic-check"/></svg><span class="l1" data-k="tile.proof">Semak &amp; Gaya</span><small class="l2" data-k2="tile.proof">Proofread</small></button>
+          <button type="button" class="tile" data-go="library"><svg class="ic"><use href="#ic-refs"/></svg><span class="l1" data-k="tile.refs">Rujukan</span><small class="l2" data-k2="tile.refs">References</small></button>
+        </div>
+
+        <div class="home-grid">
+          <div class="card project-card">
+            <div class="card-head"><h2><span data-k="home.project">Projek Semasa</span> <small data-k2="home.project">Current Project</small></h2></div>
+            <p class="pc-title" id="homeProjectTitle">My First Thesis</p>
+            <div class="stat-row">
+              <div class="stat"><strong id="homeWords">0</strong><span data-i18n="stat.words">perkataan</span></div>
+              <div class="stat"><strong id="homeChapters">5</strong><span data-i18n="stat.chapters">bab</span></div>
+              <div class="stat"><strong id="homeRefs">0</strong><span data-i18n="stat.refs">rujukan</span></div>
+            </div>
+            <button type="button" class="btn btn-primary" data-go="academic" data-focus="thesis"><span data-i18n="home.continue">Sambung menulis</span> <svg class="ic"><use href="#ic-arrow"/></svg></button>
+          </div>
+          <div class="card recent-card">
+            <div class="card-head"><h2><span data-k="home.recent">Aktiviti Terkini</span> <small data-k2="home.recent">Recent Activity</small></h2></div>
+            <ul id="recentList" class="recent-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Casual chat ===== -->
+      <section class="view" id="view-casual" hidden aria-labelledby="casualTitle">
+        <div class="view-head">
+          <div><div class="eyebrow"><span class="eyebrow-dot"></span> <span data-i18n="casual.eyebrow">MOD SEMBANG</span></div><h1 id="casualTitle"><span data-k="card.casual">Sembang Santai</span> <small data-k2="card.casual">Casual Chat</small></h1><p data-i18n="casual.sub">Tanya apa sahaja dalam BM atau English: idea, hiburan, penulisan atau saranan.</p></div>
+          <button id="clearCasual" class="icon-btn" type="button" data-i18n-aria="casual.clear" aria-label="Kosongkan sembang">↺</button>
+        </div>
+        <div class="panel chat-panel casual-panel">
+          <div id="casualMessages" class="messages" aria-live="polite"></div>
+          <div class="chat-bottom">
+            <div class="prompt-chips" aria-label="Cadangan">
+              <button type="button" class="chip" data-prompt="idea"><svg class="ic"><use href="#ic-bulb"/></svg><span data-k="tile.idea">Idea</span></button>
+              <button type="button" class="chip" data-prompt="fun"><svg class="ic"><use href="#ic-film"/></svg><span data-k="tile.fun">Hiburan</span></button>
+              <button type="button" class="chip" data-prompt="write"><svg class="ic"><use href="#ic-pen"/></svg><span data-k="tile.writing">Penulisan</span></button>
+              <button type="button" class="chip" data-prompt="suggest"><svg class="ic"><use href="#ic-star"/></svg><span data-k="tile.suggest">Saranan</span></button>
+            </div>
+            <form id="casualForm" class="chat-form">
+              <label class="sr-only" for="casualInput" data-i18n="home.askLabel">Tanya apa sahaja</label>
+              <textarea id="casualInput" rows="2" maxlength="6000" data-i18n-ph="home.ask" placeholder="Tanya apa sahaja…"></textarea>
+              <div class="compose-actions"><span id="casualActivity" class="chat-activity" role="status" aria-live="polite"></span><button type="submit" class="send-btn" id="casualSend"><span data-i18n="send">Hantar</span> <svg class="ic"><use href="#ic-send"/></svg></button></div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Academic workspace (existing thesis tools) ===== -->
+      <section class="view" id="view-academic" hidden aria-labelledby="workspaceHeading">
+        <div class="view-head workspace-head">
+          <div><div class="breadcrumb"><span data-i18n="ws.crumb">AKADEMIK</span> <span>/</span> <strong id="crumbChapter">Chapter 1</strong></div><h1 id="workspaceHeading" data-i18n="ws.heading">Dari idea ke tesis.</h1></div>
+          <div class="top-actions"><span id="saveStatus" class="save-indicator">✓ Saved locally</span><button id="exportBtn" class="btn btn-primary top-export" type="button">↓ <span data-i18n="export">Eksport DOCX</span></button></div>
+        </div>
+
+        <div class="welcome-strip" id="welcomeStrip"><span class="welcome-icon">✦</span><div><strong data-i18n="ws.welcomeT">Perjalanan penyelidikan anda bermula dengan perbualan.</strong><span data-i18n="ws.welcomeB">Tulis secara santai, tukar idea kepada draf, dan tentukan apa yang masuk ke dalam tesis.</span></div><button id="dismissWelcome" type="button" aria-label="Tutup" class="btn-reset welcome-dismiss">×</button></div>
+
+        <div class="chapter-strip">
+          <button id="projectSummary" type="button" class="project-tile btn-reset" aria-label="Edit project information"><span class="project-tile-icon"><svg class="ic"><use href="#ic-thesis"/></svg></span><span class="project-tile-text"><strong id="sidebarProjectTitle">My First Thesis</strong><small id="sidebarProjectMeta">Thesis workspace</small></span></button>
+          <nav id="chaptersNav" class="chapters-nav" aria-label="Thesis chapters"></nav>
+          <button id="addChapter" type="button" class="icon-btn small add-chapter" title="Add chapter" aria-label="Add chapter">＋</button>
+        </div>
+
+        <div class="mobile-tabs" role="tablist" aria-label="Workspace view"><button id="tabChat" type="button" class="mobile-tab active" role="tab" aria-selected="true">◉ &nbsp;<span data-i18n="ws.tabTalk">Sembang &amp; Draf</span></button><button id="tabThesis" type="button" class="mobile-tab" role="tab" aria-selected="false">▤ &nbsp;<span data-i18n="ws.tabThesis">Tesis Saya</span></button></div>
+
+        <div class="work-area" id="workArea">
+          <section class="panel chat-panel" id="chatPanel" aria-labelledby="chatTitle">
+            <div class="panel-heading"><div><div class="eyebrow"><span class="eyebrow-dot"></span> <span data-i18n="ws.thinking">RUANG BERFIKIR ANDA</span></div><h2 id="chatTitle" data-i18n="ws.chatTitle">Jom bincang penyelidikan</h2><p data-i18n="ws.chatSub">Jangan risau tentang bahasa akademik. Terangkan idea anda sahaja.</p></div><button id="clearChat" type="button" class="icon-btn" title="Clear conversation" aria-label="Clear conversation">↺</button></div>
+            <div id="messages" class="messages" aria-live="polite"></div>
+            <div class="chat-bottom"><div id="selectedIdea" class="idea-selection" hidden></div><form id="chatForm" class="chat-form"><label class="sr-only" for="chatInput">What is on your mind?</label><textarea id="chatInput" rows="2" maxlength="6000" data-i18n-ph="ws.chatPh" placeholder="cth. Saya rasa gambar produk mempengaruhi pembeli sebab..."></textarea><div class="compose-actions"><div class="compose-left"><button id="voiceBtn" type="button" class="icon-btn voice-btn" title="Speak your idea" aria-label="Speak your idea">🎙</button><select id="voiceLang" class="language-select" aria-label="Speech language"><option value="ms-MY">BM</option><option value="en-US">EN</option></select><select id="voiceMode" class="language-select" aria-label="Speech recognition type"><option value="ai">AI Voice</option><option value="browser">Browser</option></select><span class="compose-hint" data-i18n="ws.hint">Enter hantar · Shift+Enter baris baharu</span></div><button type="submit" class="send-btn" id="sendBtn"><span data-i18n="send">Hantar</span> <svg class="ic"><use href="#ic-send"/></svg></button></div>
+            <div class="smart-options"><label><input type="checkbox" id="autoDraft" checked> <span data-i18n="ws.autoDraft">Draf akademik automatik</span></label><label><input type="checkbox" id="autoSendVoice" checked> <span data-i18n="ws.autoVoice">Hantar suara automatik</span></label></div>
+            <div id="chatActivity" class="chat-activity" role="status" aria-live="polite"></div>
+            </form><div class="chat-disclaimer" data-i18n="ws.disclaimer">✦ Tesis anda disimpan pada peranti ini sahaja. Sahkan semua sitasi yang dijana AI.</div></div>
+          </section>
+
+          <section class="panel editor-panel" id="thesisPanel" aria-labelledby="thesisPanelTitle">
+            <div class="panel-heading editor-header"><div><div class="eyebrow" data-i18n="ws.academicSpace">RUANG AKADEMIK ANDA</div><h2 id="thesisPanelTitle"><span data-i18n="ws.builder">Pembina Tesis</span> <span class="builder-mark">✦</span></h2><p id="activeChapterSubtitle">Organize and refine your writing.</p></div><div class="header-tools"><button id="addSection" type="button" class="btn btn-outline">＋ <span data-i18n="ws.section">Seksyen</span></button><button id="saveSection" type="button" class="btn btn-soft" data-i18n="save">Simpan</button></div></div>
+            <div class="editor-body">
+              <div id="thesisOverview" class="thesis-overview"><div class="overview-top"><div><div class="eyebrow" data-i18n="ws.document">DOKUMEN ANDA</div><h3 id="documentHeading">Chapter 1: Introduction</h3><div id="documentMeta" class="document-meta">Choose a section to start writing.</div></div><span class="draft-pill" data-i18n="draft">DRAF</span></div><div id="sectionsTabs" class="sections-tabs"></div></div>
+              <div class="draft-area" id="draftArea">
+                <div class="draft-top"><label for="sectionEditor" id="sectionTitleLabel">Selected section</label><span id="wordCount">0 words</span></div>
+                <textarea id="sectionEditor" class="section-editor" data-i18n-ph="ws.editorPh" placeholder="Seksyen tesis anda bermula di sini..."></textarea>
+                <div class="editor-footer"><div class="editor-help" data-i18n="ws.autosave">Perubahan disimpan automatik dalam pelayar ini.</div><button class="btn btn-outline btn-mini" id="historyBtn" type="button">↶ <span data-i18n="ws.history">Sejarah</span></button></div>
+              </div>
+              <div class="conversion-panel" id="conversionPanel"><div class="conversion-head"><div><div class="eyebrow" data-i18n="ws.assistant">PEMBANTU PENULISAN AKADEMIK</div><h3 data-i18n="ws.convertTitle">Tukar idea anda kepada penulisan penyelidikan</h3></div><span id="aiMode" class="status-chip">Checking AI…</span><button id="unlockAI" class="btn btn-outline btn-mini" type="button">🔐 <span data-i18n="ai.connect">Sambung AI</span></button></div><p class="conversion-helper" data-i18n="ws.convertHelp">Pilih mesej dalam sembang dan tekan Convert. Draf akademik muncul di sini untuk semakan anda. Tiada apa dimasukkan secara automatik.</p><div class="ref-options" id="refOptions"><label><input type="checkbox" id="withRefs"> 📚 <span data-i18n="ws.withRefs">Cari rujukan jurnal sebenar</span></label><label><input type="checkbox" id="recentRefs"> <span data-i18n="ws.recentRefs">2015 ke atas sahaja</span></label><span id="refsHint" class="ref-hint">Searches OpenAlex for real journal papers and cites them in APA. Needs AI connected.</span></div><div id="conversionEmpty" class="conversion-empty"><div class="conversion-graphic">❝ <span>✦</span></div><strong data-i18n="ws.emptyT">Idea seterusnya bermula di sini</strong><span data-i18n="ws.emptyB">Pilih mesej daripada perbualan untuk menghasilkan draf.</span></div><div id="conversionResult" class="conversion-result" hidden><div class="draft-result-heading"><span id="draftModeBadge" class="status-chip">DRAFT</span><button id="copyDraft" type="button" class="btn-reset text-action">⧉ <span data-i18n="copy">Salin</span></button></div><textarea id="academicOutput" aria-label="Academic draft (editable)" rows="8"></textarea><div class="result-notes" id="draftNotes"></div><div id="draftRefs" class="draft-refs" hidden><div class="eyebrow" data-i18n="ws.refsCited">RUJUKAN DIPETIK · OPENALEX</div><ol id="draftRefList"></ol><details id="draftFound" class="draft-found"><summary><span data-i18n="ws.allFound">Semua kajian ditemui</span> (<span id="draftFoundCount">0</span>)</summary><ul id="draftFoundList"></ul></details></div><div class="conversion-buttons"><button id="insertDraft" type="button" class="btn btn-primary"><span data-i18n="ws.insert">Masukkan ke seksyen terpilih</span> ↗</button><button id="regenerateDraft" type="button" class="btn btn-outline" data-i18n="ws.regenerate">Jana semula</button></div></div></div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- ===== Proofread ===== -->
+      <section class="view" id="view-proofread" hidden aria-labelledby="proofTitle">
+        <div class="view-head"><div><div class="eyebrow"><span class="eyebrow-dot"></span> <span data-i18n="nav.academicUp">AKADEMIK</span></div><h1 id="proofTitle"><span data-k="proof.title">Semakan Tatabahasa &amp; Gaya</span> <small data-k2="proof.title">Proofread &amp; Style</small></h1><p data-i18n="proof.sub">Tampal teks anda. ThesTalk membetulkan tatabahasa, ejaan dan kejelasan tanpa mengubah maksud atau sitasi.</p></div></div>
+        <div class="panel tool-panel">
+          <label for="proofInput" class="field-label" data-i18n="proof.input">Teks anda</label>
+          <textarea id="proofInput" rows="8" maxlength="6000" data-i18n-ph="proof.ph" placeholder="Tampal perenggan anda di sini…"></textarea>
+          <div class="tool-row"><button id="proofBtn" type="button" class="btn btn-primary"><svg class="ic"><use href="#ic-check"/></svg> <span data-i18n="proof.btn">Semak teks</span></button><span id="proofStatus" class="chat-activity" role="status" aria-live="polite"></span></div>
+          <div id="proofResult" class="conversion-result" hidden>
+            <div class="draft-result-heading"><span class="status-chip" data-i18n="proof.result">TEKS DISEMAK</span><button id="proofCopy" type="button" class="btn-reset text-action">⧉ <span data-i18n="copy">Salin</span></button></div>
+            <textarea id="proofOutput" rows="8" aria-label="Teks disemak"></textarea>
+            <p class="result-notes" data-i18n="proof.note">Semak setiap perubahan sebelum guna. Fakta dan sitasi tidak disahkan oleh semakan ini.</p>
+            <div class="conversion-buttons"><button id="proofInsert" type="button" class="btn btn-outline" data-i18n="proof.insert">Masukkan ke seksyen tesis terpilih</button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Projects ===== -->
+      <section class="view" id="view-projects" hidden aria-labelledby="projectsTitle">
+        <div class="view-head"><div><h1 id="projectsTitle"><span data-k="nav.projects">Projek Saya</span> <small data-k2="nav.projects">My Projects</small></h1><p data-i18n="proj.sub">Satu projek tesis disimpan dalam pelayar ini. Eksport DOCX sebagai sandaran.</p></div></div>
+        <div class="card project-detail">
+          <div class="pd-top"><span class="pd-icon"><svg class="ic"><use href="#ic-thesis"/></svg></span><div><h2 id="pdTitle">My First Thesis</h2><p id="pdMeta" class="muted"></p></div></div>
+          <div class="stat-row">
+            <div class="stat"><strong id="pdWords">0</strong><span data-i18n="stat.words">perkataan</span></div>
+            <div class="stat"><strong id="pdChapters">0</strong><span data-i18n="stat.chapters">bab</span></div>
+            <div class="stat"><strong id="pdRefs">0</strong><span data-i18n="stat.refs">rujukan</span></div>
+          </div>
+          <ul id="pdChapterList" class="pd-chapters"></ul>
+          <div class="pd-actions">
+            <button id="pdOpen" type="button" class="btn btn-primary" data-go="academic" data-focus="thesis"><span data-i18n="proj.open">Buka ruang kerja tesis</span></button>
+            <button id="pdEdit" type="button" class="btn btn-outline" data-i18n="proj.edit">Edit profil tesis</button>
+            <button id="pdExport" type="button" class="btn btn-outline">↓ <span data-i18n="export">Eksport DOCX</span></button>
+            <button id="newProject" type="button" class="btn btn-outline btn-danger">＋ <span data-i18n="proj.new">Projek baharu</span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Library ===== -->
+      <section class="view" id="view-library" hidden aria-labelledby="libraryTitle">
+        <div class="view-head"><div><h1 id="libraryTitle"><span data-k="nav.library">Perpustakaan</span> <small data-k2="nav.library">Library</small></h1><p data-i18n="lib.sub">Rujukan daripada draf yang anda masukkan ke dalam tesis. Ia ditambah sebagai senarai Rujukan di hujung fail DOCX.</p></div><span class="count-pill" id="libCount">0</span></div>
+        <div class="card">
+          <div id="refsItems" class="history-items lib-items"></div>
+          <div class="modal-actions"><button id="copyRefs" class="btn btn-outline" type="button">⧉ <span data-i18n="lib.copyAll">Salin semua</span></button><button id="libFind" class="btn btn-primary" type="button" data-go="academic" data-focus="writing"><span data-i18n="lib.find">Cari rujukan untuk idea baharu</span></button></div>
+        </div>
+      </section>
+
+      <!-- ===== Settings / Profile ===== -->
+      <section class="view" id="view-settings" hidden aria-labelledby="settingsTitle">
+        <div class="view-head"><div><h1 id="settingsTitle"><span data-k="nav.settings">Tetapan</span> <small data-k2="nav.settings">Settings</small></h1></div></div>
+        <div class="settings-grid">
+          <form class="card setting" id="profileForm">
+            <h2 data-i18n="set.profile">Profil</h2>
+            <label class="form-field" for="profileName"><span data-i18n="set.name">Nama paparan</span><input id="profileName" maxlength="60" autocomplete="name" data-i18n-ph="set.namePh" placeholder="cth. Nur Akma"></label>
+            <button type="submit" class="btn btn-primary" data-i18n="save">Simpan</button>
+          </form>
+          <div class="card setting">
+            <h2 data-i18n="set.lang">Bahasa antara muka</h2>
+            <div class="seg-control lang-toggle" role="group" aria-label="Bahasa / Language"><button type="button" data-lang="ms">Bahasa Malaysia</button><button type="button" data-lang="en">English</button></div>
+            <h2 data-i18n="set.theme">Tema</h2>
+            <div class="seg-control" role="group" aria-label="Tema"><button type="button" data-theme-set="light"><svg class="ic"><use href="#ic-sun"/></svg> <span data-i18n="set.light">Cerah</span></button><button type="button" data-theme-set="dark"><svg class="ic"><use href="#ic-moon"/></svg> <span data-i18n="set.dark">Gelap</span></button><button type="button" data-theme-set="system" data-i18n="set.system">Ikut peranti</button></div>
+          </div>
+          <div class="card setting">
+            <h2 data-i18n="set.ai">Sambungan AI</h2>
+            <p class="muted" data-i18n="set.aiBody">AI memerlukan pemilik aplikasi menetapkan kunci API di pelayan dan anda memasukkan kod akses.</p>
+            <div class="tool-row"><span id="aiStatusMirror" class="status-chip local">…</span><button type="button" class="btn btn-outline" id="connectAI2">🔐 <span data-i18n="ai.connect">Sambung AI</span></button></div>
+          </div>
+          <div class="card setting">
+            <h2 data-i18n="set.thesis">Profil tesis</h2>
+            <p class="muted" data-i18n="set.thesisBody">Tajuk, objektif, soalan kajian, bahasa draf dan gaya sitasi.</p>
+            <button id="settingsBtn" type="button" class="btn btn-outline" data-i18n="proj.edit">Edit profil tesis</button>
+            <button id="restartOnboarding" type="button" class="btn-reset text-action" data-i18n="set.onboard">Tunjuk semula pengenalan</button>
+          </div>
+        </div>
+      </section>
     </main>
+
+    <!-- Mobile bottom navigation -->
+    <nav class="bottom-nav" aria-label="Menu">
+      <button type="button" data-go="home"><svg class="ic"><use href="#ic-home"/></svg><span data-k="nav.home">Utama</span></button>
+      <button type="button" data-go="casual"><svg class="ic"><use href="#ic-chat"/></svg><span data-k="nav.casual">Sembang</span></button>
+      <button type="button" data-go="projects"><svg class="ic"><use href="#ic-folder"/></svg><span data-k="nav.projectsShort">Projek</span></button>
+      <button type="button" data-go="library"><svg class="ic"><use href="#ic-book"/></svg><span data-k="nav.library">Perpustakaan</span></button>
+      <button type="button" data-go="settings"><svg class="ic"><use href="#ic-user"/></svg><span data-k="nav.profile">Profil</span></button>
+    </nav>
   </div>
 
-  <div id="modalBackdrop" class="modal-backdrop" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-top"><div><div class="eyebrow">THESIS PROFILE</div><h2 id="modalTitle">Project settings</h2></div><button class="icon-btn" id="closeModal" aria-label="Close dialog">×</button></div><form id="projectForm"><div class="form-grid"><label class="form-field span2">Thesis title<input id="projectTitle" required maxlength="250" placeholder="Enter your research title"></label><label class="form-field">University / institution<input id="projectUniversity" maxlength="120" placeholder="e.g. Universiti Teknologi MARA"></label><label class="form-field">Degree<select id="projectDegree"><option>PhD</option><option>Master's</option><option>Bachelor's</option><option>Other</option></select></label><label class="form-field span2">Research objectives (one per line)<textarea id="projectObjectives" rows="3" placeholder="RO1 ...&#10;RO2 ..."></textarea></label><label class="form-field span2">Research questions (one per line)<textarea id="projectQuestions" rows="3" placeholder="RQ1 ...&#10;RQ2 ..."></textarea></label><label class="form-field span2">Theories / methodology / important context<textarea id="projectContext" rows="3" placeholder="Communication theory, quantitative survey..."></textarea></label><label class="form-field">Draft language<select id="projectLanguage"><option value="English">English</option><option value="Bahasa Melayu">Bahasa Melayu</option></select></label><label class="form-field">Citation style<select id="projectCitation"><option value="APA 7">APA 7</option><option value="Harvard">Harvard</option><option value="IEEE">IEEE</option></select></label></div><div class="modal-actions"><button id="cancelSettings" type="button" class="btn btn-outline">Cancel</button><button type="submit" class="btn btn-primary">Save project</button></div></form></div></div>
-  <div id="historyBackdrop" class="modal-backdrop" hidden><div class="modal small-modal" role="dialog" aria-modal="true" aria-labelledby="historyTitle"><div class="modal-top"><div><div class="eyebrow">VERSION HISTORY</div><h2 id="historyTitle">Restore a draft</h2></div><button class="icon-btn" id="closeHistory" aria-label="Close history">×</button></div><div id="historyItems" class="history-items"></div><div class="modal-actions"><button id="closeHistoryBottom" class="btn btn-outline">Close</button></div></div></div>
-  <div id="refsBackdrop" class="modal-backdrop" hidden><div class="modal small-modal" role="dialog" aria-modal="true" aria-labelledby="refsTitle"><div class="modal-top"><div><div class="eyebrow">REFERENCE LIBRARY</div><h2 id="refsTitle">References in this thesis</h2></div><button class="icon-btn" id="closeRefs" aria-label="Close references">×</button></div><p class="refs-help">Papers you cite in inserted drafts are kept here and added as a References list at the end of your DOCX export. Removing one here does not change your chapter text.</p><div id="refsItems" class="history-items"></div><div class="modal-actions"><button id="copyRefs" class="btn btn-outline" type="button">⧉ Copy all</button><button id="closeRefsBottom" class="btn btn-outline" type="button">Close</button></div></div></div>
+  <!-- First-run onboarding -->
+  <div id="onboard" class="onboard" hidden role="dialog" aria-modal="true" aria-labelledby="obTitle1">
+    <div class="ob-card">
+      <div class="ob-step" data-step="1">
+        <svg class="ob-logo" aria-hidden="true"><use href="#logo"/></svg>
+        <h2 id="obTitle1">Pilih Bahasa</h2><p class="ob-alt">Choose Language</p>
+        <div class="ob-options" role="radiogroup" aria-labelledby="obTitle1">
+          <button type="button" class="ob-option" role="radio" data-ob-lang="ms" aria-checked="true"><span class="ob-code">BM</span> Bahasa Malaysia</button>
+          <button type="button" class="ob-option" role="radio" data-ob-lang="en" aria-checked="false"><span class="ob-code">EN</span> English</button>
+        </div>
+        <label class="form-field ob-name" for="obName"><span id="obNameLabel">Nama anda (pilihan)</span><input id="obName" maxlength="60" autocomplete="name" placeholder="cth. Nur Akma"></label>
+        <button type="button" class="btn btn-primary ob-next" id="obNext">Teruskan</button>
+      </div>
+      <div class="ob-step" data-step="2" hidden>
+        <h2 id="obTitle2">Pilih Mod Penggunaan</h2><p class="ob-alt" id="obAlt2">Choose Your Mode</p>
+        <div class="ob-modes" role="radiogroup" aria-labelledby="obTitle2">
+          <button type="button" class="ob-mode" role="radio" data-ob-mode="casual" aria-checked="true"><span class="mc-icon"><svg class="ic"><use href="#ic-chat"/></svg></span><strong id="obCasualT">Mod Sembang</strong><span id="obCasualD">Sembang santai, idea, inspirasi dan kehidupan harian.</span></button>
+          <button type="button" class="ob-mode" role="radio" data-ob-mode="academic" aria-checked="false"><span class="mc-icon"><svg class="ic"><use href="#ic-cap"/></svg></span><strong id="obAcadT">Mod Akademik</strong><span id="obAcadD">Penyelidikan, tesis, penulisan dan pembelajaran.</span></button>
+        </div>
+        <div class="ob-dots" aria-hidden="true"><span></span><span class="on"></span></div>
+        <button type="button" class="btn btn-primary ob-next" id="obStart">Mula</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalBackdrop" class="modal-backdrop" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-top"><div><div class="eyebrow">THESIS PROFILE</div><h2 id="modalTitle" data-i18n="proj.edit">Edit profil tesis</h2></div><button class="icon-btn" id="closeModal" type="button" aria-label="Close dialog">×</button></div><form id="projectForm"><div class="form-grid"><label class="form-field span2"><span data-i18n="pf.title">Tajuk tesis</span><input id="projectTitle" required maxlength="250" placeholder="Enter your research title"></label><label class="form-field"><span data-i18n="pf.uni">Universiti / institusi</span><input id="projectUniversity" maxlength="120" placeholder="e.g. Universiti Teknologi MARA"></label><label class="form-field"><span data-i18n="pf.degree">Ijazah</span><select id="projectDegree"><option>PhD</option><option>Master's</option><option>Bachelor's</option><option>Other</option></select></label><label class="form-field span2"><span data-i18n="pf.ro">Objektif kajian (satu setiap baris)</span><textarea id="projectObjectives" rows="3" placeholder="RO1 ...&#10;RO2 ..."></textarea></label><label class="form-field span2"><span data-i18n="pf.rq">Soalan kajian (satu setiap baris)</span><textarea id="projectQuestions" rows="3" placeholder="RQ1 ...&#10;RQ2 ..."></textarea></label><label class="form-field span2"><span data-i18n="pf.context">Teori / metodologi / konteks penting</span><textarea id="projectContext" rows="3" placeholder="Communication theory, quantitative survey..."></textarea></label><label class="form-field"><span data-i18n="pf.lang">Bahasa draf</span><select id="projectLanguage"><option value="English">English</option><option value="Bahasa Melayu">Bahasa Melayu</option></select></label><label class="form-field"><span data-i18n="pf.cite">Gaya sitasi</span><select id="projectCitation"><option value="APA 7">APA 7</option><option value="Harvard">Harvard</option><option value="IEEE">IEEE</option></select></label></div><div class="modal-actions"><button id="cancelSettings" type="button" class="btn btn-outline" data-i18n="cancel">Batal</button><button type="submit" class="btn btn-primary" data-i18n="proj.save">Simpan projek</button></div></form></div></div>
+  <div id="historyBackdrop" class="modal-backdrop" hidden><div class="modal small-modal" role="dialog" aria-modal="true" aria-labelledby="historyTitle"><div class="modal-top"><div><div class="eyebrow">VERSION HISTORY</div><h2 id="historyTitle" data-i18n="hist.title">Pulihkan draf</h2></div><button class="icon-btn" id="closeHistory" type="button" aria-label="Close history">×</button></div><div id="historyItems" class="history-items"></div><div class="modal-actions"><button id="closeHistoryBottom" type="button" class="btn btn-outline" data-i18n="close">Tutup</button></div></div></div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="./docx.js"></script>
   <script src="./app.js"></script>
+  <script src="./shell.js"></script>
 </body>
 </html>
