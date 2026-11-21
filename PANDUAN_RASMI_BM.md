@@ -156,6 +156,19 @@ Akademik → **Slaid Pembentangan**.
 5. **Tema reka bentuk** (v2.5): pilih Klasik, Galeri, Bilik Gelap, Tropika, Neon atau Pastel, atau tekan 🎲 Rawak. Tema boleh ditukar bila-bila masa dan mengubah pratonton serta fail PowerPoint.
 6. **Muat turun PowerPoint**: fail .pptx dengan nota penyampai, dan slaid rujukan untuk sumber yang disebut dalam slaid.
 
+## Audit Sitasi (v2.6)
+
+Akademik → **Audit Sitasi**. Pilih tesis atau satu paper jurnal, kemudian tekan **Audit sekarang**. App akan semak:
+
+1. **Sitasi tanpa rujukan**: nama dalam teks yang tiada dalam senarai rujukan (atau ejaan/tahun berbeza).
+2. **Tahun tidak sepadan**: contoh Smith (2018) dalam teks tetapi 2019 dalam senarai.
+3. **Rujukan tidak disitasi**: ada dalam senarai tetapi tidak disebut dalam teks. Boleh tekan **Buang**.
+4. **Pengarang dan tahun sama**: perlu huruf a/b (2019a, 2019b).
+5. **Gaya APA 7**: et al. untuk 3 pengarang ke atas, bukan untuk 2 pengarang.
+6. **DOI**: disemak dengan OpenAlex. DOI yang salah ditanda; rujukan tanpa DOI diberi cadangan DOI, tekan **Tambah DOI**.
+
+Tekan **Buka** untuk terus ke bahagian yang bermasalah. Semakan ini percuma dan tidak guna AI.
+
 ## Sync telefon ↔ laptop (v2.2)
 
 Profil → **Sync telefon ↔ laptop**. Tiada akaun diperlukan.

@@ -1,12 +1,12 @@
 {
   "name": "thestalk-ai",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "private": true,
   "description": "Talkademic AI installable PWA and secure serverless AI gateway",
   "scripts": {
     "start": "node dev-server.js",
     "test": "node --test tests/*.test.js",
-    "check": "node --check public/app.js && node --check public/shell.js && node --check public/refexport.js && node --check public/refimport.js && node --check public/backup.js && node --check public/papers.js && node --check public/analysis.js && node --check lib/analysis.js && node --check api/analysis.js && node --check public/matrix.js && node --check public/goals.js && node --check public/slidethemes.js && node --check public/slides.js && node --check lib/slides.js && node --check api/slides.js && node --check lib/sync.js && node --check api/sync.js && node --check public/sync.js && node --check lib/matrix.js && node --check api/matrix.js && node --check public/docximport.js && node --check lib/journals.js && node --check lib/paper.js && node --check api/paper.js && node --check api/journals.js && node --check api/draft.js && node --check lib/draft.js && node --check public/docx.js && node --check lib/common.js && node --check api/chat.js && node --check api/convert.js && node --check api/transcribe.js && node --check api/cite.js && node --check lib/cite.js && node --check lib/sources.js"
+    "check": "node --check public/app.js && node --check public/shell.js && node --check public/refexport.js && node --check public/refimport.js && node --check public/backup.js && node --check public/papers.js && node --check public/analysis.js && node --check lib/analysis.js && node --check api/analysis.js && node --check public/matrix.js && node --check public/goals.js && node --check public/citeaudit.js && node --check public/audit.js && node --check api/audit.js && node --check public/slidethemes.js && node --check public/slides.js && node --check lib/slides.js && node --check api/slides.js && node --check lib/sync.js && node --check api/sync.js && node --check public/sync.js && node --check lib/matrix.js && node --check api/matrix.js && node --check public/docximport.js && node --check lib/journals.js && node --check lib/paper.js && node --check api/paper.js && node --check api/journals.js && node --check api/draft.js && node --check lib/draft.js && node --check public/docx.js && node --check lib/common.js && node --check api/chat.js && node --check api/convert.js && node --check api/transcribe.js && node --check api/cite.js && node --check lib/cite.js && node --check lib/sources.js"
   },
   "dependencies": {
     "@vercel/blob": "^2.9.0"

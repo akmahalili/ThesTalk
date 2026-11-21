@@ -110,6 +110,7 @@
           <button class="nav-sub" type="button" data-go="papers" data-k="nav.papers">Jurnal &amp; Paper</button>
           <button class="nav-sub" type="button" data-go="matrix" data-k="nav.matrix">Matriks Literatur</button>
           <button class="nav-sub" type="button" data-go="analysis" data-k="tile.data">Analisis Data</button>
+          <button class="nav-sub" type="button" data-go="audit" data-k="nav.audit">Audit Sitasi</button>
           <button class="nav-sub" type="button" data-go="slides" data-k="nav.slides">Slaid Pembentangan</button>
           <button class="nav-sub" type="button" data-go="goals" data-k="nav.goals">Sasaran &amp; Peringatan</button>
         </div>
@@ -326,6 +327,7 @@
           <button type="button" class="hub-row" data-go="analysis"><span class="hub-ic"><svg class="ic"><use href="#ic-chart"/></svg></span><span class="hub-text"><strong data-k="tile.data">Analisis Data</strong><small data-k2="tile.data">Data Analysis</small><span data-i18n="hub.data.d">Tampal output SmartPLS / SPSS, dapat penerangan dan bahagian Dapatan.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
           <button type="button" class="hub-row" data-go="academic" data-focus="writing"><span class="hub-ic"><svg class="ic"><use href="#ic-pen"/></svg></span><span class="hub-text"><strong data-k="hub.writing">Penulisan Akademik</strong><small data-k2="hub.writing">Academic Writing</small><span data-i18n="hub.writing.d">Tukar idea santai kepada perenggan akademik.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
           <button type="button" class="hub-row" data-go="proofread"><span class="hub-ic"><svg class="ic"><use href="#ic-check"/></svg></span><span class="hub-text"><strong data-k="hub.proof">Semakan Bahasa &amp; Gaya</strong><small data-k2="hub.proof">Proofread &amp; Style</small><span data-i18n="hub.proof.d">Betulkan tatabahasa dan nada akademik.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
+          <button type="button" class="hub-row" data-go="audit"><span class="hub-ic"><svg class="ic"><use href="#ic-check"/></svg></span><span class="hub-text"><strong data-k="nav.audit">Audit Sitasi</strong><small data-k2="nav.audit">Citation Audit</small><span data-i18n="hub.audit.d">Semak sitasi dengan senarai rujukan, tahun, et al. dan DOI.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
           <button type="button" class="hub-row" data-go="slides"><span class="hub-ic"><svg class="ic"><use href="#ic-film"/></svg></span><span class="hub-text"><strong data-k="nav.slides">Slaid Pembentangan</strong><small data-k2="nav.slides">Presentation Slides</small><span data-i18n="hub.slides.d">Tesis atau paper jadi slaid bergambar dengan nota penyampai, muat turun PowerPoint.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
           <button type="button" class="hub-row" data-go="goals"><span class="hub-ic"><svg class="ic"><use href="#ic-check"/></svg></span><span class="hub-text"><strong data-k="nav.goals">Sasaran &amp; Peringatan</strong><small data-k2="nav.goals">Goals &amp; Reminders</small><span data-i18n="hub.goals.d">Sasaran perkataan harian, streak dan kiraan hari ke tarikh akhir.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
           <button type="button" class="hub-row" data-go="library"><span class="hub-ic"><svg class="ic"><use href="#ic-book"/></svg></span><span class="hub-text"><strong data-k="hub.refs">Rujukan &amp; Sitasi</strong><small data-k2="hub.refs">Citations &amp; References</small><span data-i18n="hub.refs.d">Senarai rujukan tesis, eksport ke Mendeley atau Zotero.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
@@ -341,6 +343,8 @@
       <section class="view" id="view-goals" hidden aria-labelledby="goalsTitle"></section>
 
       <section class="view" id="view-slides" hidden aria-labelledby="slidesTitle"></section>
+
+      <section class="view" id="view-audit" hidden aria-labelledby="auditTitle"></section>
 
       <section class="view" id="view-projects" hidden aria-labelledby="projectsTitle">
         <div class="view-head"><div><h1 id="projectsTitle"><span data-k="nav.projects">Projek Saya</span> <small data-k2="nav.projects">My Projects</small></h1><p data-i18n="proj.sub">Satu projek tesis disimpan dalam pelayar ini. Eksport DOCX sebagai sandaran.</p></div></div>
@@ -485,6 +489,8 @@
   <script src="./analysis.js"></script>
   <script src="./matrix.js"></script>
   <script src="./goals.js"></script>
+  <script src="./citeaudit.js"></script>
+  <script src="./audit.js"></script>
   <script src="./slidethemes.js"></script>
   <script src="./slides.js"></script>
   <script src="./sync.js"></script>

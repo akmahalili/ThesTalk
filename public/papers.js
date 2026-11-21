@@ -975,5 +975,5 @@
       h('div', { class: 'pd-actions' }, h('button', { type: 'button', class: 'btn btn-outline', onclick: () => { shell().go('papers'); setTimeout(newPaper, 0); } }, '＋ ', t('new')))].filter(Boolean));
   }
 
-  window.ThesTalkPapers = { render, renderProjectsCard, newPaper, _test: { unknownCitations, sectionPrompt } };
+  window.ThesTalkPapers = { render, renderProjectsCard, newPaper, open: (id, key) => { openPaper(id); view.tab = 'write'; if (SECTIONS.includes(key)) view.section = key; }, label: (p, key) => paperLabel(key, p), _test: { unknownCitations, sectionPrompt } };
 })();
