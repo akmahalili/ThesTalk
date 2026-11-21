@@ -51,6 +51,12 @@ test('Gemini falls back to Flash-Lite when the main model is not found, and repo
     assert.deepEqual(models, ['gemini-3.8-flash', 'gemini-3.5-flash-lite']);
     globalThis.fetch = async () => ({ ok: false, status: 429, json: async () => ({}) });
     await assert.rejects(common.askAI('x', 'hello'), e => e.status === 429 && /free tier/i.test(e.message));
+    const tried = [];
+    globalThis.fetch = async (url, options) => { const m = JSON.parse(options.body).model; tried.push(m); return m === 'gemini-3.8-flash' ? { ok: false, status: 503, json: async () => ({}) } : { ok: true, status: 200, json: async () => ({ choices: [{ message: { content: 'Lite OK' } }] }) }; };
+    assert.equal(await common.askAI('x', 'hello'), 'Lite OK');
+    assert.deepEqual(tried, ['gemini-3.8-flash', 'gemini-3.5-flash-lite']);
+    globalThis.fetch = async () => ({ ok: false, status: 503, json: async () => ({}) });
+    await assert.rejects(common.askAI('x', 'hello'), e => e.status === 503 && /busy/i.test(e.message));
   }
 ));
 
