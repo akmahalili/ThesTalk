@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const A = require('../public/citeaudit.js');
-const handler = require('../api/audit');
+const handler = require('../handlers/audit');
 
 const TEXT = 'Imej membina kepercayaan (Hair et al., 2019; Halili & Sulaiman, 2023). Menurut Henseler et al. (2015), HTMT lebih tepat. ' +
   'Kajian lain (Lee, Chen, & Diaz, 2021) dan Smith (2018) menyokong. Tan dan Lim (2022, p. 4) berbeza. (e.g., Kock, 2015, 2017). ' +

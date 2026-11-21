@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const Y = require('../lib/sync');
-const handler = require('../api/sync');
+const handler = require('../handlers/sync');
 
 function memStore() {
   const files = new Map();

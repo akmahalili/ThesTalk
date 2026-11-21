@@ -9,7 +9,7 @@
 Repo milik anda: https://github.com/akmahalili/Talkademic
 
 1. Ekstrak `ThesTalk_PWA_Installable_v0.3.zip`.
-2. Upload semua kandungan **dalam folder** `ThesTalk_PWA_Deploy` ke root repositori (fail `index.html`, `app.js`, folder `api/`, `lib/`, dll). Jangan muat naik `.env` yang mempunyai kunci.
+2. Upload semua kandungan **dalam folder** `ThesTalk_PWA_Deploy` ke root repositori (fail `index.html`, `app.js`, folder `api/`, `handlers/`, `lib/`, dll). Jangan muat naik `.env` yang mempunyai kunci.
 3. Commit perubahan ke branch `main`.
 
 ## 2. Terbitkan URL
@@ -155,6 +155,19 @@ Akademik → **Slaid Pembentangan**.
 4. Susun semula dengan ↑ ↓, buang dengan ×.
 5. **Tema reka bentuk** (v2.5): pilih Klasik, Galeri, Bilik Gelap, Tropika, Neon atau Pastel, atau tekan 🎲 Rawak. Tema boleh ditukar bila-bila masa dan mengubah pratonton serta fail PowerPoint.
 6. **Muat turun PowerPoint**: fail .pptx dengan nota penyampai, dan slaid rujukan untuk sumber yang disebut dalam slaid.
+
+## Kerangka Konseptual (v2.7)
+
+Akademik → **Kerangka Konseptual**.
+
+1. Tekan **✨ Cadang dengan AI** supaya AI baca tajuk, objektif dan bab anda, atau tambah konstruk sendiri dengan **+ Tambah konstruk**.
+2. Pilih peranan setiap konstruk: pemboleh ubah bebas (IV), pengantara, penyederhana, bersandar (DV) atau kawalan. Dimensi boleh ditulis satu setiap baris.
+3. Tambah anak panah dengan **+ Tambah hubungan**, atau **⚡ Sambung automatik**. Pilih positif atau negatif.
+4. Hipotesis H1, H2… ditulis dan dinomborkan sendiri, termasuk hipotesis pengantaraan dan penyederhanaan.
+5. **⬇ Muat turun PNG** untuk gambar rajah (gaya Tesis hitam putih atau Berwarna).
+6. **Masukkan rajah + hipotesis** ke bahagian tesis yang dipilih. Baris `[Rajah: Kerangka Konseptual]` akan menjadi gambar rajah bila anda Export DOCX.
+
+Slaid Pembentangan yang dijana daripada tesis juga akan guna kerangka ini.
 
 ## Audit Sitasi (v2.6)
 

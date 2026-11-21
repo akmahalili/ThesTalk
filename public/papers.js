@@ -593,7 +593,7 @@
     try { await navigator.clipboard.writeText(text); App.toast(done); } catch (e) { App.toast(text.slice(0, 80) + '…'); }
   }
 
-  function exportDocx(p) {
+  async function exportDocx(p) {
     const ms = isMs(p);
     const chapters = SECTIONS.map(k => [k, sectionOf(p, k).content.trim()]).filter(([, c]) => c).map(([k, c]) => ({
       title: paperLabel(k, p),
@@ -601,7 +601,8 @@
     }));
     const doc = { project: { title: p.title.trim() || t('untitled'), university: p.target ? (ms ? 'Jurnal sasaran: ' : 'Target journal: ') + p.target.name : '', degree: '', language: p.language }, chapters, references: p.references || [] };
     try {
-      const blob = window.ThesTalkDocx.makeDocument(doc);
+      const figures = window.TalkademicFramework ? await window.TalkademicFramework.docxFigures(chapters.map(c => c.sections[0].content)) : {};
+      const blob = window.ThesTalkDocx.makeDocument(doc, { figures });
       const name = (p.title || 'Talkademic_Paper').replace(/[^a-zA-Z0-9-_ ]/g, '').trim().replace(/\s+/g, '_').slice(0, 64) || 'Talkademic_Paper';
       const url = URL.createObjectURL(blob), a = document.createElement('a');
       a.href = url; a.download = name + '.docx'; a.hidden = true; document.body.appendChild(a); a.click(); a.remove();

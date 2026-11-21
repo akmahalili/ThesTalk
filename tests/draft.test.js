@@ -55,7 +55,7 @@ test('/api/draft plan: organises remarks and returns a pool of real papers', wit
     return ok({ results: [work(1), work(2), work(3, 2010)] });
   };
   const res = response();
-  await require('../api/draft')(req({ mode: 'plan', remarks: ['gambar close up penting utk org yakin semasa membeli', 'aku rasa org Malaysia suka tengok detail kain'], language: 'Bahasa Melayu', title: '' }), res);
+  await require('../handlers/draft')(req({ mode: 'plan', remarks: ['gambar close up penting utk org yakin semasa membeli', 'aku rasa org Malaysia suka tengok detail kain'], language: 'Bahasa Melayu', title: '' }), res);
   assert.equal(res.statusCode, 200, JSON.stringify(res.body));
   assert.equal(res.body.plan.title, 'Peranan imej close-up');
   assert.equal(res.body.papers.length, 3); // merged across searches
@@ -67,7 +67,7 @@ test('/api/draft plan: organises remarks and returns a pool of real papers', wit
 
 test('/api/draft plan refuses too little input', withEnv({ GEMINI_API_KEY: 'g', THESTALK_AI_ACCESS_CODE: 'secure-test-code-16' }, async () => {
   const res = response();
-  await require('../api/draft')(req({ mode: 'plan', remarks: ['hai'] }), res);
+  await require('../handlers/draft')(req({ mode: 'plan', remarks: ['hai'] }), res);
   assert.equal(res.statusCode, 400);
 }));
 
@@ -77,7 +77,7 @@ test('/api/draft section: numbers become APA citations, unknown numbers are drop
   let body;
   global.fetch = async (url, opts) => { body = JSON.parse(opts.body); return gemini('Imej close-up meningkatkan kepercayaan [1][2]. {3} mendapati perkara sama. Kesan ini juga dilaporkan [9].\n\nPerenggan kedua [PERLU RUJUKAN].'); };
   const res = response();
-  await require('../api/draft')(req({ mode: 'section', section: 'introduction', points: ['Imej close-up penting.'], papers: pool, title: 'Peranan imej', language: 'Bahasa Melayu' }), res);
+  await require('../handlers/draft')(req({ mode: 'section', section: 'introduction', points: ['Imej close-up penting.'], papers: pool, title: 'Peranan imej', language: 'Bahasa Melayu' }), res);
   assert.equal(res.statusCode, 200, JSON.stringify(res.body));
   assert.match(res.body.text, /\(Rahman & Lee, 2021; Rahman & Lee, 2022\)/);
   assert.match(res.body.text, /Aminah \(2023\) mendapati/);
@@ -92,7 +92,7 @@ test('/api/draft results section never gets papers to cite', withEnv({ GEMINI_AP
   let body;
   global.fetch = async (url, opts) => { body = JSON.parse(opts.body); return gemini('[DAPATAN 1]'); };
   const res = response();
-  await require('../api/draft')(req({ mode: 'section', section: 'results', points: [], papers: pool, language: 'Bahasa Melayu' }), res);
+  await require('../handlers/draft')(req({ mode: 'section', section: 'results', points: [], papers: pool, language: 'Bahasa Melayu' }), res);
   assert.equal(res.statusCode, 200, JSON.stringify(res.body));
   assert.ok(!body.messages[1].content.includes('PAPERS'));
   assert.match(body.messages[0].content, /Never invent numbers/);
@@ -100,7 +100,7 @@ test('/api/draft results section never gets papers to cite', withEnv({ GEMINI_AP
 
 test('/api/draft section rejects unknown sections', withEnv({ GEMINI_API_KEY: 'g', THESTALK_AI_ACCESS_CODE: 'secure-test-code-16' }, async () => {
   const res = response();
-  await require('../api/draft')(req({ mode: 'section', section: 'abstract' }), res);
+  await require('../handlers/draft')(req({ mode: 'section', section: 'abstract' }), res);
   assert.equal(res.statusCode, 400);
 }));
 
@@ -108,7 +108,7 @@ test('/api/draft sort: one casual remark gets a section, a formal sentence and a
   let body;
   global.fetch = async (url, opts) => { body = JSON.parse(opts.body); return gemini(JSON.stringify({ section: 'Introduction', part: 'masalah kajian', formal: 'Imej produk yang kabur menjejaskan kepercayaan pengguna.', ask: 'Ok, so apa jurang kajian yg awak nampak?' })); };
   const res = response();
-  await require('../api/draft')(req({ mode: 'sort', remark: 'gambar blur buat org x percaya seller', empty: ['literature', 'method', 'bogus'], recent: [{ section: 'introduction', text: 'gambar penting' }], title: '', language: 'Bahasa Melayu' }), res);
+  await require('../handlers/draft')(req({ mode: 'sort', remark: 'gambar blur buat org x percaya seller', empty: ['literature', 'method', 'bogus'], recent: [{ section: 'introduction', text: 'gambar penting' }], title: '', language: 'Bahasa Melayu' }), res);
   assert.equal(res.statusCode, 200, JSON.stringify(res.body));
   assert.deepEqual(res.body.sorted, { section: 'introduction', part: 'masalah kajian', formal: 'Imej produk yang kabur menjejaskan kepercayaan pengguna.', ask: 'Ok, so apa jurang kajian yg awak nampak?' });
   assert.match(body.messages[1].content, /Sections with no ideas yet: literature, method\n/);

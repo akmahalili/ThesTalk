@@ -72,7 +72,7 @@ test('findJournals retries without the journal filter if OpenAlex rejects it', w
 }));
 
 test('/api/journals: AI only writes search keywords, journals come from OpenAlex', withEnv({ GEMINI_API_KEY: 'g', THESTALK_AI_ACCESS_CODE: 'secure-test-code-16' }, async () => {
-  const handler = require('../api/journals');
+  const handler = require('../handlers/journals');
   const seen = [];
   global.fetch = async url => {
     const u = String(url);
@@ -92,7 +92,7 @@ test('/api/journals: AI only writes search keywords, journals come from OpenAlex
 
 test('/api/journals asks for a title or abstract first', withEnv({ GEMINI_API_KEY: 'g', THESTALK_AI_ACCESS_CODE: 'secure-test-code-16' }, async () => {
   const res = response();
-  await require('../api/journals')(req({ title: 'abc' }), res);
+  await require('../handlers/journals')(req({ title: 'abc' }), res);
   assert.equal(res.statusCode, 400);
 }));
 
@@ -125,7 +125,7 @@ test('/api/paper meta: abstract, titles and keywords in the paper language', wit
     return ok({ choices: [{ message: { content: JSON.stringify({ abstract: { purpose: 'Tujuan kajian ini...', method: 'Tinjauan...', findings: '[DAPATAN UTAMA]', originality: 'Kajian ini...' }, titles: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6'], keywords: ['imej produk.', 'niat pembelian'] }) } }] });
   };
   const res = response();
-  await require('../api/paper')(req({ mode: 'meta', paper: draft }), res);
+  await require('../handlers/paper')(req({ mode: 'meta', paper: draft }), res);
   assert.equal(res.statusCode, 200, JSON.stringify(res.body));
   assert.equal(res.body.meta.titles.length, 5);
   assert.deepEqual(res.body.meta.keywords, ['imej produk', 'niat pembelian']);
@@ -141,7 +141,7 @@ test('/api/paper fit: priorities sorted, enums cleaned, journal and stats passed
     return ok({ choices: [{ message: { content: JSON.stringify({ readiness: 'NOT-YET', summary: 'Belum sedia.', scopeFit: { level: 'strong', reason: 'Sesuai.' }, issues: [{ section: 'method', priority: 'low', problem: 'p1', fix: 'f1' }, { section: 'weird', priority: 'high', problem: 'p2', fix: 'f2' }], strengths: ['Topik relevan'] }) } }] });
   };
   const res = response();
-  await require('../api/paper')(req({ mode: 'fit', paper: draft, uiLang: 'ms', target: { name: 'Journal of Retailing and Consumer Services', publisher: 'Elsevier', topics: ['Consumer Behavior'], h: 140, impact: 9.1, badges: ['ABDC A'] } }), res);
+  await require('../handlers/paper')(req({ mode: 'fit', paper: draft, uiLang: 'ms', target: { name: 'Journal of Retailing and Consumer Services', publisher: 'Elsevier', topics: ['Consumer Behavior'], h: 140, impact: 9.1, badges: ['ABDC A'] } }), res);
   assert.equal(res.statusCode, 200, JSON.stringify(res.body));
   const fit = res.body.fit;
   assert.equal(fit.readiness, 'not-yet');
@@ -157,6 +157,6 @@ test('/api/paper fit: priorities sorted, enums cleaned, journal and stats passed
 
 test('/api/paper refuses an empty draft', withEnv({ GEMINI_API_KEY: 'g', THESTALK_AI_ACCESS_CODE: 'secure-test-code-16' }, async () => {
   const res = response();
-  await require('../api/paper')(req({ mode: 'fit', paper: { title: 'x', sections: [] } }), res);
+  await require('../handlers/paper')(req({ mode: 'fit', paper: { title: 'x', sections: [] } }), res);
   assert.equal(res.statusCode, 400);
 }));

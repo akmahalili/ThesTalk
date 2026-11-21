@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const cite = require('../api/cite');
+const cite = require('../handlers/cite');
 const C = require('../lib/cite');
 const { rebuildAbstract, toPaper } = require('../lib/sources');
 

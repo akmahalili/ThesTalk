@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const common = require('../lib/common');
-const status = require('../api/status');
+const status = require('../handlers/status');
 
 const KEYS = ['AI_DISABLED', 'GEMINI_API_KEY', 'ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'GROQ_API_KEY', 'GROQ_MODEL', 'AI_PROVIDER', 'CLAUDE_MODEL', 'OPENAI_MODEL', 'THESTALK_AI_ACCESS_CODE'];
 function withEnv(env, fn) {

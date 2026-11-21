@@ -117,9 +117,14 @@
       const res = await App.apiPost('/api/slides', { title: m.title, kind: d.kind, minutes: d.minutes, language: d.language, presenter: d.presenter, audience: d.audience, sections: m.sections });
       if (d.deck) for (const sl of d.deck.slides) if (sl.img) IDB.del(sl.id).catch(() => {});
       const deck = res.deck;
+      // The student's own conceptual framework (Kerangka Konseptual) wins over the AI's guess.
+      const own = !d.source.startsWith('paper:') && window.TalkademicFramework ? window.TalkademicFramework.forSlide() : null;
       deck.slides.forEach(sl => {
         sl.id = App.uid();
-        if (sl.layout === 'framework') { sl.links = sl.links.map(l => ({ f: sl.nodes.indexOf(l.from), t: sl.nodes.indexOf(l.to), label: l.label || '' })).filter(l => l.f >= 0 && l.t >= 0); }
+        if (sl.layout === 'framework') {
+          if (own) { sl.nodes = own.nodes.slice(); sl.links = own.links.map(l => ({ ...l })); }
+          else sl.links = sl.links.map(l => ({ f: sl.nodes.indexOf(l.from), t: sl.nodes.indexOf(l.to), label: l.label || '' })).filter(l => l.f >= 0 && l.t >= 0);
+        }
       });
       deck.presenter = d.presenter; deck.date = new Date().toISOString().slice(0, 10); deck.source = d.source; deck.refsSlide = true; deck.theme = d.theme || 'galeri'; deck.kindLabel = t('k.' + d.kind);
       d.deck = deck; App.save();

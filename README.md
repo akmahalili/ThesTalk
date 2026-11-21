@@ -11,7 +11,7 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 ## Deploy to Vercel (from GitHub)
 
 1. Push **these folder contents** into the repository root at https://github.com/akmahalili/Talkademic (keep `.env` out of Git).
-2. In Vercel, **Add New → Project → Import Git Repository → `akmahalili/Talkademic` → Deploy**. Choose framework **Other** if prompted. The app has root-level static assets and API serverless functions.
+2. In Vercel, **Add New → Project → Import Git Repository → `akmahalili/Talkademic` → Deploy**. Choose framework **Other** if prompted. The app has static assets in `public/` and one serverless function, `api/[route].js`, which serves every `/api/<name>` route from `handlers/<name>.js` (the free Hobby plan allows only 12 functions per deployment).
 3. It will have an HTTPS `*.vercel.app` link. On Android Chrome, use **⋮ → Add to Home screen / Install app** for an app icon and standalone experience.
 4. For **actual AI**, go to Vercel → Project → Settings → Environment Variables and configure the following **directly in Vercel**, not in source code:
    - At least one AI key: `GEMINI_API_KEY` (free), `ANTHROPIC_API_KEY` (Claude, paid) or `OPENAI_API_KEY` (ChatGPT, paid). Keep keys private.
@@ -24,6 +24,10 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 ## Free AI option (Gemini)
 
 Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. Talkademic then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.5-flash-lite`, moving to `gemini-3.1-flash-lite` when a model is busy, missing or over its limit (set `GEMINI_MODEL` to try another model first). On the free tier the Flash-Lite models allow about 500 requests a day each, while Gemini Flash allows only about 20, which is why Flash-Lite is the default. Each conversion with references uses two requests. The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. Voice transcription also runs on Gemini (the browser recording is sent as-is), so the mic works for free; without any AI key the app falls back to the browser's speech recognition. The access code is remembered on the device after a successful unlock.
+
+## Conceptual framework (v2.7)
+
+Academic → **Kerangka Konseptual**. Add constructs with a role (independent, mediator, moderator, dependent, control) and optional dimensions, then the arrows between them (positive or negative) and which path each moderator moderates; **Connect automatically** links IV → mediator → DV and IV → DV. **Suggest with AI** (`POST /api/framework`) proposes constructs and paths from the thesis title, objectives, research questions and first chapters, or from a paper, using only what the text names. `public/frameworkcore.js` numbers the hypotheses (direct paths, then mediation X → M → Y when switched on, then moderation) in Malay or English and draws the figure as SVG in a black-and-white thesis style or in colour; the figure downloads as PNG. **Add figure + hypotheses** puts the line `[Rajah: Kerangka Konseptual]`, a numbered caption and the hypotheses into the chosen thesis section (or a paper's Literature Review), and the Word export (`public/docx.js`) replaces that line with the figure as an embedded picture. Presentation slides generated from the thesis use this framework on their framework slide.
 
 ## Citation audit (v2.6)
 

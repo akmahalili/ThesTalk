@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const M = require('../lib/matrix');
 const S = require('../lib/sources');
-const handler = require('../api/matrix');
+const handler = require('../handlers/matrix');
 
 const ENV = ['GEMINI_API_KEY', 'OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'AI_DISABLED', 'AI_PROVIDER', 'THESTALK_AI_ACCESS_CODE', 'OPENALEX_API_KEY'];
 function withEnv(env, fn) {

@@ -1,8 +1,8 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const chat = require('../api/chat');
-const convert = require('../api/convert');
+const chat = require('../handlers/chat');
+const convert = require('../handlers/convert');
 
 const response = () => ({ headers: {}, statusCode: 200, setHeader(k, v) { this.headers[k] = v; }, end(body) { this.body = JSON.parse(body); } });
 const headers = { 'x-thestalk-access': 'secure-test-code-16', host: 'localhost', origin: 'https://localhost', 'content-type': 'application/json' };

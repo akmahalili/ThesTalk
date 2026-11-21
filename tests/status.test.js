@@ -1,4 +1,4 @@
-'use strict';const test=require('node:test'),assert=require('node:assert/strict');const status=require('../api/status'),chat=require('../api/chat');
+'use strict';const test=require('node:test'),assert=require('node:assert/strict');const status=require('../handlers/status'),chat=require('../handlers/chat');
 const response=()=>({headers:{},statusCode:200,setHeader(k,v){this.headers[k]=v},end(body){this.body=JSON.parse(body)}});
 test('Unconfigured server never reports AI enabled',async()=>{delete process.env.OPENAI_API_KEY;delete process.env.THESTALK_AI_ACCESS_CODE;const r=response();await status({method:'GET',headers:{}},r);assert.equal(r.body.aiEnabled,false);});
 test('AI endpoints refuse unauthenticated requests',async()=>{process.env.OPENAI_API_KEY='fake';process.env.THESTALK_AI_ACCESS_CODE='secure-test-code-16';const r=response();await chat({method:'POST',headers:{host:'localhost',origin:'https://localhost'},body:{message:'hello'}},r);assert.equal(r.statusCode,401);delete process.env.OPENAI_API_KEY;delete process.env.THESTALK_AI_ACCESS_CODE;});
