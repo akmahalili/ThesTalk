@@ -1,6 +1,7 @@
 'use strict';
 /* POST /api/transcribe — speech to text for the mic buttons.
-   Uses OpenAI when OPENAI_API_KEY is set, otherwise free Gemini (GEMINI_API_KEY). */
+   Uses free Gemini (GEMINI_API_KEY) when it is set, otherwise OpenAI. TRANSCRIBE_PROVIDER=openai forces OpenAI,
+   so adding a paid ChatGPT key for writing does not move voice off the free tier. */
 const { json, protect, fail, cap, transcribeGemini } = require('../lib/common');
 
 const EXTENSIONS = { 'audio/webm': 'webm', 'audio/ogg': 'ogg', 'audio/mp4': 'm4a', 'audio/wav': 'wav', 'audio/mpeg': 'mp3' };
@@ -43,7 +44,8 @@ module.exports = async function handler(req, res) {
     const raw = await readAudio(req);
     if (!raw) return json(res, 413, { error: 'Recording too large. Keep under 3 MB.' });
     if (raw.length < 150 || raw.length > 3_000_000) return json(res, 413, { error: 'Recording is empty or too large.' });
-    const text = process.env.OPENAI_API_KEY ? await transcribeOpenAI(raw, type) : await transcribeGemini(raw, type);
+    const useOpenAI = process.env.OPENAI_API_KEY && (!process.env.GEMINI_API_KEY || String(process.env.TRANSCRIBE_PROVIDER || '').toLowerCase() === 'openai');
+    const text = useOpenAI ? await transcribeOpenAI(raw, type) : await transcribeGemini(raw, type);
     const transcript = cap(text, 6000);
     if (!transcript) return json(res, 422, { error: 'No speech detected.' });
     return json(res, 200, { transcript });

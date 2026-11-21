@@ -103,3 +103,18 @@ test('transcription drops timestamp-only output from silent recordings', () => w
     assert.equal(await common.transcribeGemini(Buffer.alloc(300), 'audio/webm'), 'Gambar produk penting.');
   }
 ));
+
+test('voice stays on free Gemini when a paid OpenAI key is also set', () => withEnv(
+  { GEMINI_API_KEY: 'test-gemini-key', OPENAI_API_KEY: 'sk-test', THESTALK_AI_ACCESS_CODE: 'secure-test-code-16' },
+  async () => {
+    fresh();
+    delete require.cache[require.resolve('../api/transcribe')];
+    const transcribe = require('../api/transcribe');
+    const urls = [];
+    globalThis.fetch = async (url) => { urls.push(String(url)); return { ok: true, status: 200, json: async () => ({ candidates: [{ content: { parts: [{ text: 'Helo' }] } }] }) }; };
+    const res = { headers: {}, statusCode: 200, setHeader(k, v) { this.headers[k] = v; }, end(b) { this.body = JSON.parse(b); } };
+    await transcribe({ method: 'POST', headers: { 'x-thestalk-access': 'secure-test-code-16', host: 'localhost', origin: 'https://localhost', 'content-type': 'audio/webm' }, body: Buffer.alloc(400, 7) }, res);
+    assert.equal(res.statusCode, 200, JSON.stringify(res.body));
+    assert.match(urls[0], /generativelanguage\.googleapis\.com/);
+  }
+));
