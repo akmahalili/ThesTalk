@@ -804,3 +804,18 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .sm-sources li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13.5px}
 .sm-sources li:last-child{border-bottom:0}
 :root[data-theme="dark"] .sm-band{color:#4ade80}:root[data-theme="dark"] .sm-mid .sm-band{color:#fbbf24}:root[data-theme="dark"] .sm-high .sm-band{color:#f87171}
+
+/* v3.1 Format Tesis UiTM */
+#view-uitm .card{margin-bottom:14px}
+#view-uitm .view-head h1 small{font-weight:500;color:var(--muted);font-size:.55em}
+#view-uitm .card h3{margin:0 0 10px}
+.uf-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0 18px}
+.uf-form,.uf-side{min-width:0}
+@media (min-width:1100px){.uf-grid{grid-template-columns:minmax(0,1fr) 360px;align-items:start}.uf-side{position:sticky;top:12px}}
+.uf-count{font-size:12px;font-weight:600;color:var(--muted)}
+.uf-count.low{color:#b45309}.uf-count.high{color:#b91c1c}
+.uf-check{display:flex;gap:10px;align-items:flex-start;margin:12px 0;font-size:14px;color:var(--text-2)}
+.uf-check input{width:18px;height:18px;margin-top:2px;flex:none}
+.uf-list{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--text)}
+.uf-list.tips li{padding-left:14px;position:relative;color:var(--text-2)}
+.uf-list.tips li::before{content:'';position:absolute;left:2px;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--primary)}
