@@ -466,3 +466,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .sync-warn{border-left:3px solid #d97706;padding-left:10px}
 .sync-conflict{border:1px solid rgba(217,119,6,.45);background:rgba(217,119,6,.08);border-radius:14px;padding:10px 12px;margin:10px 0}
 .sync-conflict p{margin:0 0 8px}
+
+/* v2.2.1 Projects: each journal paper can be opened, edited or deleted */
+.paper-proj-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.paper-proj-list li{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:12px 0;border-bottom:1px solid var(--border)}
+.paper-proj-list li:last-child{border-bottom:0}
+.paper-proj-list .pp-title{text-align:left;font-weight:600;font-size:14.5px;line-height:1.35;color:var(--accent-text);overflow-wrap:anywhere}
+.paper-proj-list .pp-meta{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.paper-proj-list .pp-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}

@@ -83,7 +83,7 @@
       dUndo: '↶ Kembalikan draf sebelum jana', dUndoConfirm: 'Kembalikan paper seperti sebelum jana?', dUndone: 'Draf sebelum jana dikembalikan.',
       dNote: 'AI hanya memetik kajian yang benar-benar ditemui di OpenAlex. Tanda [PERLU RUJUKAN] dan [DAPATAN …] perlu anda isi sendiri. Kebanyakan jurnal minta penulis nyatakan penggunaan AI.',
       'qc.markers': 'Tiada tanda [PERLU RUJUKAN] atau [DAPATAN] tertinggal', 'qc.markersBad': '{n} tanda seperti [PERLU RUJUKAN] atau [DAPATAN] masih perlu diisi',
-      needAI: 'Sambung AI dahulu di Tetapan (kod akses).', projTitle: 'Paper Jurnal', projEmpty: 'Belum ada paper jurnal.', open: 'Buka'
+      needAI: 'Sambung AI dahulu di Tetapan (kod akses).', projTitle: 'Paper Jurnal', projEmpty: 'Belum ada paper jurnal.', open: 'Buka', edit: 'Sunting', projWords: '{n} perkataan', projNoTarget: 'Tiada jurnal sasaran', projTarget: 'Sasaran: {j}'
     },
     en: {
       title: 'Journal Papers', titleAlt: 'Jurnal & Paper', eyebrow: 'ACADEMIC',
@@ -159,7 +159,7 @@
       dUndo: '↶ Restore the draft from before generating', dUndoConfirm: 'Restore the paper as it was before generating?', dUndone: 'Previous draft restored.',
       dNote: 'The AI only cites studies actually found in OpenAlex. Markers such as [SOURCE NEEDED] and [FINDING …] are for you to fill in. Most journals ask authors to declare AI use.',
       'qc.markers': 'No [SOURCE NEEDED] or [FINDING] markers left', 'qc.markersBad': '{n} markers such as [SOURCE NEEDED] or [FINDING] still to fill in',
-      needAI: 'Connect AI first in Settings (access code).', projTitle: 'Journal Papers', projEmpty: 'No journal papers yet.', open: 'Open'
+      needAI: 'Connect AI first in Settings (access code).', projTitle: 'Journal Papers', projEmpty: 'No journal papers yet.', open: 'Open', edit: 'Edit', projWords: '{n} words', projNoTarget: 'No target journal', projTarget: 'Target: {j}'
     }
   };
   const lang = () => (shell().lang ? shell().lang() : 'ms');
@@ -956,9 +956,16 @@
     const list = store().papers;
     box.replaceChildren(...[
       h('div', { class: 'pd-top' }, h('span', { class: 'pd-icon' }, '📄'), h('div', {}, h('h2', { text: t('projTitle') }), h('p', { class: 'muted', text: list.length ? '' : t('projEmpty') }))),
-      list.length ? h('ul', { class: 'pd-chapters paper-proj-list' }, list.map(p => h('li', {},
-        h('button', { type: 'button', class: 'btn-reset text-action', onclick: () => { openPaper(p.id); shell().go('papers'); }, text: p.title.trim() || t('untitled') }),
-        h('span', { class: 'w', text: fmt(stats(p).words) + ' · ' + (p.target ? p.target.name : '—') })))) : null,
+      list.length ? h('ul', { class: 'paper-proj-list' }, list.map(p => {
+        const name = p.title.trim() || t('untitled');
+        const edit = () => { openPaper(p.id); view.tab = 'write'; shell().go('papers'); };
+        return h('li', {},
+          h('button', { type: 'button', class: 'btn-reset pp-title', onclick: () => { openPaper(p.id); shell().go('papers'); }, text: name }),
+          h('span', { class: 'pp-meta', text: t('projWords', { n: fmt(stats(p).words) }) + ' · ' + (p.target ? t('projTarget', { j: p.target.name }) : t('projNoTarget')) }),
+          h('span', { class: 'pp-actions' },
+            h('button', { type: 'button', class: 'btn btn-outline btn-mini', onclick: edit, 'aria-label': t('edit') + ': ' + name }, '✏️ ', t('edit')),
+            h('button', { type: 'button', class: 'btn btn-outline btn-mini btn-danger', onclick: () => deletePaper(p), 'aria-label': t('del') + ': ' + name }, '🗑 ', t('del'))));
+      })) : null,
       h('div', { class: 'pd-actions' }, h('button', { type: 'button', class: 'btn btn-outline', onclick: () => { shell().go('papers'); setTimeout(newPaper, 0); } }, '＋ ', t('new')))].filter(Boolean));
   }
 
