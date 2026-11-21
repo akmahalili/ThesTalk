@@ -21,7 +21,7 @@
       'voice.unsupported': 'Pelayar ini tidak menyokong input suara. Cuba Chrome.', 'voice.denied': 'Akses mikrofon ditolak. Benarkan mikrofon dalam tetapan pelayar.',
       'tts.listen': 'Dengar', 'tts.listenShort': 'Dengar', 'tts.unsupported': 'Pelayar ini tidak boleh membaca teks dengan suara.', 'tts.empty': 'Tiada teks untuk dibaca.',
       'tts.sample': 'Hai! Ini suara Talkademic. Saya boleh bacakan jawapan dan draf tesis anda.', 'tts.hasMs': 'Suara Bahasa Melayu tersedia ✓', 'tts.noMs': 'Suara Bahasa Melayu tidak dijumpai pada peranti ini.',
-      'lib.exportLabel': 'Eksport ke Mendeley / Zotero / EndNote', 'lib.exportHelp': 'Di Mendeley atau Zotero, pilih Import dan pilih fail ini.', 'lib.exportEmpty': 'Belum ada rujukan untuk dieksport.', 'lib.exported': 'Fail {file} dimuat turun.',
+      'lib.importLabel': 'Import dari Mendeley / Zotero / EndNote', 'lib.importBtn': 'Import RIS / BibTeX', 'lib.importHelp': 'Di Mendeley/Zotero: pilih rujukan → Export → RIS atau BibTeX. Google Scholar: Cite → BibTeX.', 'lib.imported': '{a} rujukan diimport. {s} sudah ada.', 'lib.importNone': 'Fail ini bukan RIS atau BibTeX, atau tiada rujukan di dalamnya.', 'lib.exportLabel': 'Eksport ke Mendeley / Zotero / EndNote', 'lib.exportHelp': 'Di Mendeley atau Zotero, pilih Import dan pilih fail ini.', 'lib.exportEmpty': 'Belum ada rujukan untuk dieksport.', 'lib.exported': 'Fail {file} dimuat turun.',
       'set.voice': 'Suara', 'set.autoSpeak': 'Baca jawapan AI secara automatik', 'set.voiceSend': 'Hantar terus selepas saya bercakap (Sembang Santai)', 'set.testVoice': 'Uji suara',
       'set.voiceHelp': 'Tiada suara BM? Di Android: Tetapan → Teks-ke-pertuturan → Enjin Google → pasang Bahasa Melayu.',
       'brand.tag': 'Sembang • Belajar • Menyelidik',
@@ -96,7 +96,7 @@
       'voice.unsupported': 'This browser does not support voice input. Try Chrome.', 'voice.denied': 'Microphone access was blocked. Allow the microphone in your browser settings.',
       'tts.listen': 'Listen', 'tts.listenShort': 'Listen', 'tts.unsupported': 'This browser cannot read text aloud.', 'tts.empty': 'Nothing to read yet.',
       'tts.sample': 'Hi! This is the Talkademic voice. I can read your answers and thesis drafts aloud.', 'tts.hasMs': 'Malay voice available ✓', 'tts.noMs': 'No Malay voice found on this device.',
-      'lib.exportLabel': 'Export to Mendeley / Zotero / EndNote', 'lib.exportHelp': 'In Mendeley or Zotero, choose Import and pick this file.', 'lib.exportEmpty': 'No references to export yet.', 'lib.exported': '{file} downloaded.',
+      'lib.importLabel': 'Import from Mendeley / Zotero / EndNote', 'lib.importBtn': 'Import RIS / BibTeX', 'lib.importHelp': 'In Mendeley/Zotero: select references → Export → RIS or BibTeX. Google Scholar: Cite → BibTeX.', 'lib.imported': '{a} references imported. {s} were already there.', 'lib.importNone': 'This file is not RIS or BibTeX, or it has no references.', 'lib.exportLabel': 'Export to Mendeley / Zotero / EndNote', 'lib.exportHelp': 'In Mendeley or Zotero, choose Import and pick this file.', 'lib.exportEmpty': 'No references to export yet.', 'lib.exported': '{file} downloaded.',
       'set.voice': 'Voice', 'set.autoSpeak': 'Read AI replies aloud automatically', 'set.voiceSend': 'Send right after I finish speaking (Casual Chat)', 'set.testVoice': 'Test voice',
       'set.voiceHelp': 'No Malay voice? On Android: Settings → Text-to-speech → Google engine → install Malay.',
       'brand.tag': 'Chat • Learn • Research',
@@ -715,6 +715,19 @@
     download(file, kind === 'ris' ? X.toRIS(refs) : X.toBibTeX(refs), kind === 'ris' ? 'application/x-research-info-systems' : 'application/x-bibtex');
     App.toast(t('lib.exported', { file }));
   }
+  async function importRefs(file) {
+    if (!file) return;
+    const I = window.TalkademicRefImport;
+    const s = App.state();
+    const out = I.parse(await file.text(), /melayu|malay/i.test((s.project || {}).language || '') ? 'ms' : 'en');
+    if (!out.refs.length) { App.toast(t('lib.importNone')); return; }
+    if (!Array.isArray(s.references)) s.references = [];
+    const r = I.merge(s.references, out.refs, App.date());
+    App.save(); App.render(); App.renderRefsList();
+    App.toast(t('lib.imported', { a: r.added, s: r.skipped }));
+  }
+  $('#importRefs').addEventListener('click', () => $('#importRefsFile').click());
+  $('#importRefsFile').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; importRefs(f).catch(err => App.toast(err.message || 'Error')); });
   $('#exportRIS').addEventListener('click', () => exportRefs('ris'));
   $('#exportBib').addEventListener('click', () => exportRefs('bib'));
 

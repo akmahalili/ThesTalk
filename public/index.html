@@ -361,7 +361,7 @@
         <div class="view-head"><div><h1 id="libraryTitle"><span data-k="nav.library">Perpustakaan</span> <small data-k2="nav.library">Library</small></h1><p data-i18n="lib.sub">Rujukan daripada draf yang anda masukkan ke dalam tesis. Ia ditambah sebagai senarai Rujukan di hujung fail DOCX.</p></div><span class="count-pill" id="libCount">0</span></div>
         <div class="card">
           <div id="refsItems" class="history-items lib-items"></div>
-          <div class="export-row"><span class="field-label" data-i18n="lib.exportLabel">Eksport ke Mendeley / Zotero / EndNote</span><div class="tool-row"><button id="exportRIS" class="btn btn-outline" type="button">↓ RIS</button><button id="exportBib" class="btn btn-outline" type="button">↓ BibTeX</button></div><p class="muted small-note" data-i18n="lib.exportHelp">Di Mendeley atau Zotero, pilih Import dan pilih fail ini.</p></div><div class="modal-actions"><button id="copyRefs" class="btn btn-outline" type="button">⧉ <span data-i18n="lib.copyAll">Salin semua</span></button><button id="libFind" class="btn btn-primary" type="button" data-go="academic" data-focus="writing"><span data-i18n="lib.find">Cari rujukan untuk idea baharu</span></button></div>
+          <div class="export-row import-row"><span class="field-label" data-i18n="lib.importLabel">Import dari Mendeley / Zotero / EndNote</span><div class="tool-row"><button id="importRefs" class="btn btn-outline" type="button">↑ <span data-i18n="lib.importBtn">Import RIS / BibTeX</span></button><input id="importRefsFile" type="file" accept=".ris,.bib,.bibtex,.txt,.nbib,application/x-research-info-systems,application/x-bibtex,text/plain" hidden></div><p class="muted small-note" data-i18n="lib.importHelp">Di Mendeley/Zotero: pilih rujukan → Export → RIS atau BibTeX. Google Scholar: Cite → BibTeX.</p></div><div class="export-row"><span class="field-label" data-i18n="lib.exportLabel">Eksport ke Mendeley / Zotero / EndNote</span><div class="tool-row"><button id="exportRIS" class="btn btn-outline" type="button">↓ RIS</button><button id="exportBib" class="btn btn-outline" type="button">↓ BibTeX</button></div><p class="muted small-note" data-i18n="lib.exportHelp">Di Mendeley atau Zotero, pilih Import dan pilih fail ini.</p></div><div class="modal-actions"><button id="copyRefs" class="btn btn-outline" type="button">⧉ <span data-i18n="lib.copyAll">Salin semua</span></button><button id="libFind" class="btn btn-primary" type="button" data-go="academic" data-focus="writing"><span data-i18n="lib.find">Cari rujukan untuk idea baharu</span></button></div>
         </div>
       </section>
 
@@ -468,6 +468,7 @@
   <script src="./docx.js"></script>
   <script src="./app.js"></script>
   <script src="./refexport.js"></script>
+  <script src="./refimport.js"></script>
   <script src="./backup.js"></script>
   <script src="./docximport.js"></script>
   <script src="./papers.js"></script>

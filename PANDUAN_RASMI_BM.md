@@ -128,3 +128,12 @@ Akademik → **Matriks Literatur**.
 5. **Muat turun Excel** untuk fail .xlsx, atau **Tambah semua ke rujukan tesis**.
 6. **Sintesis & cari jurang** memberi tema, jurang kajian dan petikan tinjauan literatur bersitasi APA yang boleh dimasukkan ke tesis atau paper.
 
+## Import rujukan RIS / BibTeX (v1.9)
+
+Perpustakaan → **Import RIS / BibTeX** (atau dalam Rujukan paper).
+
+- Mendeley / Zotero / EndNote: pilih rujukan → Export → RIS atau BibTeX.
+- Google Scholar: tekan Cite → BibTeX, simpan sebagai fail .bib.
+
+Setiap rujukan ditukar ke format APA 7 (artikel jurnal, buku, bab buku, prosiding, tesis, laman web). Rujukan yang sudah ada (DOI atau tajuk sama) tidak ditambah dua kali.
+

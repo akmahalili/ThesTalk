@@ -32,7 +32,7 @@
       citeTitle: 'Tulis dengan rujukan sebenar', citeBody: 'Taip idea secara santai. Talkademic cari kajian sebenar (OpenAlex) dan tulis perenggan akademik dengan sitasi APA.',
       citePh: 'cth. gambar close up buat pembeli lebih yakin sebab nampak kualiti produk', citeBtn: 'Jana perenggan', citeBusy: 'Mencari kajian dan menulis… (sehingga 1 minit)',
       insertInto: 'Masukkan ke {s}', discard: 'Buang', citeAdded: 'Perenggan dimasukkan. {n} rujukan ditambah.',
-      refs: 'Rujukan paper', noRefs: 'Belum ada rujukan. Guna "Tulis dengan rujukan sebenar" untuk menambah.', copyRefs: 'Salin rujukan', copied: 'Rujukan disalin.', remove: 'Buang rujukan',
+      refs: 'Rujukan paper', noRefs: 'Belum ada rujukan. Guna "Tulis dengan rujukan sebenar" untuk menambah.', copyRefs: 'Salin rujukan', importRefs: 'Import RIS / BibTeX', importedRefs: '{a} rujukan diimport. {s} sudah ada.', importNone: 'Fail ini bukan RIS atau BibTeX, atau tiada rujukan di dalamnya.', copied: 'Rujukan disalin.', remove: 'Buang rujukan',
       exportDocx: 'Eksport DOCX', del: 'Padam paper', delConfirm: 'Padam paper "{t}"? Tindakan ini tidak boleh dibatalkan (kecuali dari backup).', deleted: 'Paper dipadam.',
       jIntro: 'Cadangan jurnal berdasarkan jurnal yang sudah menerbitkan kajian serupa dengan paper anda. Semua angka dari OpenAlex.',
       jFind: 'Cari jurnal sesuai', jRecent: '5 tahun terkini sahaja', jBusy: 'Mencari jurnal yang menerbitkan kajian serupa…',
@@ -108,7 +108,7 @@
       citeTitle: 'Write with real references', citeBody: 'Type an idea casually. Talkademic finds real studies (OpenAlex) and writes an academic paragraph with APA citations.',
       citePh: 'e.g. close-up photos make buyers more confident because they can see product quality', citeBtn: 'Write paragraph', citeBusy: 'Finding studies and writing… (up to a minute)',
       insertInto: 'Insert into {s}', discard: 'Discard', citeAdded: 'Paragraph inserted. {n} references added.',
-      refs: 'Paper references', noRefs: 'No references yet. Use "Write with real references" to add some.', copyRefs: 'Copy references', copied: 'References copied.', remove: 'Remove reference',
+      refs: 'Paper references', noRefs: 'No references yet. Use "Write with real references" to add some.', copyRefs: 'Copy references', importRefs: 'Import RIS / BibTeX', importedRefs: '{a} references imported. {s} were already there.', importNone: 'This file is not RIS or BibTeX, or it has no references.', copied: 'References copied.', remove: 'Remove reference',
       exportDocx: 'Export DOCX', del: 'Delete paper', delConfirm: 'Delete paper "{t}"? This cannot be undone (except from a backup).', deleted: 'Paper deleted.',
       jIntro: 'Suggestions are journals that already publish work similar to your paper. All numbers come from OpenAlex.',
       jFind: 'Find suitable journals', jRecent: 'Last 5 years only', jBusy: 'Finding journals that publish similar work…',
@@ -365,7 +365,23 @@
         ? h('ol', { class: 'paper-refs-list' }, refs.map(r => h('li', {}, h('span', { text: r.apa }), ' ',
             h('button', { type: 'button', class: 'btn-reset ref-x', 'aria-label': t('remove'), title: t('remove'), onclick: () => { p.references = p.references.filter(x => x !== r); touch(p); renderBody(); } }, '×'))))
         : h('p', { class: 'muted small-note', text: t('noRefs') }),
-      refs.length ? h('button', { type: 'button', class: 'btn-reset text-action', onclick: () => copyText(refs.map(r => r.apa).join('\n'), t('copied')), text: t('copyRefs') }) : null);
+      h('div', { class: 'tool-row' },
+        refs.length ? h('button', { type: 'button', class: 'btn-reset text-action', onclick: () => copyText(refs.map(r => r.apa).join('\n'), t('copied')), text: t('copyRefs') }) : null,
+        refImport(p)));
+  }
+  function refImport(p) {
+    const input = h('input', { type: 'file', accept: '.ris,.bib,.bibtex,.txt,.nbib', hidden: true, onchange: async e => {
+      const f = e.target.files && e.target.files[0]; e.target.value = '';
+      if (!f) return;
+      const I = window.TalkademicRefImport;
+      const out = I.parse(await f.text(), /melayu|malay/i.test(p.language || '') ? 'ms' : 'en');
+      if (!out.refs.length) { App.toast(t('importNone')); return; }
+      if (!Array.isArray(p.references)) p.references = [];
+      const r = I.merge(p.references, out.refs, App.date());
+      touch(p); renderBody();
+      App.toast(t('importedRefs', { a: r.added, s: r.skipped }));
+    } });
+    return [h('button', { type: 'button', class: 'btn-reset text-action', onclick: () => input.click() }, '↑ ', t('importRefs')), input];
   }
 
   /* ----- Target journal tab ----- */
