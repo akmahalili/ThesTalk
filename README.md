@@ -12,9 +12,9 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 2. In Vercel, **Add New → Project → Import Git Repository → `akmahalili/ThesTalk` → Deploy**. Choose framework **Other** if prompted. The app has root-level static assets and API serverless functions.
 3. It will have an HTTPS `*.vercel.app` link. On Android Chrome, use **⋮ → Add to Home screen / Install app** for an app icon and standalone experience.
 4. For **actual AI**, go to Vercel → Project → Settings → Environment Variables and configure the following **directly in Vercel**, not in source code:
-   - `OPENAI_API_KEY` — paid API account key; keep private.
+   - At least one AI key: `GEMINI_API_KEY` (free), `ANTHROPIC_API_KEY` (Claude, paid) or `OPENAI_API_KEY` (ChatGPT, paid). Keep keys private.
    - `THESTALK_AI_ACCESS_CODE` — a **unique randomly generated code of at least 12 characters**. **Do not use your API key** as the access code. Share only with trusted users.
-   - `OPENAI_MODEL` — optionally set a model you have permission to use; default `gpt-4.1-mini`.
+   - `OPENAI_MODEL` / `CLAUDE_MODEL` / `GEMINI_MODEL` — optionally set a model to try first (defaults below).
    - `OPENAI_TRANSCRIPTION_MODEL` — optionally set a supported transcription model; default `gpt-4o-mini-transcribe`.
    - `OPENALEX_API_KEY` — free key from https://openalex.org/settings/api, needed for **Find real references** (see below).
 5. Redeploy after adding environment variables. In the app, press **Connect AI**, enter the access code and verify the badge changes to **AI connected**.
@@ -22,6 +22,18 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 ## Free AI option (Gemini)
 
 Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. ThesTalk then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.5-flash-lite`, moving to `gemini-3.1-flash-lite` when a model is busy, missing or over its limit (set `GEMINI_MODEL` to try another model first). On the free tier the Flash-Lite models allow about 500 requests a day each, while Gemini Flash allows only about 20, which is why Flash-Lite is the default. Each conversion with references uses two requests. The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. Voice transcription also runs on Gemini (the browser recording is sent as-is), so the mic works for free; without any AI key the app falls back to the browser's speech recognition. The access code is remembered on the device after a successful unlock.
+
+## Choose AI: Gemini, Claude or ChatGPT (v0.7)
+
+Each AI key switches that AI on. Users pick one in **Settings → Choose AI** or from the **✦ pill** in the top bar; the choice is saved on the device and sent with every request in the `X-ThesTalk-AI` header. If the chosen AI has no key, the server falls back to `AI_PROVIDER`, then Gemini, ChatGPT, Claude.
+
+| AI | Key | Default model (fallback) | Cost |
+|---|---|---|---|
+| Gemini | `GEMINI_API_KEY` | `gemini-3.5-flash-lite` (`gemini-3.1-flash-lite`) | Free tier |
+| Claude | `ANTHROPIC_API_KEY` | `claude-sonnet-5-5` (`claude-haiku-5-5`) | API credits from platform.claude.com |
+| ChatGPT | `OPENAI_API_KEY` | `gpt-5.6-terra` (`gpt-5.4-mini`, `gpt-4.1-mini`) | API credits from platform.openai.com |
+
+Claude Pro and ChatGPT Plus subscriptions do not include API usage. Claude Max/Team and ChatGPT Pro/Business plans include monthly API credits that can be claimed and linked to an API organization. Real references always come from OpenAlex, whichever AI writes the paragraph, and the server still drops any citation number that matches no retrieved paper. `/api/status` reports only which AIs are on (true/false), never the keys.
 
 ## Voice and export (v0.6)
 

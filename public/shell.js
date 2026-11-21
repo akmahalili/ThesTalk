@@ -10,7 +10,7 @@
   const UI_KEY = 'thestalk_ui_v1';
   const VIEWS = ['home', 'casual', 'academic', 'proofread', 'projects', 'library', 'settings'];
 
-  const ui = Object.assign({ lang: 'ms', theme: 'system', name: '', mode: 'casual', onboarded: false, academicOpen: true, autoSpeak: false, voiceAutoSend: false }, readUI());
+  const ui = Object.assign({ lang: 'ms', theme: 'system', name: '', mode: 'casual', onboarded: false, academicOpen: true, autoSpeak: false, voiceAutoSend: false, ai: 'gemini' }, readUI());
   function readUI() { try { return JSON.parse(localStorage.getItem(UI_KEY) || '{}') || {}; } catch (e) { return {}; } }
   function saveUI() { try { localStorage.setItem(UI_KEY, JSON.stringify(ui)); } catch (e) { /* storage unavailable */ } }
 
@@ -60,6 +60,9 @@
       'proj.sub': 'Satu projek tesis disimpan dalam pelayar ini. Eksport DOCX sebagai sandaran.', 'proj.open': 'Buka ruang kerja tesis', 'proj.edit': 'Edit profil tesis', 'proj.new': 'Projek baharu', 'proj.save': 'Simpan projek',
       'lib.sub': 'Rujukan daripada draf yang anda masukkan ke dalam tesis. Ia ditambah sebagai senarai Rujukan di hujung fail DOCX.', 'lib.copyAll': 'Salin semua', 'lib.find': 'Cari rujukan untuk idea baharu',
       'set.profile': 'Profil', 'set.name': 'Nama paparan', 'set.namePh': 'cth. Nur Akma', 'set.saved': 'Profil disimpan.', 'set.lang': 'Bahasa antara muka', 'set.theme': 'Tema', 'set.light': 'Cerah', 'set.dark': 'Gelap', 'set.system': 'Ikut peranti',
+      'set.aiPick': 'Pilih AI', 'set.aiPickBody': 'Gemini percuma untuk kegunaan harian. Claude dan ChatGPT menggunakan kredit API, sesuai untuk bab dan abstrak penting.',
+      'set.aiPickRefs': 'Rujukan sebenar tetap dicari dalam OpenAlex, apa pun AI yang dipilih.', 'set.aiPickLocked': 'Sambung AI dahulu (kod akses) untuk memilih AI.',
+      'ai.free': 'Percuma', 'ai.paid': 'Kredit API', 'ai.needKey': 'Belum ada API key', 'ai.switched': 'Kini menggunakan {x}',
       'set.ai': 'Sambungan AI', 'set.aiBody': 'AI memerlukan pemilik aplikasi menetapkan kunci API di pelayan dan anda memasukkan kod akses.', 'ai.on': '✦ AI disambung', 'ai.off': 'AI belum aktif',
       'set.thesis': 'Profil tesis', 'set.thesisBody': 'Tajuk, objektif, soalan kajian, bahasa draf dan gaya sitasi.', 'set.onboard': 'Tunjuk semula pengenalan',
       'pf.title': 'Tajuk tesis', 'pf.uni': 'Universiti / institusi', 'pf.degree': 'Ijazah', 'pf.ro': 'Objektif kajian (satu setiap baris)', 'pf.rq': 'Soalan kajian (satu setiap baris)', 'pf.context': 'Teori / metodologi / konteks penting', 'pf.lang': 'Bahasa draf', 'pf.cite': 'Gaya sitasi',
@@ -111,6 +114,9 @@
       'proj.sub': 'One thesis project is stored in this browser. Export DOCX as a backup.', 'proj.open': 'Open thesis workspace', 'proj.edit': 'Edit thesis profile', 'proj.new': 'New project', 'proj.save': 'Save project',
       'lib.sub': 'References from drafts you inserted into your thesis. They are added as a References list at the end of your DOCX.', 'lib.copyAll': 'Copy all', 'lib.find': 'Find references for a new idea',
       'set.profile': 'Profile', 'set.name': 'Display name', 'set.namePh': 'e.g. Nur Akma', 'set.saved': 'Profile saved.', 'set.lang': 'Interface language', 'set.theme': 'Theme', 'set.light': 'Light', 'set.dark': 'Dark', 'set.system': 'Match device',
+      'set.aiPick': 'Choose AI', 'set.aiPickBody': 'Gemini is free for everyday use. Claude and ChatGPT use API credits, best for important chapters and abstracts.',
+      'set.aiPickRefs': 'Real references still come from OpenAlex, whichever AI you choose.', 'set.aiPickLocked': 'Connect AI first (access code) to choose an AI.',
+      'ai.free': 'Free', 'ai.paid': 'API credits', 'ai.needKey': 'No API key yet', 'ai.switched': 'Now using {x}',
       'set.ai': 'AI connection', 'set.aiBody': 'AI needs the app owner to set an API key on the server and you to enter the access code.', 'ai.on': '✦ AI connected', 'ai.off': 'AI not active',
       'set.thesis': 'Thesis profile', 'set.thesisBody': 'Title, objectives, research questions, draft language and citation style.', 'set.onboard': 'Show the welcome screens again',
       'pf.title': 'Thesis title', 'pf.uni': 'University / institution', 'pf.degree': 'Degree', 'pf.ro': 'Research objectives (one per line)', 'pf.rq': 'Research questions (one per line)', 'pf.context': 'Theories / methodology / important context', 'pf.lang': 'Draft language', 'pf.cite': 'Citation style',
@@ -144,6 +150,7 @@
     $$('[data-theme-toggle]').forEach(b => b.setAttribute('aria-label', t('theme.toggle')));
     renderIdentity();
     renderCasual();
+    if (typeof renderAI === 'function') try { renderAI(); } catch (e) { /* picker not ready yet */ }
     refresh();
   }
 
@@ -591,10 +598,76 @@
   $('#restartOnboarding').addEventListener('click', showOnboarding);
   function onAI(on) {
     const chip = $('#aiStatusMirror');
-    if (!chip) return;
-    chip.textContent = t(on ? 'ai.on' : 'ai.off');
-    chip.classList.toggle('local', !on);
+    if (chip) {
+      chip.textContent = t(on ? 'ai.on' : 'ai.off');
+      chip.classList.toggle('local', !on);
+    }
+    renderAI();
   }
+
+  /* ---------- Pilih AI: Gemini (free) / Claude / ChatGPT ---------- */
+  const AI_LIST = [
+    { id: 'gemini', name: 'Gemini', by: 'Google', cost: 'ai.free' },
+    { id: 'claude', name: 'Claude', by: 'Anthropic', cost: 'ai.paid' },
+    { id: 'openai', name: 'ChatGPT', by: 'OpenAI', cost: 'ai.paid' }
+  ];
+  const aiKeys = () => (App.providers && App.providers()) || {};
+  /* The AI that will actually answer: the saved choice if its key exists, otherwise the server default. */
+  function aiChoice() {
+    const k = aiKeys();
+    if (k[ui.ai]) return ui.ai;
+    const d = App.defaultProvider && App.defaultProvider();
+    if (d && k[d]) return d;
+    return (AI_LIST.find(a => k[a.id]) || AI_LIST[0]).id;
+  }
+  const aiName = id => (AI_LIST.find(a => a.id === id) || AI_LIST[0]).name;
+  function fillAIOptions(box) {
+    if (!box) return;
+    const k = aiKeys(), on = App.aiAvailable(), cur = aiChoice();
+    box.replaceChildren();
+    AI_LIST.forEach(a => {
+      const usable = on && !!k[a.id];
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'ai-option'; b.dataset.ai = a.id;
+      b.setAttribute('role', 'radio');
+      b.setAttribute('aria-checked', String(usable && a.id === cur));
+      b.disabled = !usable;
+      const dot = document.createElement('span'); dot.className = 'ai-dot ai-' + a.id; dot.setAttribute('aria-hidden', 'true');
+      const txt = document.createElement('span'); txt.className = 'ai-text';
+      const nm = document.createElement('strong'); nm.textContent = a.name;
+      const sub = document.createElement('small'); sub.textContent = usable ? t(a.cost) + ' · ' + a.by : (on ? t('ai.needKey') : a.by);
+      txt.append(nm, sub);
+      const tick = document.createElement('span'); tick.className = 'ai-tick'; tick.setAttribute('aria-hidden', 'true'); tick.textContent = '✓';
+      b.append(dot, txt, tick);
+      b.addEventListener('click', () => setAI(a.id));
+      box.appendChild(b);
+    });
+  }
+  function renderAI() {
+    const on = App.aiAvailable();
+    const pill = $('#aiPill');
+    if (pill) { pill.hidden = !on; $('#aiPillName').textContent = aiName(aiChoice()); }
+    fillAIOptions($('#aiOptions'));
+    fillAIOptions($('#aiMenuOptions'));
+    const note = $('#aiPickNote');
+    if (note) note.textContent = t(on ? 'set.aiPickRefs' : 'set.aiPickLocked');
+  }
+  function setAI(id) {
+    if (!aiKeys()[id]) return;
+    const changed = ui.ai !== id;
+    ui.ai = id; saveUI(); renderAI(); closeAIMenu();
+    if (changed) App.toast(t('ai.switched').replace('{x}', aiName(id)));
+  }
+  function closeAIMenu() { const m = $('#aiMenu'); if (m) m.hidden = true; const p = $('#aiPill'); if (p) p.setAttribute('aria-expanded', 'false'); }
+  $('#aiPill').addEventListener('click', e => {
+    e.stopPropagation();
+    const m = $('#aiMenu'), open = m.hidden;
+    if (open) fillAIOptions($('#aiMenuOptions'));
+    m.hidden = !open; e.currentTarget.setAttribute('aria-expanded', String(open));
+    if (open) { const b = m.querySelector('[aria-checked="true"]') || m.querySelector('button:not([disabled])'); if (b) b.focus(); }
+  });
+  document.addEventListener('click', e => { if (!e.target.closest('.ai-pick-wrap')) closeAIMenu(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAIMenu(); });
 
   /* ---------- search ---------- */
   function snippet(text, q) {
@@ -679,7 +752,7 @@
     }, 30);
   }
 
-  window.ThesTalkShell = { refresh, onAI, go, t };
+  window.ThesTalkShell = { refresh, onAI, go, t, aiChoice };
 
   /* ---------- boot ---------- */
   applyTheme();

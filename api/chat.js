@@ -1,5 +1,5 @@
 'use strict';
-const { json, protect, cap, metadata, getBody, askAI, integrity, fail } = require('../lib/common');
+const { json, protect, cap, metadata, getBody, askAI, pick, integrity, fail } = require('../lib/common');
 
 const ACADEMIC = 'You are ThesTalk AI, a warm, concise research thinking partner. Speak natural Bahasa Melayu for Malay, English for English, or mix if the researcher mixes. The user is brainstorming, not requesting a finished academic chapter. Help explain the academic significance without claiming unverified evidence. ' + integrity;
 
@@ -19,7 +19,8 @@ module.exports = async function handler(req, res) {
     const input = casual
       ? [...history, { role: 'user', content: text }]
       : [{ role: 'user', content: 'Research profile (unverified metadata): ' + JSON.stringify(metadata(data)) }, ...history, { role: 'user', content: text }];
-    return json(res, 200, { reply: await askAI(casual ? CASUAL : ACADEMIC, input, casual ? 600 : 700) });
+    const ai = pick(req);
+    return json(res, 200, { reply: await askAI(casual ? CASUAL : ACADEMIC, input, casual ? 600 : 700, { provider: ai }), ai });
   } catch (e) {
     return fail(res, e);
   }

@@ -97,6 +97,13 @@
           <div id="searchResults" class="search-results" hidden></div>
         </div>
         <div class="top-right">
+          <div class="ai-pick-wrap">
+            <button type="button" class="ai-pill" id="aiPill" aria-haspopup="true" aria-expanded="false" aria-controls="aiMenu" hidden><span class="ai-spark" aria-hidden="true">✦</span><span id="aiPillName">Gemini</span><svg class="ic chev" aria-hidden="true"><use href="#ic-down"/></svg></button>
+            <div class="ai-menu" id="aiMenu" hidden>
+              <div class="ai-menu-title" data-i18n="set.aiPick">Pilih AI</div>
+              <div class="ai-options" id="aiMenuOptions" role="radiogroup" data-i18n-aria="set.aiPick" aria-label="Pilih AI"></div>
+            </div>
+          </div>
           <button type="button" class="icon-btn" data-theme-toggle aria-label="Tukar tema"><svg class="ic sun"><use href="#ic-sun"/></svg><svg class="ic moon"><use href="#ic-moon"/></svg></button>
           <button type="button" class="avatar-chip" data-go="settings" aria-label="Profil"><span class="avatar-circle" id="avatarInitials">T</span><span class="avatar-name" id="avatarName">Penyelidik</span></button>
         </div>
@@ -309,6 +316,12 @@
             <h2 data-i18n="set.ai">Sambungan AI</h2>
             <p class="muted" data-i18n="set.aiBody">AI memerlukan pemilik aplikasi menetapkan kunci API di pelayan dan anda memasukkan kod akses.</p>
             <div class="tool-row"><span id="aiStatusMirror" class="status-chip local">…</span><button type="button" class="btn btn-outline" id="connectAI2">🔐 <span data-i18n="ai.connect">Sambung AI</span></button></div>
+          </div>
+          <div class="card setting" id="aiPickCard">
+            <h2 data-i18n="set.aiPick">Pilih AI</h2>
+            <p class="muted" data-i18n="set.aiPickBody">Gemini percuma untuk kegunaan harian. Claude dan ChatGPT menggunakan kredit API, sesuai untuk bab dan abstrak penting.</p>
+            <div class="ai-options" id="aiOptions" role="radiogroup" data-i18n-aria="set.aiPick" aria-label="Pilih AI"></div>
+            <p class="muted small-note" id="aiPickNote" data-i18n="set.aiPickRefs">Rujukan sebenar tetap dicari dalam OpenAlex, apa pun AI yang dipilih.</p>
           </div>
           <div class="card setting">
             <h2 data-i18n="set.voice">Suara</h2>

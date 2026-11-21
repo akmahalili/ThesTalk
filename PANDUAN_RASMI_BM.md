@@ -17,13 +17,17 @@ Repo milik anda: https://github.com/akmahalili/ThesTalk
 3. Pilih framework **Other**, root directory `./`, kemudian Deploy.
 4. Buka URL HTTPS `.vercel.app` yang Vercel berikan. Ia akan berfungsi sebagai aplikasi penulisan tempatan (AI masih belum diaktifkan).
 
-## 3. Aktifkan AI sebenar (pilihan, berbayar)
+## 3. Aktifkan AI sebenar
 
-Di Vercel Project Settings > Environment Variables, tetapkan **secara rahsia**:
+Di Vercel Project Settings > Environment Variables, tetapkan **secara rahsia** sekurang-kurangnya satu kunci AI (jangan commit ke GitHub):
 
-- `OPENAI_API_KEY`: kunci OpenAI API milik anda (jangan kongsi dalam chat, jangan commit ke GitHub)
+- `GEMINI_API_KEY`: Google Gemini, ada peringkat percuma (lalai)
+- `ANTHROPIC_API_KEY`: Claude, guna kredit API dari https://platform.claude.com
+- `OPENAI_API_KEY`: ChatGPT, guna kredit API dari https://platform.openai.com
 - `THESTALK_AI_ACCESS_CODE`: kod unik panjang sekurang-kurangnya 12 aksara yang anda cipta, **bukan** API key
-- `OPENAI_MODEL`: secara pilihan `gpt-4.1-mini` atau model lain yang akaun API boleh gunakan
+- `OPENAI_MODEL` / `CLAUDE_MODEL` / `GEMINI_MODEL`: pilihan, model yang hendak dicuba dahulu
+
+**Pilih AI (v0.7):** setiap kunci menghidupkan AI itu. Pengguna memilih di **Tetapan → Pilih AI** atau butang **✦** di bar atas. Langganan Claude Pro dan ChatGPT Plus tidak termasuk API; plan Claude Max/Team dan ChatGPT Pro/Business ada kredit API bulanan yang perlu dituntut. Rujukan tetap dicari dalam OpenAlex, apa pun AI yang dipilih.
 
 Redeploy selepas menambah konfigurasi. Pada laman aplikasi, tekan `Connect AI` dan masukkan *access code* tadi. Bila lulus, status bertukar menjadi `AI connected`. Tanpa kedua-dua tetapan ini, aplikasi dengan sengaja **tidak** mendakwa menghasilkan teks AI.
 

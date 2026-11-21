@@ -7,7 +7,7 @@
  * 4. The server converts the numbers into APA 7 citations, drops numbers that match
  *    no retrieved paper and lists only the papers actually cited.
  */
-const { json, protect, cap, metadata, getBody, askAI, integrity, fail } = require('../lib/common');
+const { json, protect, cap, metadata, getBody, askAI, pick, integrity, fail } = require('../lib/common');
 const sources = require('../lib/sources');
 const C = require('../lib/cite');
 
@@ -22,17 +22,18 @@ module.exports = async function handler(req, res) {
     const length = data.length === 'long' ? 'long' : 'short';
     const recent = data.recentOnly === true;
     const warnings = [];
+    const ai = pick(req);
 
     // 1. Understand the idea and plan the searches.
     let claim = '';
     let queries = [];
     try {
-      const raw = await askAI(C.QUERY_INSTRUCTIONS, C.queryInput(idea, meta), 400, { text: { format: { type: 'json_object' } } });
+      const raw = await askAI(C.QUERY_INSTRUCTIONS, C.queryInput(idea, meta), 400, { text: { format: { type: 'json_object' } }, provider: ai });
       const plan = C.parseJSONLoose(raw) || {};
       claim = cap(plan.claim, 400);
       queries = C.cleanQueries(plan.queries);
     } catch (e) {
-      if (e.status === 429) throw e; // provider quota: nothing else will work either
+      if (e.status === 429 || e.status === 402) throw e; // provider quota or credits: nothing else will work either
     }
     if (!queries.length) queries = [C.fallbackQuery(idea)];
 
@@ -49,7 +50,7 @@ module.exports = async function handler(req, res) {
     }
 
     // 3. Write from those papers only.
-    const raw = await askAI(C.writeInstructions(lang, length) + '\n' + integrity, C.writeInput({ idea, claim, meta, papers }), length === 'long' ? 1500 : 1000);
+    const raw = await askAI(C.writeInstructions(lang, length) + '\n' + integrity, C.writeInput({ idea, claim, meta, papers }), length === 'long' ? 1500 : 1000, { provider: ai });
 
     // 4. Validate citations and build the reference list.
     const out = C.render(raw, papers, lang);
@@ -64,7 +65,8 @@ module.exports = async function handler(req, res) {
       papers: out.papers,
       queries,
       warnings,
-      provider: sources.provider
+      provider: sources.provider,
+      ai
     });
   } catch (e) {
     return fail(res, e);
