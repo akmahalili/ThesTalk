@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const common = require('../lib/common');
 const status = require('../api/status');
 
-const KEYS = ['AI_DISABLED', 'GEMINI_API_KEY', 'ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'AI_PROVIDER', 'CLAUDE_MODEL', 'OPENAI_MODEL', 'THESTALK_AI_ACCESS_CODE'];
+const KEYS = ['AI_DISABLED', 'GEMINI_API_KEY', 'ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'GROQ_API_KEY', 'GROQ_MODEL', 'AI_PROVIDER', 'CLAUDE_MODEL', 'OPENAI_MODEL', 'THESTALK_AI_ACCESS_CODE'];
 function withEnv(env, fn) {
   return async () => {
     const saved = Object.fromEntries(KEYS.map(k => [k, process.env[k]]));
@@ -27,7 +27,7 @@ test('provider: requested AI is used only when its key exists', withEnv({ GEMINI
   assert.equal(common.provider('chatgpt'), 'gemini');
   assert.equal(common.provider(''), 'gemini');
   assert.equal(common.pick({ headers: { 'x-thestalk-ai': 'claude' } }), 'claude');
-  assert.deepEqual(common.available(), { gemini: true, claude: true, openai: false });
+  assert.deepEqual(common.available(), { gemini: true, claude: true, openai: false, groq: false });
 }));
 
 test('provider: Claude alone is enough to configure the app', withEnv({ ANTHROPIC_API_KEY: 'a', THESTALK_AI_ACCESS_CODE: 'secure-test-code-16' }, () => {
@@ -89,15 +89,41 @@ test('ChatGPT quota error says credits are used up', withEnv({ OPENAI_API_KEY: '
 test('status lists which AIs are switched on, without secrets', withEnv({ GEMINI_API_KEY: 'g', OPENAI_API_KEY: 'o', THESTALK_AI_ACCESS_CODE: 'secure-test-code-16' }, async () => {
   const r = { headers: {}, setHeader(k, v) { this.headers[k] = v; }, end(b) { this.body = JSON.parse(b); } };
   await status({ method: 'GET', headers: { 'x-thestalk-access': 'secure-test-code-16' } }, r);
-  assert.deepEqual(r.body.providers, { gemini: true, claude: false, openai: true });
+  assert.deepEqual(r.body.providers, { gemini: true, claude: false, openai: true, groq: false });
   assert.equal(r.body.defaultProvider, 'gemini');
   assert.ok(!JSON.stringify(r.body).includes('"o"'));
   const locked = { headers: {}, setHeader() {}, end(b) { this.body = JSON.parse(b); } };
   await status({ method: 'GET', headers: {} }, locked);
-  assert.deepEqual(locked.body.providers, { gemini: false, claude: false, openai: false });
+  assert.deepEqual(locked.body.providers, { gemini: false, claude: false, openai: false, groq: false });
 }));
 
 test('AI_DISABLED hides an AI even when its key exists', withEnv({ GEMINI_API_KEY: 'g', OPENAI_API_KEY: 'o', AI_DISABLED: 'chatgpt' }, () => {
-  assert.deepEqual(common.available(), { gemini: true, claude: false, openai: false });
+  assert.deepEqual(common.available(), { gemini: true, claude: false, openai: false, groq: false });
   assert.equal(common.provider('openai'), 'gemini');
+}));
+
+test('Groq: free second AI, chosen on request, with JSON mode and gpt-oss low reasoning', withEnv({ GEMINI_API_KEY: 'g', GROQ_API_KEY: 'q' }, async () => {
+  assert.equal(common.provider('groq'), 'groq');
+  assert.deepEqual(common.available(), { gemini: true, claude: false, openai: false, groq: true });
+  const sent = [];
+  global.fetch = async (url, opts) => { sent.push({ url: String(url), body: JSON.parse(opts.body), auth: opts.headers.Authorization }); return reply(200, { choices: [{ message: { content: '<think>hmm</think>{"ok":true}' } }] }); };
+  const out = await common.askAI('sys', 'hi', 500, { provider: 'groq', text: { format: { type: 'json_object' } } });
+  assert.equal(out, '{"ok":true}');
+  assert.match(sent[0].url, /api\.groq\.com\/openai\/v1\/chat\/completions/);
+  assert.equal(sent[0].auth, 'Bearer q');
+  assert.equal(sent[0].body.model, 'openai/gpt-oss-120b');
+  assert.equal(sent[0].body.reasoning_effort, 'low');
+  assert.deepEqual(sent[0].body.response_format, { type: 'json_object' });
+}));
+
+test('Groq answers when the Gemini free limit is used up', withEnv({ GEMINI_API_KEY: 'g', GROQ_API_KEY: 'q' }, async () => {
+  const hosts = [];
+  global.fetch = async url => { hosts.push(new URL(String(url)).host); return String(url).includes('generativelanguage') ? reply(429, {}) : reply(200, { choices: [{ message: { content: 'jawapan' } }] }); };
+  assert.equal(await common.askAI('sys', 'hi', 300, {}), 'jawapan');
+  assert.ok(hosts.includes('api.groq.com'));
+}));
+
+test('without a Groq key the Gemini limit message is shown as before', withEnv({ GEMINI_API_KEY: 'g' }, async () => {
+  global.fetch = async () => reply(429, {});
+  await assert.rejects(common.askAI('sys', 'hi', 300, {}), /Gemini free tier/);
 }));

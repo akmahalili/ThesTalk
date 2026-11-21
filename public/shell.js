@@ -81,7 +81,7 @@
       'proj.sub': 'Satu projek tesis disimpan dalam pelayar ini. Eksport DOCX sebagai sandaran.', 'proj.open': 'Buka ruang kerja tesis', 'proj.edit': 'Edit profil tesis', 'proj.new': 'Projek baharu', 'proj.save': 'Simpan projek',
       'lib.sub': 'Rujukan daripada draf yang anda masukkan ke dalam tesis. Ia ditambah sebagai senarai Rujukan di hujung fail DOCX.', 'lib.copyAll': 'Salin semua', 'lib.find': 'Cari rujukan untuk idea baharu',
       'set.profile': 'Profil', 'set.name': 'Nama paparan', 'set.namePh': 'cth. Nur Akma', 'set.saved': 'Profil disimpan.', 'set.lang': 'Bahasa antara muka', 'set.theme': 'Tema', 'set.light': 'Cerah', 'set.dark': 'Gelap', 'set.system': 'Ikut peranti',
-      'set.aiPick': 'Pilih AI', 'set.aiPickBody': 'Gemini percuma untuk kegunaan harian. Claude dan ChatGPT menggunakan kredit API, sesuai untuk bab dan abstrak penting.',
+      'set.aiPick': 'Pilih AI', 'set.aiPickBody': 'Semua AI di sini percuma. Gemini untuk kegunaan harian; Groq (jika disambung) juga menjadi sandaran bila had percuma Gemini habis. Untuk ChatGPT atau Claude yang anda langgan, guna butang Hantar ke ChatGPT / Claude dalam Jurnal & Paper.',
       'set.aiPickRefs': 'Rujukan sebenar tetap dicari dalam OpenAlex, apa pun AI yang dipilih.', 'set.aiPickLocked': 'Sambung AI dahulu (kod akses) untuk memilih AI.',
       'ai.free': 'Percuma', 'ai.paid': 'Kredit API', 'ai.needKey': 'Belum ada API key', 'ai.switched': 'Kini menggunakan {x}',
       'set.ai': 'Sambungan AI', 'set.aiBody': 'AI memerlukan pemilik aplikasi menetapkan kunci API di pelayan dan anda memasukkan kod akses.', 'ai.on': '✦ AI disambung', 'ai.off': 'AI belum aktif',
@@ -156,7 +156,7 @@
       'proj.sub': 'One thesis project is stored in this browser. Export DOCX as a backup.', 'proj.open': 'Open thesis workspace', 'proj.edit': 'Edit thesis profile', 'proj.new': 'New project', 'proj.save': 'Save project',
       'lib.sub': 'References from drafts you inserted into your thesis. They are added as a References list at the end of your DOCX.', 'lib.copyAll': 'Copy all', 'lib.find': 'Find references for a new idea',
       'set.profile': 'Profile', 'set.name': 'Display name', 'set.namePh': 'e.g. Nur Akma', 'set.saved': 'Profile saved.', 'set.lang': 'Interface language', 'set.theme': 'Theme', 'set.light': 'Light', 'set.dark': 'Dark', 'set.system': 'Match device',
-      'set.aiPick': 'Choose AI', 'set.aiPickBody': 'Gemini is free for everyday use. Claude and ChatGPT use API credits, best for important chapters and abstracts.',
+      'set.aiPick': 'Choose AI', 'set.aiPickBody': 'Every AI here is free. Gemini for everyday use; Groq (if connected) is also the backup when Gemini\'s free limit runs out. For your ChatGPT or Claude subscription, use the Send to ChatGPT / Claude button in Journal Papers.',
       'set.aiPickRefs': 'Real references still come from OpenAlex, whichever AI you choose.', 'set.aiPickLocked': 'Connect AI first (access code) to choose an AI.',
       'ai.free': 'Free', 'ai.paid': 'API credits', 'ai.needKey': 'No API key yet', 'ai.switched': 'Now using {x}',
       'set.ai': 'AI connection', 'set.aiBody': 'AI needs the app owner to set an API key on the server and you to enter the access code.', 'ai.on': '✦ AI connected', 'ai.off': 'AI not active',
@@ -765,7 +765,8 @@
   const AI_LIST = [
     { id: 'gemini', name: 'Gemini', by: 'Google', cost: 'ai.free' },
     { id: 'claude', name: 'Claude', by: 'Anthropic', cost: 'ai.paid' },
-    { id: 'openai', name: 'ChatGPT', by: 'OpenAI', cost: 'ai.paid' }
+    { id: 'openai', name: 'ChatGPT', by: 'OpenAI', cost: 'ai.paid' },
+    { id: 'groq', name: 'Groq', by: 'Llama · GPT-OSS', cost: 'ai.free' }
   ];
   const aiKeys = () => (App.providers && App.providers()) || {};
   /* The AI that will actually answer: the saved choice if its key exists, otherwise the server default. */
@@ -781,7 +782,9 @@
     if (!box) return;
     const k = aiKeys(), on = App.aiAvailable(), cur = aiChoice();
     box.replaceChildren();
-    AI_LIST.forEach(a => {
+    // Only AIs that are switched on in this app are listed (paid ones without credits stay hidden).
+    const shown = AI_LIST.filter(a => k[a.id]);
+    (shown.length ? shown : AI_LIST.slice(0, 1)).forEach(a => {
       const usable = on && !!k[a.id];
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'ai-option'; b.dataset.ai = a.id;
