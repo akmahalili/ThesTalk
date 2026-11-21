@@ -23,6 +23,15 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 
 Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. ThesTalk then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.5-flash-lite`, moving to `gemini-3.1-flash-lite` when a model is busy, missing or over its limit (set `GEMINI_MODEL` to try another model first). On the free tier the Flash-Lite models allow about 500 requests a day each, while Gemini Flash allows only about 20, which is why Flash-Lite is the default. Each conversion with references uses two requests. The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. Voice transcription also runs on Gemini (the browser recording is sent as-is), so the mic works for free; without any AI key the app falls back to the browser's speech recognition. The access code is remembered on the device after a successful unlock.
 
+## Journal papers (v0.9)
+
+**Jurnal & Paper** (home card, Academic menu, or My Projects) holds any number of journal articles next to the thesis, stored in the same workspace so they are saved and backed up with it.
+
+- **Write**: IMRaD sections (Abstract, Introduction, Literature Review, Methodology, Results, Discussion, Conclusion) with writing guidance, keywords, word counts, and *Write with real references* (same OpenAlex-backed `/api/cite` as the thesis). DOCX export.
+- **Target journal**: `POST /api/journals`. The AI only turns the title/abstract into English search keywords; OpenAlex then finds recent articles like the paper, counts which journals published them, and returns each journal's real h-index, 2-year mean citedness, open access, APC, DOAJ and the lists OpenAlex records (CWTS Core, ABDC, FT50, ERIH PLUS, SINTA and others). OpenAlex has no Scopus/WoS or quartile data, so each journal links to Scimago to check the quartile.
+- **Abstract & title**: `POST /api/paper` mode `meta` — structured abstract (purpose, method, findings, originality), five titles and six keywords in the paper's language, with placeholders instead of invented findings.
+- **Readiness check**: an instant on-device checklist (empty sections, abstract and title length, keywords, references count and recency, target chosen), then `POST /api/paper` mode `fit` — reviewer-style verdict, scope fit and prioritised fixes for the chosen journal. Word and reference counts are computed by the server, not the model.
+
 ## Backup & restore (v0.8)
 
 Everything lives in the browser's local storage, so **Settings → Backup & restore** saves the whole workspace (thesis, chats, references, display settings) as `ThesTalk-backup-<title>-<date>.json`. On Android the **Share** button sends it straight to Drive or WhatsApp. **Restore from file** shows what the backup contains, asks before replacing the current project and keeps an undo copy for 7 days. The AI access code is never written to the file. The dashboard shows a reminder once there is work and no backup in the last 7 days. The file logic is in `public/backup.js` and tested in `tests/backup.test.js`.

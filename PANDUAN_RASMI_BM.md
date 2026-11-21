@@ -64,3 +64,14 @@ Semua kerja disimpan dalam pelayar sahaja. Untuk elak kehilangan atau untuk pind
 
 Kod akses AI tidak disimpan dalam fail backup. Masukkan semula kod di peranti baharu. Papan pemuka akan mengingatkan anda jika belum backup lebih 7 hari.
 
+## Jurnal & Paper (v0.9)
+
+Untuk artikel jurnal (berasingan daripada tesis). Buka dari kad **Jurnal & Paper** di Utama, menu Akademik, atau **Projek Saya**.
+
+1. **Tulis**: isi tajuk dan bahagian Abstrak hingga Kesimpulan. Guna **Tulis dengan rujukan sebenar** untuk menjana perenggan bersitasi daripada kajian sebenar. Eksport ke DOCX bila siap.
+2. **Jurnal sasaran**: tekan **Cari jurnal sesuai**. ThesTalk cari jurnal yang sudah menerbitkan kajian serupa dan tunjuk h-index, impak 2 tahun, akses terbuka/APC serta senarai seperti CWTS Core, ABDC dan SINTA. Tekan **Semak kuartil (Scimago)** untuk sahkan Q1–Q4 dan status Scopus, kemudian **Pilih sebagai sasaran**.
+3. **Abstrak & tajuk**: jana abstrak berstruktur, lima pilihan tajuk dan kata kunci.
+4. **Semak kesediaan**: semakan pantas (tanpa AI) dan semakan AI yang menyenaraikan apa perlu dibaiki, ikut keutamaan, untuk jurnal sasaran.
+
+Semua nombor jurnal datang daripada OpenAlex, bukan AI. Impak 2 tahun bukan Impact Factor rasmi. Hantar hanya melalui laman rasmi jurnal.
+

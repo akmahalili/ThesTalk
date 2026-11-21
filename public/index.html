@@ -74,6 +74,7 @@
           <button class="nav-sub" type="button" data-go="academic" data-focus="research" data-k="tile.research">Penyelidikan</button>
           <button class="nav-sub" type="button" data-go="academic" data-focus="writing" data-k="tile.writing">Penulisan</button>
           <button class="nav-sub" type="button" data-go="proofread" data-k="tile.proof">Semak &amp; Gaya</button>
+          <button class="nav-sub" type="button" data-go="papers" data-k="nav.papers">Jurnal &amp; Paper</button>
         </div>
         <button class="nav-item" type="button" data-go="projects"><svg class="ic"><use href="#ic-folder"/></svg><span class="dual"><span class="l1" data-k="nav.projects">Projek Saya</span><small class="l2" data-k2="nav.projects">My Projects</small></span></button>
         <button class="nav-item" type="button" data-go="library"><svg class="ic"><use href="#ic-book"/></svg><span class="dual"><span class="l1" data-k="nav.library">Perpustakaan</span><small class="l2" data-k2="nav.library">Library</small></span><span class="nav-count" id="refsCount">0</span></button>
@@ -152,6 +153,11 @@
           <button type="button" class="mode-card" data-go="academic" data-focus="research">
             <span class="mc-icon"><svg class="ic"><use href="#ic-cap"/></svg></span>
             <span class="mc-text"><strong><span data-k="card.academic">Pembantu Akademik</span> <small data-k2="card.academic">Academic Assistant</small></strong><span data-i18n="card.academic.d">Sokongan untuk penyelidikan, penulisan, tesis dan rujukan.</span></span>
+            <svg class="ic mc-arrow"><use href="#ic-arrow"/></svg>
+          </button>
+          <button type="button" class="mode-card" data-go="papers">
+            <span class="mc-icon"><svg class="ic"><use href="#ic-refs"/></svg></span>
+            <span class="mc-text"><strong><span data-k="card.papers">Jurnal &amp; Paper</span> <small data-k2="card.papers">Journal Papers</small></strong><span data-i18n="card.papers.d">Tulis artikel, cari jurnal berindeks dan semak sebelum hantar.</span></span>
             <svg class="ic mc-arrow"><use href="#ic-arrow"/></svg>
           </button>
         </div>
@@ -273,6 +279,8 @@
       </section>
 
       <!-- ===== Projects ===== -->
+      <section class="view" id="view-papers" hidden aria-labelledby="papersTitle"></section>
+
       <section class="view" id="view-projects" hidden aria-labelledby="projectsTitle">
         <div class="view-head"><div><h1 id="projectsTitle"><span data-k="nav.projects">Projek Saya</span> <small data-k2="nav.projects">My Projects</small></h1><p data-i18n="proj.sub">Satu projek tesis disimpan dalam pelayar ini. Eksport DOCX sebagai sandaran.</p></div></div>
         <div class="card project-detail">
@@ -290,6 +298,7 @@
             <button id="newProject" type="button" class="btn btn-outline btn-danger">＋ <span data-i18n="proj.new">Projek baharu</span></button>
           </div>
         </div>
+        <div class="card project-detail" id="papersCard"></div>
       </section>
 
       <!-- ===== Library ===== -->
@@ -399,6 +408,7 @@
   <script src="./app.js"></script>
   <script src="./refexport.js"></script>
   <script src="./backup.js"></script>
+  <script src="./papers.js"></script>
   <script src="./shell.js"></script>
 </body>
 </html>

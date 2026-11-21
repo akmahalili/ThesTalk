@@ -8,7 +8,7 @@
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
   const UI_KEY = 'thestalk_ui_v1';
-  const VIEWS = ['home', 'casual', 'academic', 'proofread', 'projects', 'library', 'settings'];
+  const VIEWS = ['home', 'casual', 'academic', 'proofread', 'papers', 'projects', 'library', 'settings'];
 
   const ui = Object.assign({ lang: 'ms', theme: 'system', name: '', mode: 'casual', onboarded: false, academicOpen: true, autoSpeak: false, voiceAutoSend: false, ai: 'gemini' }, readUI());
   function readUI() { try { return JSON.parse(localStorage.getItem(UI_KEY) || '{}') || {}; } catch (e) { return {}; } }
@@ -26,6 +26,7 @@
       'set.voiceHelp': 'Tiada suara BM? Di Android: Tetapan → Teks-ke-pertuturan → Enjin Google → pasang Bahasa Melayu.',
       'brand.tag': 'Sembang • Belajar • Menyelidik',
       'nav.dashboard': 'Dashboard', 'nav.home': 'Utama', 'nav.casual': 'Sembang', 'nav.academic': 'Akademik', 'nav.academicUp': 'AKADEMIK',
+      'nav.papers': 'Jurnal & Paper', 'card.papers': 'Jurnal & Paper', 'card.papers.d': 'Tulis artikel, cari jurnal berindeks dan semak sebelum hantar.',
       'nav.projects': 'Projek Saya', 'nav.projectsShort': 'Projek', 'nav.library': 'Perpustakaan', 'nav.settings': 'Tetapan', 'nav.profile': 'Profil',
       'bk.title': 'Backup & pulih', 'bk.body': 'Semua kerja disimpan dalam pelayar ini sahaja. Simpan fail backup, kemudian pulihkan di telefon atau laptop lain.',
       'bk.save': 'Simpan backup', 'bk.share': 'Kongsi', 'bk.restore': 'Pulih dari fail', 'bk.undo': '↶ Batalkan pemulihan terakhir', 'bk.note': 'Kod akses AI tidak termasuk dalam backup.',
@@ -89,6 +90,7 @@
       'set.voiceHelp': 'No Malay voice? On Android: Settings → Text-to-speech → Google engine → install Malay.',
       'brand.tag': 'Chat • Learn • Research',
       'nav.dashboard': 'Dashboard', 'nav.home': 'Home', 'nav.casual': 'Chat', 'nav.academic': 'Academic', 'nav.academicUp': 'ACADEMIC',
+      'nav.papers': 'Journal Papers', 'card.papers': 'Journal Papers', 'card.papers.d': 'Write articles, find indexed journals and check before submitting.',
       'nav.projects': 'My Projects', 'nav.projectsShort': 'Projects', 'nav.library': 'Library', 'nav.settings': 'Settings', 'nav.profile': 'Profile',
       'bk.title': 'Backup & restore', 'bk.body': 'All your work is stored only in this browser. Save a backup file, then restore it on another phone or laptop.',
       'bk.save': 'Save backup', 'bk.share': 'Share', 'bk.restore': 'Restore from file', 'bk.undo': '↶ Undo last restore', 'bk.note': 'The AI access code is not included in backups.',
@@ -170,6 +172,7 @@
     renderCasual();
     if (typeof renderAI === 'function') try { renderAI(); } catch (e) { /* picker not ready yet */ }
     if (typeof renderBackup === 'function') try { renderBackup(); } catch (e) { /* not ready yet */ }
+    try { if (window.ThesTalkPapers) { if (current === 'papers') window.ThesTalkPapers.render(); window.ThesTalkPapers.renderProjectsCard(); } } catch (e) { /* not ready yet */ }
     refresh();
   }
 
@@ -217,14 +220,15 @@
     VIEWS.forEach(v => { const el = $('#view-' + v); if (el) el.hidden = v !== view; });
     const focus = pendingFocus; pendingFocus = null;
     $$('.side-nav .nav-item[data-go]').forEach(b => b.classList.toggle('active', b.dataset.go === view));
-    $('#academicToggle').classList.toggle('active', view === 'academic' || view === 'proofread');
+    $('#academicToggle').classList.toggle('active', view === 'academic' || view === 'proofread' || view === 'papers');
     $$('.nav-sub').forEach(b => b.classList.toggle('active', (b.dataset.go === view) && (view !== 'academic' || b.dataset.focus === (focus || lastFocus))));
-    const bottomMap = { academic: 'projects', proofread: 'home' };
+    const bottomMap = { academic: 'projects', proofread: 'home', papers: 'projects' };
     const bottom = bottomMap[view] || view;
     $$('.bottom-nav button').forEach(b => { const on = b.dataset.go === bottom; b.classList.toggle('active', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     if (view === 'academic') applyFocus(focus);
     if (view === 'library') App.renderRefsList();
     if (view === 'casual') { renderCasual(); }
+    if (view === 'papers' && window.ThesTalkPapers) window.ThesTalkPapers.render();
     refresh();
     closeSearch();
     window.scrollTo({ top: 0 });
@@ -864,11 +868,11 @@
       renderHome();
       renderLibraryCount();
       renderBackup();
-      if (current === 'projects') renderProjects();
+      if (current === 'projects') { renderProjects(); if (window.ThesTalkPapers) window.ThesTalkPapers.renderProjectsCard(); }
     }, 30);
   }
 
-  window.ThesTalkShell = { refresh, onAI, go, t, aiChoice };
+  window.ThesTalkShell = { refresh, onAI, go, t, aiChoice, lang: () => ui.lang };
 
   /* ---------- boot ---------- */
   applyTheme();
