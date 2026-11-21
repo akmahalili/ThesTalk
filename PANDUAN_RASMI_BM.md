@@ -156,16 +156,22 @@ Akademik → **Slaid Pembentangan**.
 5. **Tema reka bentuk** (v2.5): pilih Klasik, Galeri, Bilik Gelap, Tropika, Neon atau Pastel, atau tekan 🎲 Rawak. Tema boleh ditukar bila-bila masa dan mengubah pratonton serta fail PowerPoint.
 6. **Muat turun PowerPoint**: fail .pptx dengan nota penyampai, dan slaid rujukan untuk sumber yang disebut dalam slaid.
 
-## Format Tesis UiTM (v3.1)
+## Format Tesis Universiti (v3.2)
 
-Akademik → **Format Tesis UiTM**.
+Akademik → **Format Tesis Universiti**.
 
-1. Isi butiran halaman tajuk: jenis (tesis atau disertasi), nama, no. pelajar, ijazah, program, fakulti, bulan dan tahun penyerahan.
-2. Tampal **Abstract** dan **Abstrak** (kiraan perkataan ditunjukkan: minimum 250 untuk PhD, 200 untuk Sarjana, maksimum satu halaman), **Penghargaan**, dan **Senarai singkatan** (tekan **✨ Cari dalam tesis**).
-3. Untuk naskhah akhir selepas viva, tanda **Sertakan Pengesahan Panel Pemeriksa**.
-4. Tekan **⬇ Muat turun tesis format UiTM (Word)**. Buka dalam Word dan tekan **Ya** apabila diminta mengemas kini medan supaya Isi Kandungan dan nombor halaman tepat.
+1. Pilih **Universiti**. Pautan garis panduan rasmi dan nota "Perlu disemak" dipaparkan di bawahnya.
+   - Universiti awam: UiTM, UM, UKM, USM, UPM, UTM, UTHM, UMS, UPSI, UNIMAS, UniMAP, UIAM, UUM, UMK.
+   - Universiti swasta: MMU, UNITEN, UCSI.
+   - **Universiti lain (tetapan sendiri)**: isi nama universiti, margin, fon, saiz, jarak baris, inden, kedudukan nombor halaman, gaya tajuk bab, susunan abstrak dan ayat halaman tajuk mengikut templat universiti anda. Gunakan ini untuk USIM, UMT, UPNM, UTeM, UniSZA dan UMPSA (garis panduan mereka tidak dijumpai dalam talian).
+2. Isi butiran halaman tajuk: jenis (tesis atau disertasi), nama, no. pelajar/matrik, ijazah, program, fakulti, bulan dan tahun penyerahan. UPM juga meminta nama pengerusi jawatankuasa penyeliaan.
+3. Tampal **Abstract** dan **Abstrak** (kiraan perkataan ditunjukkan: minimum 250 untuk PhD, 200 untuk Sarjana), kata kunci jika diminta (UM), tajuk dalam bahasa kedua jika abstrak terjemahan perlu tajuk, **Penghargaan**, dan **Senarai singkatan** (tekan **✨ Cari dalam tesis**).
+4. Untuk naskhah akhir selepas viva, tanda **Sertakan Pengesahan Panel Pemeriksa** (UiTM) atau **halaman pengesahan/kelulusan** (UPM, UMS, UIAM, UCSI).
+5. Semak senarai **Format yang digunakan** dan **Susunan halaman awal**, kemudian tekan **⬇ Muat turun tesis format … (Word)**. Buka dalam Word dan tekan **Ya** apabila diminta mengemas kini medan supaya Isi Kandungan dan nombor halaman tepat.
 
-Format mengikut Garis Panduan Format Tesis/Disertasi IPSis 2026: Times New Roman 12, jarak 1.5, margin kiri 3.8 cm, nombor halaman i, ii… kemudian 1, 2…, BAB/CHAPTER di tengah, kapsyen jadual dan rajah, serta RUJUKAN dengan inden gantung. Tulis kapsyen sebagai "Jadual 4.1: Tajuk" atau "Rajah 2.1: Tajuk" supaya masuk ke senarai jadual/rajah. Semak keperluan khusus fakulti anda.
+Halaman berwarna kuning dalam fail ialah tempat borang rasmi bertandatangan (contohnya borang perakuan UM, UPM, UPSI, UniMAP, UUM dan borang hak cipta UIAM): gantikan dengan borang daripada universiti. Tulis kapsyen sebagai "Jadual 4.1: Tajuk" atau "Rajah 2.1: Tajuk" supaya masuk ke senarai jadual/rajah. Fakulti mungkin ada keperluan tambahan; semak versi terkini garis panduan dengan pusat pengajian siswazah.
+
+UiTM mengikut Garis Panduan Format Tesis/Disertasi IPSis 2026: Times New Roman 12, jarak 1.5, margin kiri 3.8 cm, nombor halaman i, ii… kemudian 1, 2…, BAB/CHAPTER di tengah, kapsyen jadual dan rajah, serta RUJUKAN dengan inden gantung.
 
 ## Semak Persamaan (v3.0)
 

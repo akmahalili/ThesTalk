@@ -65,3 +65,77 @@ test('findAbbreviations and caption parsing', () => {
   assert.equal(D.caption('Figure 4.1 shows the means.'), null);
   assert.equal(D.chapterTitle('Bab 2: Kajian Literatur', 2), 'KAJIAN LITERATUR');
 });
+
+/* ---------- other universities (thesisprofiles.js) ---------- */
+const Profiles = require('../public/thesisprofiles.js');
+const plain = out => part(out, 'word/document.xml').replace(/<w:instrText[^>]*>[^<]*<\/w:instrText>/g, '').replace(/<[^>]+>/g, '');
+
+test('every university profile builds a document with its source', () => {
+  assert.ok(Profiles.PROFILES.length >= 18);
+  for (const p of Profiles.PROFILES) {
+    if (p.id !== 'custom') assert.match(p.source.url, /^https?:\/\//, p.id);
+    assert.ok(['awam', 'swasta', 'lain'].includes(p.sector), p.id);
+    const out = D.build(state('English'), { ...fmt, uni: p.id, confirm: true }, {});
+    const doc = part(out, 'word/document.xml');
+    assert.equal(out.profile.id, p.id);
+    assert.ok(doc.includes('TC "REFERENCES') || doc.includes('TC "BIBLIOGRAPHY') || doc.includes('TC "REFERENCE"'), p.id + ' references');
+    assert.match(plain(out), /NUR AKMA HALILI/i, p.id + ' name on the title page');
+    assert.ok(!/\{[A-Z_]+\}/.test(plain(out)), p.id + ' no tokens left');
+    assert.equal((doc.match(/<w:sectPr>/g) || []).length >= 2, true, p.id);
+  }
+  assert.deepEqual(Profiles.NOT_FOUND, ['USIM', 'UMT', 'UPNM', 'UTeM', 'UniSZA', 'UMPSA']);
+});
+
+test('UM: double spacing, page number bottom right, one-line chapter heading, figures listed first', () => {
+  const out = D.build(state('English'), { ...fmt, uni: 'um', keywords: 'images, trust' }, {});
+  const doc = part(out, 'word/document.xml'), text = plain(out);
+  assert.match(doc, /<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="2268" w:header="709" w:footer="567"/);
+  assert.match(part(out, 'word/styles.xml'), /w:styleId="BodyText">.*?w:line="480"/);
+  assert.match(part(out, 'word/footer1.xml'), /<w:jc w:val="right"\/>.*<w:sz w:val="20"\/>.*PAGE/);
+  assert.match(doc, /TC "CHAPTER 1: INTRODUCTION" \\l 1 <\/w:instrText><\/w:r><w:r><w:fldChar w:fldCharType="end"\/><\/w:r><w:r><w:t xml:space="preserve">CHAPTER 1: INTRODUCTION</);
+  assert.ok(text.indexOf('LIST OF FIGURES') < text.indexOf('LIST OF TABLES'));
+  assert.ok(text.includes('ORIGINAL LITERARY WORK DECLARATION') && text.includes('Keywords: images, trust') && text.includes('KUALA LUMPUR'));
+});
+
+test('UKM: number top right, hidden on the first page of each chapter, CHAPTER I, no indent after headings', () => {
+  const out = D.build(state('English'), { ...fmt, uni: 'ukm' }, {});
+  const doc = part(out, 'word/document.xml'), text = plain(out);
+  assert.match(doc, /<w:headerReference w:type="default" r:id="rIdHdr"\/><w:headerReference w:type="first" r:id="rIdHdrBlank"\/>/);
+  assert.match(part(out, 'word/header1.xml'), /<w:jc w:val="right"\/>.*PAGE/);
+  // front matter + 3 chapters + references: one section per chapter, each with titlePg.
+  assert.equal((doc.match(/<w:sectPr>/g) || []).length, 5);
+  assert.equal((doc.match(/<w:titlePg\/>/g) || []).length, 4);
+  assert.match(doc, /<w:pgNumType w:fmt="decimal" w:start="1"\/><w:titlePg\/>/);
+  assert.ok(text.includes('CHAPTER I') && text.includes('CHAPTER IV') && text.includes('BANGI'));
+  assert.match(doc, /<w:pStyle w:val="BodyNoIndent"\/><\/w:pPr><w:r><w:t xml:space="preserve">Product images/);
+  assert.ok(text.indexOf('DECLARATION') < text.indexOf('ACKNOWLEDGEMENT') && text.indexOf('ACKNOWLEDGEMENT') < text.indexOf('ABSTRACT'));
+});
+
+test('IIUM in Malay: BAB SATU, capital section headings, Arabic abstract page; prelims after the contents move down', () => {
+  const out = D.build(state('Bahasa Melayu'), { ...fmt, uni: 'iium', abstrak: 'Kajian ini.' }, {});
+  const text = plain(out), doc = part(out, 'word/document.xml');
+  assert.ok(text.includes('BAB SATU') && text.includes('1.1 BACKGROUND OF THE STUDY') && text.includes('ملخص البحث'));
+  const usm = D.build(state('English'), { ...fmt, uni: 'usm', abstrak: 'Kajian ini.' }, {});
+  const toc = part(usm, 'word/document.xml').match(/TABLE OF CONTENTS.*?CHAPTER 1/s)[0].replace(/<[^>]+>/g, '|');
+  // USM puts the abstracts after the lists: their page numbers come after the contents page.
+  const pageOf = label => (toc.match(new RegExp(label + '\\|+\\|([ivx]+)')) || [])[1];
+  assert.ok(['ABSTRAK', 'ABSTRACT', 'TABLE OF CONTENTS'].every(pageOf), toc);
+  const roman = r => ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi', 'xii'].indexOf(r);
+  assert.ok(roman(pageOf('ABSTRAK')) > roman(pageOf('TABLE OF CONTENTS')));
+  assert.ok(doc.length > 0);
+});
+
+test('custom profile takes the student settings', () => {
+  const custom = { univ: 'Universiti Sains Islam Malaysia', top: 3, bottom: 2.5, left: 4, right: 2.5, font: 'Arial', size: 11, line: 2, indent: 'none', pageNum: 'bottom-right', chapterNum: 'roman', chapterLayout: 'one', abstractOrder: 'enOnly', statement: 'A thesis submitted for the degree of' };
+  const out = D.build(state('English'), { ...fmt, uni: 'custom', custom }, {});
+  const styles = part(out, 'word/styles.xml'), doc = part(out, 'word/document.xml'), text = plain(out);
+  assert.match(styles, /w:ascii="Arial"[^>]*\/><w:sz w:val="22"\/>/);
+  assert.match(doc, /<w:pgMar w:top="1701"/);
+  assert.match(styles, /w:styleId="BodyText">.*?w:line="480".*?<w:ind w:firstLine="0"\/>/);
+  assert.ok(text.includes('UNIVERSITI SAINS ISLAM MALAYSIA') && text.includes('A thesis submitted for the degree of') && text.includes('CHAPTER I: INTRODUCTION'));
+  assert.ok(!text.includes('ABSTRAK'));
+  // Bad values fall back to safe ones.
+  const p = Profiles.resolve('custom', { size: 40, font: 'Comic Sans', line: 3, left: 20 });
+  assert.deepEqual([p.size, p.font, p.line, p.margins.left], [12, 'Times New Roman', 1.5, 4]);
+  assert.equal(Profiles.resolve('nope').id, 'uitm');
+});
