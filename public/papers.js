@@ -195,7 +195,8 @@
   function payload(p) {
     return { title: p.title, language: p.language, keywords: p.keywords, sections: SECTIONS.map(k => ({ key: k, content: sectionOf(p, k).content })), refYears: refYears(p) };
   }
-  function needAI() { if (App.aiAvailable()) return false; App.toast(t('needAI')); return true; }
+  /* Re-checks the connection before refusing, and asks for the access code if it is missing. */
+  async function needAI() { return !(await App.ensureAI()); }
 
   /* ---------- rendering ---------- */
   function render() {
@@ -454,9 +455,9 @@
     try { await fn(); } catch (e) { App.toast(e.message || 'Error'); } finally { view.busy = ''; renderBody(); }
   }
 
-  function doCite(p) {
+  async function doCite(p) {
     const idea = String(view.citeIdea || '').trim();
-    if (idea.length < 4 || needAI()) return;
+    if (idea.length < 4 || await needAI()) return;
     run('cite', async () => {
       const data = await App.apiPost('/api/cite', {
         idea, recentOnly: true, chapter: 'Journal article', section: paperLabel(view.section, p),
@@ -479,10 +480,10 @@
     App.toast(t('citeAdded', { n: added }));
   }
 
-  function findJournals(p) {
+  async function findJournals(p) {
     const abstract = sectionOf(p, 'abstract').content || sectionOf(p, 'introduction').content.slice(0, 2500);
     if (words(p.title) < 2 && words(abstract) < 8) { App.toast(t('jNeed')); return; }
-    if (needAI()) return;
+    if (await needAI()) return;
     run('journals', async () => {
       const data = await App.apiPost('/api/journals', { title: p.title, abstract: abstract.slice(0, 3000), keywords: p.keywords || '', recentOnly: view.recent });
       p.journals = { at: new Date().toISOString(), items: Array.isArray(data.journals) ? data.journals : [], searched: data.searched || 0 };
@@ -503,8 +504,8 @@
     view.manual = '';
   }
 
-  function genMeta(p) {
-    if (needAI()) return;
+  async function genMeta(p) {
+    if (await needAI()) return;
     run('meta', async () => {
       const data = await App.apiPost('/api/paper', { mode: 'meta', paper: payload(p) });
       p.meta = data.meta; App.save();
@@ -527,8 +528,8 @@
     App.toast(t('mUsed'));
   }
 
-  function checkFit(p) {
-    if (needAI()) return;
+  async function checkFit(p) {
+    if (await needAI()) return;
     run('fit', async () => {
       const data = await App.apiPost('/api/paper', { mode: 'fit', paper: payload(p), target: p.target, uiLang: lang() });
       p.fit = { at: new Date().toISOString(), target: data.target || null, result: data.fit };
@@ -592,8 +593,12 @@
     const box = h('textarea', { id: 'noteInput', rows: 2, maxLength: 1500, placeholder: t('dPh'), value: view.note,
       oninput: e => { view.note = e.target.value; },
       onkeydown: e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); add(); } } });
-    const act = h('span', { class: 'chat-activity', role: 'status' });
-    const mic = h('button', { type: 'button', class: 'icon-btn voice-btn', 'aria-label': t('dMic'), title: t('dMic'), onclick: e => { if (shell().mic) shell().mic(e.currentTarget, act, box, () => { view.note = box.value; }); } }, '🎙');
+    const listening = !!(shell().micOn && shell().micOn('paper-note'));
+    const act = h('span', { id: 'noteAct', class: 'chat-activity', role: 'status' });
+    // The mic stays on until tapped again; it finds the live elements even after the card re-renders.
+    const mic = h('button', { id: 'noteMic', type: 'button', class: 'icon-btn voice-btn' + (listening ? ' recording' : ''), 'aria-pressed': String(listening), 'aria-label': t('dMic'), title: t('dMic'),
+      onclick: () => { if (shell().mic) shell().mic(() => $('#noteMic'), () => $('#noteAct'), () => $('#noteInput'), null, { key: 'paper-note' }); } }, '🎙');
+    if (listening) setTimeout(() => { const a = $('#noteAct'); if (a && !a.textContent) a.textContent = shell().t ? shell().t('voice.listening') : ''; }, 0);
     function add() { addNote(p, box.value); view.note = ''; renderBody(); setTimeout(() => { const el = $('#noteInput'); if (el) el.focus(); }, 0); }
     const fromChat = chatIdeas(p);
     const progress = view.progress && view.progress.paperId === p.id ? h('ol', { class: 'draft-steps' }, view.progress.steps.map(st => h('li', { class: 'step-' + st.s },
@@ -634,10 +639,10 @@
     App.toast(t('dUndone'));
   }
 
-  function generatePaper(p) {
+  async function generatePaper(p) {
     const notes = (p.notes || []).map(n => n.text).filter(Boolean);
     if (notes.length < 2) { App.toast(t('dNeed')); return; }
-    if (needAI()) return;
+    if (await needAI()) return;
     const hasContent = SECTIONS.some(k => sectionOf(p, k).content.trim());
     if (hasContent && !confirm(t('dReplace'))) return;
     const order = ['introduction', 'literature', 'method', 'results', 'discussion', 'conclusion'];

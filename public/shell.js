@@ -382,7 +382,7 @@
     if (s.casualMessages.length > 200) s.casualMessages.splice(0, s.casualMessages.length - 200);
     $('#casualInput').value = '';
     renderCasual(); App.save();
-    if (!App.aiAvailable()) { App.toast(t('casual.noai')); return; }
+    if (!(await App.ensureAI())) return;
     casualBusy = true; $('#casualSend').disabled = true; $('#casualActivity').textContent = t('casual.working');
     try {
       const data = await App.apiPost('/api/chat', { message: val, history, mode: 'casual' });
@@ -415,7 +415,7 @@
     const text = $('#proofInput').value.trim();
     const status = $('#proofStatus');
     if (text.length < 4) { status.textContent = t('proof.empty'); return; }
-    if (!App.aiAvailable()) { status.textContent = t('proof.needsAI'); return; }
+    if (!(await App.ensureAI())) { status.textContent = t('proof.needsAI'); return; }
     if (proofBusy) return;
     proofBusy = true; $('#proofBtn').disabled = true; status.textContent = t('proof.working');
     try {
@@ -527,66 +527,120 @@
   decorateAcademic();
 
   /* ---------- mic in Casual Chat (Gemini/OpenAI transcription, browser fallback) ---------- */
-  let recorder = null, recStream = null, recChunks = [], browserRec = null;
-  function appendText(box, text) {
-    const v = String(text || '').trim(); if (!v) return;
+  /* ---------- voice input: stays ON until the user taps the mic again ----------
+     AI mode records in ~40-second segments on one open microphone, so each piece is transcribed
+     while recording carries on. Browser mode keeps speech recognition running and restarts it
+     whenever the browser ends it after a pause. A 30-minute safety limit stops a forgotten mic. */
+  const SEGMENT_MS = 40000, MAX_MS = 30 * 60000;
+  let mic = null;
+  const el = v => (typeof v === 'function' ? v() : v);
+  function appendText(target, text) {
+    const box = el(target);
+    const v = String(text || '').trim(); if (!v || !box) return;
     box.value = (box.value.trim() ? box.value.trim() + ' ' : '') + v;
-    box.focus();
+    box.dispatchEvent(new Event('input', { bubbles: true }));
   }
   async function transcribeBlob(blob, type) {
     const r = await fetch('/api/transcribe', { method: 'POST', headers: { 'Content-Type': type, 'X-ThesTalk-Access': App.accessCode() }, body: blob });
     let d = {}; try { d = await r.json(); } catch (e) { /* ignore */ }
+    if (r.status === 422) return ''; // silence in this segment
     if (!r.ok) throw Error(d.error || 'Transcription failed.');
     return d.transcript || '';
   }
   function afterVoice() { if (ui.voiceAutoSend && $('#casualInput').value.trim()) sendCasual($('#casualInput').value); }
-  /* Voice input for any text box: AI transcription when available, else the browser's speech recognition. */
-  async function toggleMic(btn, act, box, after) {
-    if (recorder && recorder.state === 'recording') { recorder.stop(); return; }
-    if (browserRec) { browserRec.stop(); return; }
+  function micStatus() {
+    if (!mic) return;
+    const act = el(mic.act); if (!act) return;
+    act.textContent = mic.wanted ? t('voice.listening') + (mic.pending ? ' · ' + t('voice.transcribing') : '') : (mic.pending ? t('voice.transcribing') : '');
+  }
+  function finishMic(m) {
+    if (m.pending || m.recorder || m.rec) return; // wait for the last pieces
+    if (m.stream) m.stream.getTracks().forEach(tr => tr.stop());
+    clearTimeout(m.limit);
+    const btn = el(m.btn), act = el(m.act);
+    if (btn) { btn.classList.remove('recording'); btn.setAttribute('aria-pressed', 'false'); }
+    if (act) act.textContent = '';
+    if (mic === m) mic = null;
+    if (m.after) m.after();
+  }
+  function stopMic() {
+    const m = mic; if (!m) return;
+    m.wanted = false;
+    clearTimeout(m.segTimer);
+    if (m.recorder && m.recorder.state === 'recording') m.recorder.stop();
+    else if (m.rec) { try { m.rec.stop(); } catch (e) { m.rec = null; } }
+    micStatus(); finishMic(m);
+  }
+  function startSegment(m) {
+    const recorder = new MediaRecorder(m.stream, m.mime ? { mimeType: m.mime } : undefined);
+    const chunks = [];
+    m.recorder = recorder;
+    recorder.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+    recorder.onstop = async () => {
+      m.recorder = null;
+      const type = String(recorder.mimeType || m.mime || 'audio/webm').split(';')[0];
+      if (m.wanted) startSegment(m); // keep listening while this piece is transcribed
+      const blob = new Blob(chunks, { type });
+      if (blob.size >= 1500) {
+        m.pending++; micStatus();
+        try { appendText(m.box, await transcribeBlob(blob, type)); }
+        catch (e) { App.toast(e.message); }
+        finally { m.pending--; micStatus(); }
+      }
+      if (!m.wanted) finishMic(m);
+    };
+    recorder.start();
+    clearTimeout(m.segTimer);
+    m.segTimer = setTimeout(() => { if (m.wanted && recorder.state === 'recording') recorder.stop(); }, SEGMENT_MS);
+  }
+  function startBrowser(m) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const rec = new SR();
+    m.rec = rec;
+    rec.lang = m.lang;
+    rec.continuous = true;
+    rec.interimResults = false;
+    rec.onresult = e => { for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) appendText(m.box, e.results[i][0].transcript); };
+    rec.onerror = e => { if (e && (e.error === 'not-allowed' || e.error === 'service-not-allowed')) { m.wanted = false; App.toast(t('voice.denied')); } };
+    rec.onend = () => {
+      m.rec = null;
+      if (m.wanted) setTimeout(() => { if (m.wanted) { try { startBrowser(m); } catch (e) { m.wanted = false; finishMic(m); } } }, 200);
+      else finishMic(m);
+    };
+    rec.start();
+  }
+  /* Voice input for any text box. Tap once to start, tap again to stop. */
+  async function toggleMic(btn, act, box, after, opts = {}) {
+    if (mic) { const same = opts.key ? mic.key === opts.key : mic.btn === btn; stopMic(); if (same) return; }
     Speech.stop();
-    const canAI = App.aiAvailable() && App.transcriptionOn() && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder;
+    const m = { key: opts.key || '', btn, act, box, after, wanted: true, pending: 0, stream: null, recorder: null, rec: null, mime: '', lang: opts.lang || (ui.lang === 'en' ? 'en-US' : 'ms-MY') };
+    const canAI = !opts.browserOnly && App.aiAvailable() && App.transcriptionOn() && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder;
     if (canAI) {
       try {
-        recStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'].find(x => MediaRecorder.isTypeSupported(x)) || '';
-        recorder = new MediaRecorder(recStream, mime ? { mimeType: mime } : undefined);
-        recChunks = [];
-        recorder.ondataavailable = e => { if (e.data && e.data.size) recChunks.push(e.data); };
-        recorder.onstop = async () => {
-          recStream.getTracks().forEach(tr => tr.stop());
-          btn.classList.remove('recording');
-          const type = String(recorder.mimeType || 'audio/webm').split(';')[0];
-          const blob = new Blob(recChunks, { type });
-          recorder = null;
-          if (blob.size < 150) { act.textContent = ''; return; }
-          act.textContent = t('voice.transcribing');
-          try { appendText(box, await transcribeBlob(blob, type)); act.textContent = ''; if (after) after(); }
-          catch (e) { act.textContent = ''; App.toast(e.message); }
-        };
-        recorder.start();
-        btn.classList.add('recording'); act.textContent = t('voice.listening');
-        setTimeout(() => { if (recorder && recorder.state === 'recording') recorder.stop(); }, 90000);
-        return;
+        m.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        m.mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'].find(x => MediaRecorder.isTypeSupported(x)) || '';
+        mic = m;
+        startSegment(m);
       } catch (e) {
-        if (recStream) recStream.getTracks().forEach(tr => tr.stop());
-        recorder = null;
+        if (m.stream) m.stream.getTracks().forEach(tr => tr.stop());
+        m.stream = null; mic = null;
         if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError')) { App.toast(t('voice.denied')); return; }
       }
     }
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) { App.toast(t('voice.unsupported')); return; }
-    browserRec = new SR();
-    browserRec.lang = ui.lang === 'en' ? 'en-US' : 'ms-MY';
-    browserRec.interimResults = false;
-    browserRec.onresult = e => appendText(box, Array.from(e.results).map(r => r[0].transcript).join(' '));
-    browserRec.onerror = e => { if (e && e.error === 'not-allowed') App.toast(t('voice.denied')); };
-    browserRec.onend = () => { browserRec = null; btn.classList.remove('recording'); act.textContent = ''; if (after) after(); };
-    try { browserRec.start(); btn.classList.add('recording'); act.textContent = t('voice.listening'); }
-    catch (e) { browserRec = null; App.toast(t('voice.unsupported')); }
+    if (!mic) {
+      if (!(window.SpeechRecognition || window.webkitSpeechRecognition)) { App.toast(t('voice.unsupported')); return; }
+      mic = m;
+      try { startBrowser(m); } catch (e) { mic = null; App.toast(t('voice.unsupported')); return; }
+    }
+    const b = el(btn); if (b) { b.classList.add('recording'); b.setAttribute('aria-pressed', 'true'); }
+    m.limit = setTimeout(() => { if (mic === m) stopMic(); }, MAX_MS);
+    micStatus();
   }
   const toggleCasualMic = () => toggleMic($('#casualMic'), $('#casualActivity'), $('#casualInput'), afterVoice);
   $('#casualMic').addEventListener('click', toggleCasualMic);
+  $('#voiceBtn').onclick = () => toggleMic($('#voiceBtn'), $('#chatActivity'), $('#chatInput'),
+    () => { const box = $('#chatInput'); if ($('#autoSendVoice') && $('#autoSendVoice').checked && box.value.trim()) App.addMessage(box.value); },
+    { browserOnly: $('#voiceMode') && $('#voiceMode').value === 'browser', lang: $('#voiceLang') && $('#voiceLang').value });
 
   /* ---------- reference export (RIS / BibTeX) ---------- */
   function sortedReferences() { return (App.state().references || []).slice().sort((a, b) => String(a.apa).localeCompare(String(b.apa))); }
@@ -873,7 +927,7 @@
     }, 30);
   }
 
-  window.ThesTalkShell = { refresh, onAI, go, t, aiChoice, lang: () => ui.lang, mic: toggleMic };
+  window.ThesTalkShell = { refresh, onAI, go, t, aiChoice, lang: () => ui.lang, mic: toggleMic, micOn: key => !!mic && mic.key === key };
 
   /* ---------- boot ---------- */
   applyTheme();
