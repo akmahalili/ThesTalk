@@ -620,3 +620,27 @@ small{font-size:.78em}
   .journal-list{grid-template-columns:1fr}
   .paper-editor{min-height:260px}
 }
+
+/* ---------- v1.0 Sembang → Paper penuh ---------- */
+.draft-card{display:flex;flex-direction:column;gap:10px;border-color:var(--primary-soft-2);background:linear-gradient(180deg,var(--surface) 0%,var(--surface-2) 100%)}
+.draft-card[open]{gap:12px}
+.draft-card summary{cursor:pointer;display:flex;align-items:center;gap:8px;list-style:none;font-size:15px}
+.draft-card summary::-webkit-details-marker{display:none}
+.note-list{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:7px;font-size:14px;line-height:1.5;max-height:320px;overflow:auto}
+.note-list li::marker{color:var(--muted);font-size:12px}
+.note-compose{display:flex;gap:8px;align-items:flex-end}
+.note-compose textarea{flex:1;min-width:0;border:1px solid var(--border-strong);border-radius:12px;padding:10px 12px;font:14px/1.5 var(--font);background:var(--surface);color:var(--text);resize:vertical}
+.note-compose .voice-btn{flex:none;width:42px;height:42px;font-size:18px}
+.note-compose .btn{flex:none}
+.draft-go{align-self:flex-start;font-size:14px;padding:13px 18px}
+.draft-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.draft-steps li{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.step-dot{display:inline-flex;width:20px;height:20px;border-radius:50%;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:var(--surface-3);color:var(--muted);flex:none}
+.draft-steps .step-doing{color:var(--text);font-weight:600}
+.draft-steps .step-doing .step-dot{background:var(--primary-soft);color:var(--accent-text);animation:pulse 1.1s infinite}
+.draft-steps .step-done{color:var(--text-2)}
+.draft-steps .step-done .step-dot{background:var(--success-bg);color:var(--success)}
+.draft-steps .step-fail{color:var(--danger);font-weight:600}
+.draft-steps .step-fail .step-dot{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger)}
+@media (max-width:899px){.draft-go{align-self:stretch}}
+@media (prefers-reduced-motion: reduce){.draft-steps .step-doing .step-dot{animation:none}}

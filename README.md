@@ -23,6 +23,16 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 
 Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. ThesTalk then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.5-flash-lite`, moving to `gemini-3.1-flash-lite` when a model is busy, missing or over its limit (set `GEMINI_MODEL` to try another model first). On the free tier the Flash-Lite models allow about 500 requests a day each, while Gemini Flash allows only about 20, which is why Flash-Lite is the default. Each conversion with references uses two requests. The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. Voice transcription also runs on Gemini (the browser recording is sent as-is), so the mic works for free; without any AI key the app falls back to the browser's speech recognition. The access code is remembered on the device after a successful unlock.
 
+## Chat → full paper (v1.0)
+
+In **Jurnal & Paper → Write**, the *Sembang → Paper penuh* card collects casual remarks for the paper (typed, by voice, or imported from the chats). **Generate full paper with references** then runs `POST /api/draft` step by step, each step a short request inside the serverless time limit:
+
+1. `mode: "plan"` — the AI sorts the remarks into IMRaD sections as formal points (inferred elements are marked "(cadangan)"), writes a working title, five evidence searches and one theory search; OpenAlex returns a pool of up to 24 real papers with abstracts.
+2. `mode: "section"` × 6 — each section is written from its points, citing pool papers only by number; `lib/cite.js` turns numbers into APA 7 citations and drops unknown numbers. Results never cite and never invents numbers; missing details become placeholders such as `[SAIZ SAMPEL]`, `[DAPATAN 1]` or `[PERLU RUJUKAN]`.
+3. `/api/paper` `meta` writes the structured abstract and keywords.
+
+The previous draft is kept so it can be restored, and the readiness checklist counts placeholders still to fill. In a real run five casual Malay/English remarks became a ~2,100-word paper with 15 real references in about 35 seconds on the free Gemini tier (8 AI requests).
+
 ## Journal papers (v0.9)
 
 **Jurnal & Paper** (home card, Academic menu, or My Projects) holds any number of journal articles next to the thesis, stored in the same workspace so they are saved and backed up with it.

@@ -61,6 +61,16 @@
       'qc.refs': 'Sekurang-kurangnya 40 rujukan (panduan umum Q1–Q2)', 'qc.refsBad': '{n} rujukan (panduan umum: 40 atau lebih)',
       'qc.recent': 'Separuh rujukan dari 5 tahun terkini', 'qc.recentBad': '{p}% rujukan dari 5 tahun terkini (sasaran ≥ 50%)',
       'qc.target': 'Jurnal sasaran dipilih', 'qc.targetBad': 'Belum pilih jurnal sasaran',
+      dTitle: 'Sembang → Paper penuh', dBody: 'Taip idea, pendapat atau pemerhatian anda secara santai, satu demi satu (boleh guna mikrofon). Bila cukup, tekan Jana paper penuh: ThesTalk susun ikut bahagian jurnal dan masukkan sitasi daripada kajian sebenar secara automatik.',
+      dPh: 'cth. I think, gambar close up penting utk org yakin semasa membeli', dAdd: 'Tambah', dMic: 'Cakap untuk menaip', dCount: '{n} idea', dNone: 'Belum ada idea. Mula taip di bawah.',
+      dImport: 'Ambil dari sembang ({n})', dImported: '{n} idea diambil dari sembang.', dRemove: 'Buang idea',
+      dGen: 'Jana paper penuh dengan rujukan', dNeed: 'Tambah sekurang-kurangnya 2 idea dahulu.',
+      dReplace: 'Kandungan paper sedia ada akan diganti dengan draf baharu. Salinan disimpan supaya boleh dikembalikan. Teruskan?',
+      dStepPlan: 'Menyusun idea & mencari kajian sebenar', dStepSection: 'Menulis {s}', dStepAbstract: 'Menulis abstrak & kata kunci',
+      dDone: 'Paper penuh siap: {w} perkataan, {r} rujukan. Semak setiap bahagian sebelum hantar.', dFail: 'Terhenti semasa "{s}": {e} Bahagian yang siap telah disimpan.',
+      dUndo: '↶ Kembalikan draf sebelum jana', dUndoConfirm: 'Kembalikan paper seperti sebelum jana?', dUndone: 'Draf sebelum jana dikembalikan.',
+      dNote: 'AI hanya memetik kajian yang benar-benar ditemui di OpenAlex. Tanda [PERLU RUJUKAN] dan [DAPATAN …] perlu anda isi sendiri. Kebanyakan jurnal minta penulis nyatakan penggunaan AI.',
+      'qc.markers': 'Tiada tanda [PERLU RUJUKAN] atau [DAPATAN] tertinggal', 'qc.markersBad': '{n} tanda seperti [PERLU RUJUKAN] atau [DAPATAN] masih perlu diisi',
       needAI: 'Sambung AI dahulu di Tetapan (kod akses).', projTitle: 'Paper Jurnal', projEmpty: 'Belum ada paper jurnal.', open: 'Buka'
     },
     en: {
@@ -115,6 +125,16 @@
       'qc.refs': 'At least 40 references (general Q1–Q2 guide)', 'qc.refsBad': '{n} references (general guide: 40 or more)',
       'qc.recent': 'Half of references from the last 5 years', 'qc.recentBad': '{p}% of references from the last 5 years (aim for ≥ 50%)',
       'qc.target': 'Target journal chosen', 'qc.targetBad': 'No target journal yet',
+      dTitle: 'Chat → Full paper', dBody: 'Type your ideas, opinions or observations casually, one at a time (the mic works too). When you have enough, press Generate full paper: ThesTalk organises them into journal sections and adds citations from real studies automatically.',
+      dPh: 'e.g. I think close-up photos make people confident when buying', dAdd: 'Add', dMic: 'Speak to type', dCount: '{n} ideas', dNone: 'No ideas yet. Start typing below.',
+      dImport: 'Import from chats ({n})', dImported: '{n} ideas imported from your chats.', dRemove: 'Remove idea',
+      dGen: 'Generate full paper with references', dNeed: 'Add at least 2 ideas first.',
+      dReplace: 'The current paper content will be replaced by a new draft. A copy is kept so you can restore it. Continue?',
+      dStepPlan: 'Organising ideas & finding real studies', dStepSection: 'Writing {s}', dStepAbstract: 'Writing abstract & keywords',
+      dDone: 'Full paper ready: {w} words, {r} references. Review every section before submitting.', dFail: 'Stopped at "{s}": {e} Finished sections have been saved.',
+      dUndo: '↶ Restore the draft from before generating', dUndoConfirm: 'Restore the paper as it was before generating?', dUndone: 'Previous draft restored.',
+      dNote: 'The AI only cites studies actually found in OpenAlex. Markers such as [SOURCE NEEDED] and [FINDING …] are for you to fill in. Most journals ask authors to declare AI use.',
+      'qc.markers': 'No [SOURCE NEEDED] or [FINDING] markers left', 'qc.markersBad': '{n} markers such as [SOURCE NEEDED] or [FINDING] still to fill in',
       needAI: 'Connect AI first in Settings (access code).', projTitle: 'Journal Papers', projEmpty: 'No journal papers yet.', open: 'Open'
     }
   };
@@ -146,7 +166,7 @@
   }
 
   /* ---------- state ---------- */
-  const view = { tab: 'write', section: 'introduction', busy: '', recent: true, cite: null, manual: '' };
+  const view = { tab: 'write', section: 'introduction', busy: '', recent: true, cite: null, manual: '', note: '', progress: null };
   function store() { const s = App.state(); if (!Array.isArray(s.papers)) s.papers = []; return s; }
   function current() { const s = store(); return s.papers.find(p => p.id === s.activePaper) || s.papers[0] || null; }
   function touch(p) { p.updated = new Date().toISOString(); App.save(); }
@@ -278,6 +298,7 @@
       ? h('label', { class: 'form-field' }, h('span', { text: t('keywords') }), h('input', { id: 'paperKeywords', value: p.keywords || '', maxLength: 400, placeholder: t('keywordsPh'), oninput: e => { p.keywords = e.target.value; touch(p); } }))
       : null;
     return h('div', { class: 'paper-write' },
+      draftCard(p),
       chips,
       h('div', { class: 'card paper-section' },
         h('div', { class: 'ps-head' }, h('h2', { text: t('sec.' + view.section) }), count),
@@ -394,7 +415,8 @@
       [kws >= 4 && kws <= 8, kws >= 4 && kws <= 8 ? t('qc.keywords') : t('qc.keywordsBad', { n: kws })],
       [st.refs >= 40, st.refs >= 40 ? t('qc.refs') : t('qc.refsBad', { n: st.refs })],
       [st.recentPct !== null && st.recentPct >= 50, st.recentPct !== null && st.recentPct >= 50 ? t('qc.recent') : t('qc.recentBad', { p: st.recentPct === null ? 0 : st.recentPct })],
-      [!!p.target, p.target ? t('qc.target') : t('qc.targetBad')]
+      [!!p.target, p.target ? t('qc.target') : t('qc.targetBad')],
+      [!markers(p), markers(p) ? t('qc.markersBad', { n: markers(p) }) : t('qc.markers')]
     ];
   }
 
@@ -489,12 +511,15 @@
     });
   }
 
+  function abstractText(p, m) {
+    const L = S[isMs(p) ? 'ms' : 'en'];
+    return [['aPurpose', m.purpose], ['aMethod', m.method], ['aFindings', m.findings], ['aOriginality', m.originality]]
+      .filter(([, v]) => v).map(([k, v]) => L[k] + ': ' + v).join('\n\n');
+  }
   function useAbstract(p) {
     const m = p.meta && p.meta.abstract;
     if (!m) return;
-    const L = S[isMs(p) ? 'ms' : 'en'];
-    const text = [['aPurpose', m.purpose], ['aMethod', m.method], ['aFindings', m.findings], ['aOriginality', m.originality]]
-      .filter(([, v]) => v).map(([k, v]) => L[k] + ': ' + v).join('\n\n');
+    const text = abstractText(p, m);
     const sec = sectionOf(p, 'abstract');
     if (sec.content.trim() && !confirm(t('mReplace'))) return;
     sec.content = text; touch(p);
@@ -537,6 +562,120 @@
       a.href = url; a.download = name + '.docx'; a.hidden = true; document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 5000);
     } catch (e) { App.toast(e.message); }
+  }
+
+  /* ---------- Sembang → Paper penuh ---------- */
+  const MARKER = /\[(?:PERLU RUJUKAN|SOURCE NEEDED|DAPATAN[^\]]*|FINDING[^\]]*|[A-Z][A-Z /]{3,})\]/g;
+  function markers(p) { return SECTIONS.reduce((n, k) => n + (sectionOf(p, k).content.match(MARKER) || []).length, 0); }
+  function chatIdeas(p) {
+    const s = App.state(), done = new Set(p.importedIds || []);
+    return [...(s.messages || []), ...(s.casualMessages || [])].filter(m => m && m.role === 'user' && m.text && String(m.text).trim().length > 8 && !done.has(m.id));
+  }
+  function addNote(p, text) {
+    const v = String(text || '').trim();
+    if (!v) return;
+    if (!Array.isArray(p.notes)) p.notes = [];
+    p.notes.push({ id: App.uid(), text: v.slice(0, 1500) });
+    touch(p);
+  }
+  function mergeRefs(p, refs) {
+    if (!Array.isArray(p.references)) p.references = [];
+    const key = r => String(r.doi || r.apa || '').toLowerCase();
+    let added = 0;
+    for (const r of Array.isArray(refs) ? refs : []) { if (r && r.apa && !p.references.some(x => key(x) === key(r))) { p.references.push(r); added++; } }
+    return added;
+  }
+
+  function draftCard(p) {
+    const notes = Array.isArray(p.notes) ? p.notes : [];
+    const busy = view.busy === 'draft';
+    const box = h('textarea', { id: 'noteInput', rows: 2, maxLength: 1500, placeholder: t('dPh'), value: view.note,
+      oninput: e => { view.note = e.target.value; },
+      onkeydown: e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); add(); } } });
+    const act = h('span', { class: 'chat-activity', role: 'status' });
+    const mic = h('button', { type: 'button', class: 'icon-btn voice-btn', 'aria-label': t('dMic'), title: t('dMic'), onclick: e => { if (shell().mic) shell().mic(e.currentTarget, act, box, () => { view.note = box.value; }); } }, '🎙');
+    function add() { addNote(p, box.value); view.note = ''; renderBody(); setTimeout(() => { const el = $('#noteInput'); if (el) el.focus(); }, 0); }
+    const fromChat = chatIdeas(p);
+    const progress = view.progress && view.progress.paperId === p.id ? h('ol', { class: 'draft-steps' }, view.progress.steps.map(st => h('li', { class: 'step-' + st.s },
+      h('span', { class: 'step-dot', 'aria-hidden': 'true', text: st.s === 'done' ? '✓' : st.s === 'fail' ? '!' : st.s === 'doing' ? '…' : '' }), ' ', st.label))) : null;
+    return h('details', { class: 'card draft-card', open: true },
+      h('summary', {}, h('strong', {}, '💬 ', t('dTitle')), ' ', h('span', { class: 'nav-count', text: t('dCount', { n: notes.length }) })),
+      h('p', { class: 'muted small-note', text: t('dBody') }),
+      notes.length
+        ? h('ol', { class: 'note-list' }, notes.map(n => h('li', {}, h('span', { text: n.text }), ' ',
+            h('button', { type: 'button', class: 'btn-reset ref-x', 'aria-label': t('dRemove'), title: t('dRemove'), disabled: busy, onclick: () => { p.notes = p.notes.filter(x => x !== n); touch(p); renderBody(); } }, '×'))))
+        : h('p', { class: 'muted small-note', text: t('dNone') }),
+      h('div', { class: 'note-compose' }, box, mic, h('button', { type: 'button', class: 'btn btn-outline', disabled: busy, onclick: add, text: t('dAdd') })),
+      act,
+      h('div', { class: 'tool-row' },
+        fromChat.length ? h('button', { type: 'button', class: 'btn-reset text-action', disabled: busy, onclick: () => importChat(p), text: t('dImport', { n: fromChat.length }) }) : null,
+        p.prevDraft && !busy ? h('button', { type: 'button', class: 'btn-reset text-action', onclick: () => undoDraft(p), text: t('dUndo') }) : null),
+      h('button', { type: 'button', class: 'btn btn-primary draft-go', disabled: !!view.busy, onclick: () => generatePaper(p) }, '✨ ', t('dGen')),
+      progress,
+      h('p', { class: 'result-notes', text: t('dNote') }));
+  }
+
+  function importChat(p) {
+    const list = chatIdeas(p);
+    if (!list.length) return;
+    if (!Array.isArray(p.importedIds)) p.importedIds = [];
+    list.forEach(m => { addNote(p, m.text); p.importedIds.push(m.id); });
+    touch(p); renderBody();
+    App.toast(t('dImported', { n: list.length }));
+  }
+
+  function undoDraft(p) {
+    const prev = p.prevDraft;
+    if (!prev || !confirm(t('dUndoConfirm'))) return;
+    p.title = prev.title; p.keywords = prev.keywords; p.references = prev.references || [];
+    for (const s of prev.sections || []) sectionOf(p, s.key).content = s.content;
+    p.prevDraft = null; view.progress = null;
+    touch(p); render();
+    App.toast(t('dUndone'));
+  }
+
+  function generatePaper(p) {
+    const notes = (p.notes || []).map(n => n.text).filter(Boolean);
+    if (notes.length < 2) { App.toast(t('dNeed')); return; }
+    if (needAI()) return;
+    const hasContent = SECTIONS.some(k => sectionOf(p, k).content.trim());
+    if (hasContent && !confirm(t('dReplace'))) return;
+    const order = ['introduction', 'literature', 'method', 'results', 'discussion', 'conclusion'];
+    view.progress = { paperId: p.id, steps: [{ k: 'plan', label: t('dStepPlan'), s: 'doing' }, ...order.map(k => ({ k, label: t('dStepSection', { s: t('sec.' + k) }), s: 'wait' })), { k: 'abstract', label: t('dStepAbstract'), s: 'wait' }] };
+    const step = (k, s) => { const x = view.progress.steps.find(i => i.k === k); if (x) x.s = s; renderBody(); };
+    run('draft', async () => {
+      p.prevDraft = { at: new Date().toISOString(), title: p.title, keywords: p.keywords, sections: SECTIONS.map(k => ({ key: k, content: sectionOf(p, k).content })), references: (p.references || []).slice() };
+      const target = p.target ? p.target.name : '';
+      let at = 'plan';
+      try {
+        const plan = await App.apiPost('/api/draft', { mode: 'plan', remarks: notes, title: p.title, language: p.language, target });
+        if (!p.title.trim() && plan.plan && plan.plan.title) p.title = plan.plan.title;
+        SECTIONS.forEach(k => { sectionOf(p, k).content = ''; });
+        p.references = [];
+        touch(p); step('plan', 'done');
+        for (const k of order) {
+          at = k; step(k, 'doing');
+          const out = await App.apiPost('/api/draft', { mode: 'section', section: k, points: (plan.plan.sections || {})[k] || [], papers: plan.papers || [], title: p.title, language: p.language, target });
+          sectionOf(p, k).content = String(out.text || '');
+          mergeRefs(p, out.references);
+          touch(p); step(k, 'done');
+        }
+        at = 'abstract'; step('abstract', 'doing');
+        const meta = await App.apiPost('/api/paper', { mode: 'meta', paper: payload(p) });
+        p.meta = meta.meta;
+        if (meta.meta && meta.meta.abstract) sectionOf(p, 'abstract').content = abstractText(p, meta.meta.abstract);
+        if (meta.meta && meta.meta.keywords && meta.meta.keywords.length && !String(p.keywords || '').trim()) p.keywords = meta.meta.keywords.join('; ');
+        touch(p); step('abstract', 'done');
+        view.section = 'introduction';
+        const st = stats(p);
+        App.toast(t('dDone', { w: fmt(st.words), r: fmt(st.refs) }));
+        setTimeout(render, 0); // title may have changed
+      } catch (e) {
+        step(at, 'fail');
+        const label = (view.progress.steps.find(i => i.k === at) || {}).label || at;
+        throw new Error(t('dFail', { s: label, e: e.message || '' }));
+      }
+    });
   }
 
   /* ---------- "My Projects" card ---------- */

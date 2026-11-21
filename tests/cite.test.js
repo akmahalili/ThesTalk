@@ -135,3 +135,10 @@ test('OpenAlex records become clean paper objects', () => {
   assert.equal(p.doi, '');
   assert.equal(C.mergePapers([[toPaper(WORKS[0]), p], [toPaper(WORKS[0])]]).length, 2);
 });
+
+test('a {n} citation at the end of a clause becomes parenthetical, and markdown emphasis is removed', () => {
+  const C = require('../lib/cite');
+  const papers = [{ n: 1, title: 'A', authors: ['Ali Falahat'], year: '2019', venue: 'J' }, { n: 2, title: 'B', authors: ['Siti Aminah'], year: '2021', venue: 'J' }];
+  const out = C.render('E-dagang berkembang pesat {1}. {2} mendapati *e-commerce* penting.', papers, 'ms');
+  assert.equal(out.text, 'E-dagang berkembang pesat (Falahat, 2019). Aminah (2021) mendapati e-commerce penting.');
+});

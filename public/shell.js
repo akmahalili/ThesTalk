@@ -540,8 +540,8 @@
     return d.transcript || '';
   }
   function afterVoice() { if (ui.voiceAutoSend && $('#casualInput').value.trim()) sendCasual($('#casualInput').value); }
-  async function toggleCasualMic() {
-    const btn = $('#casualMic'), act = $('#casualActivity');
+  /* Voice input for any text box: AI transcription when available, else the browser's speech recognition. */
+  async function toggleMic(btn, act, box, after) {
     if (recorder && recorder.state === 'recording') { recorder.stop(); return; }
     if (browserRec) { browserRec.stop(); return; }
     Speech.stop();
@@ -561,7 +561,7 @@
           recorder = null;
           if (blob.size < 150) { act.textContent = ''; return; }
           act.textContent = t('voice.transcribing');
-          try { appendText($('#casualInput'), await transcribeBlob(blob, type)); act.textContent = ''; afterVoice(); }
+          try { appendText(box, await transcribeBlob(blob, type)); act.textContent = ''; if (after) after(); }
           catch (e) { act.textContent = ''; App.toast(e.message); }
         };
         recorder.start();
@@ -579,12 +579,13 @@
     browserRec = new SR();
     browserRec.lang = ui.lang === 'en' ? 'en-US' : 'ms-MY';
     browserRec.interimResults = false;
-    browserRec.onresult = e => appendText($('#casualInput'), Array.from(e.results).map(r => r[0].transcript).join(' '));
+    browserRec.onresult = e => appendText(box, Array.from(e.results).map(r => r[0].transcript).join(' '));
     browserRec.onerror = e => { if (e && e.error === 'not-allowed') App.toast(t('voice.denied')); };
-    browserRec.onend = () => { browserRec = null; btn.classList.remove('recording'); act.textContent = ''; afterVoice(); };
+    browserRec.onend = () => { browserRec = null; btn.classList.remove('recording'); act.textContent = ''; if (after) after(); };
     try { browserRec.start(); btn.classList.add('recording'); act.textContent = t('voice.listening'); }
     catch (e) { browserRec = null; App.toast(t('voice.unsupported')); }
   }
+  const toggleCasualMic = () => toggleMic($('#casualMic'), $('#casualActivity'), $('#casualInput'), afterVoice);
   $('#casualMic').addEventListener('click', toggleCasualMic);
 
   /* ---------- reference export (RIS / BibTeX) ---------- */
@@ -872,7 +873,7 @@
     }, 30);
   }
 
-  window.ThesTalkShell = { refresh, onAI, go, t, aiChoice, lang: () => ui.lang };
+  window.ThesTalkShell = { refresh, onAI, go, t, aiChoice, lang: () => ui.lang, mic: toggleMic };
 
   /* ---------- boot ---------- */
   applyTheme();

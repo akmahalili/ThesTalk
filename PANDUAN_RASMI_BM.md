@@ -75,3 +75,14 @@ Untuk artikel jurnal (berasingan daripada tesis). Buka dari kad **Jurnal & Paper
 
 Semua nombor jurnal datang daripada OpenAlex, bukan AI. Impak 2 tahun bukan Impact Factor rasmi. Hantar hanya melalui laman rasmi jurnal.
 
+## Sembang → Paper penuh (v1.0)
+
+Dalam **Jurnal & Paper → Tulis**, kad **Sembang → Paper penuh**:
+
+1. Taip idea secara santai, satu demi satu, dan tekan Enter atau **Tambah**. Boleh juga guna 🎙 atau **Ambil dari sembang** untuk mengambil ayat daripada Sembang.
+2. Tekan **Jana paper penuh dengan rujukan**. ThesTalk menyusun idea ikut bahagian jurnal, mencari kajian sebenar di OpenAlex, kemudian menulis Pengenalan hingga Kesimpulan serta abstrak dan kata kunci, dengan sitasi APA dimasukkan secara automatik. Ia mengambil masa kira-kira 30–60 saat.
+3. Isi sendiri tanda seperti [PERLU RUJUKAN], [SAIZ SAMPEL] dan [DAPATAN 1]. AI tidak mereka data. Semak kesediaan akan mengira tanda yang masih ada.
+4. Tak puas hati? Tekan **↶ Kembalikan draf sebelum jana**.
+
+Semak setiap sitasi sebelum hantar, dan nyatakan penggunaan AI jika jurnal memintanya.
+
