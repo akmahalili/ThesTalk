@@ -9,7 +9,7 @@
   <title>Talkademic — Sembang • Belajar • Menyelidik</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./theme-tech.css">
   <link rel="manifest" href="./manifest.webmanifest">
@@ -162,6 +162,7 @@
           </svg>
           <svg class="hero-art robot" viewBox="0 0 220 220" role="img" aria-label="Talkademic AI"><use href="#robot"/></svg>
         </div>
+        <div class="dash" id="homeDash" aria-label="Dashboard"></div>
         <div class="backup-nudge" id="backupNudge" hidden>
           <p><span aria-hidden="true">💾</span> <span id="backupNudgeText"></span></p>
           <button type="button" class="btn btn-primary" id="backupNudgeBtn" data-i18n="bk.saveNow">Backup sekarang</button>
@@ -214,18 +215,7 @@
           <button type="button" class="tile" data-go="library"><svg class="ic"><use href="#ic-refs"/></svg><span class="l1" data-k="tile.refs">Rujukan</span><small class="l2" data-k2="tile.refs">References</small></button>
         </div>
 
-        <div class="home-grid">
-          <div class="card goal-card" id="homeGoal"></div>
-          <div class="card project-card">
-            <div class="card-head"><h2><span data-k="home.project">Projek Semasa</span> <small data-k2="home.project">Current Project</small></h2></div>
-            <p class="pc-title" id="homeProjectTitle">My First Thesis</p>
-            <div class="stat-row">
-              <div class="stat"><strong id="homeWords">0</strong><span data-i18n="stat.words">perkataan</span></div>
-              <div class="stat"><strong id="homeChapters">5</strong><span data-i18n="stat.chapters">bab</span></div>
-              <div class="stat"><strong id="homeRefs">0</strong><span data-i18n="stat.refs">rujukan</span></div>
-            </div>
-            <button type="button" class="btn btn-primary" data-go="academic" data-focus="thesis"><span data-i18n="home.continue">Sambung menulis</span> <svg class="ic"><use href="#ic-arrow"/></svg></button>
-          </div>
+        <div class="home-grid one">
           <div class="card recent-card">
             <div class="card-head"><h2><span data-k="home.recent">Aktiviti Terkini</span> <small data-k2="home.recent">Recent Activity</small></h2><button type="button" id="clearRecent" class="btn-reset text-action" data-i18n="recent.clear" hidden>Kosongkan aktiviti</button></div>
             <ul id="recentList" class="recent-list"></ul>
@@ -487,6 +477,7 @@
   <script src="./goals.js"></script>
   <script src="./slides.js"></script>
   <script src="./sync.js"></script>
+  <script src="./dashboard.js"></script>
   <script src="./shell.js"></script>
 </body>
 </html>

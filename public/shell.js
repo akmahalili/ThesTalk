@@ -372,12 +372,13 @@
   }
   function renderHome() {
     const s = App.state(), n = totals();
-    $('#homeProjectTitle').textContent = s.project.title || '—';
-    $('#homeWords').textContent = fmt(n.words);
-    $('#homeChapters').textContent = fmt(n.chapters);
-    $('#homeRefs').textContent = fmt(n.refs);
+    const set = (id, v) => { const el = $(id); if (el) el.textContent = v; };
+    set('#homeProjectTitle', s.project.title || '—');
+    set('#homeWords', fmt(n.words));
+    set('#homeChapters', fmt(n.chapters));
+    set('#homeRefs', fmt(n.refs));
     renderRecent();
-    try { if (window.TalkademicGoals) window.TalkademicGoals.home(); } catch (e) { /* goals not ready */ }
+    try { if (window.TalkademicDashboard) window.TalkademicDashboard.render(); } catch (e) { /* dashboard not ready */ }
   }
 
   /* ---------- projects ---------- */

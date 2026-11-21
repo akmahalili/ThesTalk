@@ -9,7 +9,7 @@
   const S = {
     ms: {
       title: 'Sasaran & Peringatan', alt: 'Goals & Reminders', sub: 'Tetapkan sasaran perkataan harian, jejak streak, dan kira hari ke tarikh akhir. Peringatan masuk ke kalendar telefon anda.',
-      today: 'Hari ini', of: 'daripada {n} perkataan', target: 'Sasaran harian (perkataan)', papersToo: 'Kira juga paper jurnal', streak: '{n} hari berturut-turut', streak0: 'Mulakan streak hari ini', best: 'Terbaik: {n} hari',
+      today: 'Hari ini', of: 'daripada {n} perkataan', target: 'Sasaran harian (perkataan)', thesisTarget: 'Sasaran tesis keseluruhan (perkataan)', papersToo: 'Kira juga paper jurnal', streak: '{n} hari berturut-turut', streak0: 'Mulakan streak hari ini', best: 'Terbaik: {n} hari',
       left: 'Tulis {n} perkataan lagi untuk capai sasaran hari ini.', met: 'Sasaran hari ini tercapai. Syabas!', week: '7 hari lepas', countNote: 'Dikira daripada pertambahan perkataan dalam tesis dan paper anda hari ini, termasuk teks yang dijana atau diimport.',
       deadlines: 'Tarikh akhir', dTitle: 'Perkara', dTitlePh: 'Contoh: Hantar Bab 2 kepada penyelia', dDate: 'Tarikh', add: 'Tambah', none: 'Belum ada tarikh akhir.', days: '{n} hari lagi', today0: 'Hari ini', tomorrow: 'Esok', past: '{n} hari lepas',
       cal: 'Kalendar', calAll: 'Semua ke kalendar', remove: 'Buang', confirmRemove: 'Buang tarikh akhir ini?',
@@ -19,7 +19,7 @@
     },
     en: {
       title: 'Goals & Reminders', alt: 'Sasaran & Peringatan', sub: 'Set a daily word target, keep a streak and count down to deadlines. Reminders go into your phone calendar.',
-      today: 'Today', of: 'of {n} words', target: 'Daily target (words)', papersToo: 'Count journal papers too', streak: '{n}-day streak', streak0: 'Start a streak today', best: 'Best: {n} days',
+      today: 'Today', of: 'of {n} words', target: 'Daily target (words)', thesisTarget: 'Whole-thesis target (words)', papersToo: 'Count journal papers too', streak: '{n}-day streak', streak0: 'Start a streak today', best: 'Best: {n} days',
       left: 'Write {n} more words to reach today\'s target.', met: 'Today\'s target reached. Well done!', week: 'Last 7 days', countNote: 'Counted from the words added to your thesis and papers today, including generated or imported text.',
       deadlines: 'Deadlines', dTitle: 'What', dTitlePh: 'e.g. Send Chapter 2 to supervisor', dDate: 'Date', add: 'Add', none: 'No deadlines yet.', days: '{n} days left', today0: 'Today', tomorrow: 'Tomorrow', past: '{n} days ago',
       cal: 'Calendar', calAll: 'All to calendar', remove: 'Remove', confirmRemove: 'Remove this deadline?',
@@ -62,6 +62,7 @@
     if (!g.log || typeof g.log !== 'object') g.log = {};
     if (!Array.isArray(g.deadlines)) g.deadlines = [];
     if (!/^\d{2}:\d{2}$/.test(g.time || '')) g.time = '21:00';
+    if (!(g.thesisTarget > 0)) g.thesisTarget = 80000;
     return g;
   }
   const count = s => (String(s || '').match(/\S+/g) || []).length;
@@ -211,6 +212,8 @@
           h('span', { class: 'gw-target', style: 'bottom:calc(22px + ' + Math.round(g.target / max * 72) + 'px)' })),
         h('div', { class: 'ana-row' },
           h('label', { class: 'form-field' }, h('span', { text: t('target') }), h('input', { type: 'number', min: 50, max: 20000, step: 50, value: g.target, onchange: ev => { const v = Math.round(Number(ev.target.value)); if (v >= 50 && v <= 20000) { g.target = v; g.touched = true; Object.values(g.log).forEach(x => { x.met = x.words >= v; }); App.save(); render(); } } })),
+          h('label', { class: 'form-field' }, h('span', { text: t('thesisTarget') }), h('input', { type: 'number', min: 1000, max: 500000, step: 1000, value: g.thesisTarget, onchange: ev => { const v = Math.round(Number(ev.target.value)); if (v >= 1000 && v <= 500000) { g.thesisTarget = v; App.save(); } } }))),
+        h('div', { class: 'ana-row' },
           h('label', { class: 'check-row' }, h('input', { type: 'checkbox', checked: g.papers, onchange: ev => { const before = totalWords(g); g.papers = ev.target.checked; g.touched = true; const after = totalWords(g); if (g.log[today]) g.log[today].start += after - before; g.lastTotal = after; tick(); App.save(); render(); } }), h('span', { text: t('papersToo') }))),
         h('p', { class: 'muted small-note', text: t('countNote') })),
       h('div', { class: 'card' },
@@ -235,5 +238,15 @@
         h('p', { class: 'muted small-note', text: t('remHelp') })));
   }
 
-  window.TalkademicGoals = { render, home, tick, streaks, calendar, deadlineEvent, reminderEvent, dayKey };
+  /* Numbers for the home dashboard. */
+  function summary() {
+    tick();
+    const g = data(), today = dayKey(), st = streaks(g), next = nextDeadline(g);
+    return {
+      today: (g.log[today] || {}).words || 0, target: g.target, streak: st.cur, best: st.best, thesisTarget: g.thesisTarget,
+      week: Array.from({ length: 7 }, (_, i) => { const k = addDays(today, i - 6), e = g.log[k] || {}; return { key: k, words: e.words || 0, met: !!e.met, day: (parseDay(k).getDay() + 6) % 7, now: k === today }; }),
+      next: next ? { title: next.title, days: daysBetween(today, next.date), when: when(next.date) } : null
+    };
+  }
+  window.TalkademicGoals = { render, home, tick, summary, streaks, calendar, deadlineEvent, reminderEvent, dayKey };
 })();
