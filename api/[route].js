@@ -16,6 +16,7 @@ const ROUTES = {
   paper: () => require('../handlers/paper'),
   slides: () => require('../handlers/slides'),
   status: () => require('../handlers/status'),
+  survey: () => require('../handlers/survey'),
   sync: () => require('../handlers/sync'),
   transcribe: () => require('../handlers/transcribe'),
 };

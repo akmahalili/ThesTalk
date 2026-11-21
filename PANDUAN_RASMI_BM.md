@@ -156,6 +156,20 @@ Akademik → **Slaid Pembentangan**.
 5. **Tema reka bentuk** (v2.5): pilih Klasik, Galeri, Bilik Gelap, Tropika, Neon atau Pastel, atau tekan 🎲 Rawak. Tema boleh ditukar bila-bila masa dan mengubah pratonton serta fail PowerPoint.
 6. **Muat turun PowerPoint**: fail .pptx dengan nota penyampai, dan slaid rujukan untuk sumber yang disebut dalam slaid.
 
+## Analisis Soal Selidik (v2.8)
+
+Akademik → **Analisis Soal Selidik**.
+
+1. Muat turun respons Google Forms sebagai CSV (Respons → ikon Sheets → Fail → Muat turun → CSV).
+2. Tekan **📂 Buka fail CSV**. App meneka jenis setiap lajur (demografi, item Likert, nombor). Betulkan jika salah dan tanda item negatif sebagai **Terbalik (R)**.
+3. Namakan semula konstruk (cth. KP → Kepercayaan pembeli).
+4. Keputusan keluar terus: profil responden, alfa Cronbach, statistik item-jumlah, min dan tahap, kepencongan dan kurtosis, serta korelasi Pearson.
+5. **⬇ Excel semua jadual**, **Salin jadual** (tampal dalam Word), **⬇ PNG** untuk carta, dan **⬇ Data berkod (CSV)** untuk SPSS atau SmartPLS.
+6. Teks Bab 4 ditulis daripada angka sebenar. **✨ Perhalusi dengan AI** hanya memperbaiki bahasa; jika AI ubah mana-mana angka, teks asal dikekalkan. Isi tanda [PERLU RUJUKAN] dengan rujukan kaedah anda.
+7. **Masukkan ke tesis** (Bab 4) atau ke Dapatan paper.
+
+Data responden kekal dalam peranti anda dan tidak dihantar ke AI.
+
 ## Kerangka Konseptual (v2.7)
 
 Akademik → **Kerangka Konseptual**.

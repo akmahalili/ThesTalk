@@ -17,7 +17,7 @@
       go: 'Analisis', busy: 'Menganalisis output… (sehingga 1 minit)', need: 'Tampal output statistik dahulu.',
       means: 'Maksudnya', checks: 'Semakan ambang', table: 'Jadual keputusan', writeup: 'Bahagian Dapatan (boleh disunting)', refs: 'Rujukan kaedah', warn: 'Perlu diberi perhatian',
       pass: 'Lulus', fail: 'Tidak lulus', check: 'Semak', copy: 'Salin', copied: 'Disalin.', toPaper: 'Masukkan ke Dapatan paper', toThesis: 'Masukkan ke bahagian tesis semasa', noPaper: 'Belum ada paper. Cipta di Jurnal & Paper.',
-      inserted: 'Dimasukkan ke "{s}" bersama {n} rujukan baharu.', note: 'Angka diambil terus daripada output anda. Semak semula, terutamanya tanda [NILAI?] yang perlu diisi.', choose: 'Pilih paper'
+      inserted: 'Dimasukkan ke "{s}" bersama {n} rujukan baharu.', note: 'Angka diambil terus daripada output anda. Semak semula, terutamanya tanda [NILAI?] yang perlu diisi.', choose: 'Pilih paper', csv: 'Ada fail CSV soal selidik (Google Forms)? Buka Analisis Soal Selidik'
     },
     en: {
       title: 'Data Analysis', alt: 'Analisis Data', sub: 'Paste SmartPLS or SPSS output. Talkademic explains it, checks the standard thresholds and writes an APA Results section.',
@@ -28,7 +28,7 @@
       go: 'Analyse', busy: 'Analysing the output… (up to a minute)', need: 'Paste the statistical output first.',
       means: 'What it means', checks: 'Threshold checks', table: 'Results table', writeup: 'Results section (editable)', refs: 'Method references', warn: 'Needs attention',
       pass: 'Pass', fail: 'Fail', check: 'Check', copy: 'Copy', copied: 'Copied.', toPaper: "Add to a paper's Results", toThesis: 'Add to the current thesis section', noPaper: 'No papers yet. Create one in Journal Papers.',
-      inserted: 'Added to "{s}" with {n} new references.', note: 'Numbers come straight from your output. Check them again, especially any [VALUE?] markers to fill in.', choose: 'Choose paper'
+      inserted: 'Added to "{s}" with {n} new references.', note: 'Numbers come straight from your output. Check them again, especially any [VALUE?] markers to fill in.', choose: 'Choose paper', csv: 'Have a questionnaire CSV (Google Forms)? Open Survey Analysis'
     }
   };
   const t = (k, v) => { let s = (S[lang()] && S[lang()][k]) || S.ms[k] || k; if (v) for (const [a, b] of Object.entries(v)) s = s.split('{' + a + '}').join(String(b)); return s; };
@@ -75,6 +75,7 @@
     } });
     fill(root, 
       h('div', { class: 'view-head' }, h('div', {}, h('h1', { id: 'analysisTitle' }, t('title'), ' ', h('small', { text: t('alt') })), h('p', { text: t('sub') }))),
+      h('button', { type: 'button', class: 'btn-reset text-action ana-csv', onclick: () => shell().go && shell().go('survey'), text: t('csv') }),
       h('div', { class: 'card ana-form' },
         h('div', { class: 'ana-row' }, h('label', { class: 'form-field' }, h('span', { text: t('kind') }), kind), h('label', { class: 'form-field' }, h('span', { text: t('write') }), wl)),
         h('label', { class: 'form-field' }, h('span', { text: t('hyp') }), h('textarea', { rows: 3, maxLength: 3000, placeholder: t('hypPh'), value: d.hypotheses, oninput: e => { d.hypotheses = e.target.value; App.save(); } })),
