@@ -27,7 +27,7 @@ Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead 
 
 ## Second free AI: Groq (v2.4)
 
-Only AIs that are switched on appear in **Choose AI**, so Claude and ChatGPT (paid API) are hidden. Add `GROQ_API_KEY` (free tier at console.groq.com, no card; over the limit it returns 429, never a charge) to show **Groq** (GPT-OSS 120B, then Llama 3.3 70B and Qwen3 32B). When Gemini's free limit is used up or Gemini is down, requests fall back to Groq automatically.
+Only AIs that are switched on appear in **Choose AI**, so Claude and ChatGPT (paid API) are hidden. Add `GROQ_API_KEY` (free tier at console.groq.com, no card; over the limit it returns 429, never a charge) to show **Groq** (GPT-OSS 120B, then Qwen 3.8 27B and GPT-OSS 20B). When Gemini's free limit is used up or Gemini is down, requests fall back to Groq automatically.
 
 ## Sync between devices (v2.2)
 

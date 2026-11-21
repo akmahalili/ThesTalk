@@ -1,6 +1,6 @@
 {
   "name": "thestalk-ai",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "private": true,
   "description": "Talkademic AI installable PWA and secure serverless AI gateway",
   "scripts": {

@@ -766,7 +766,7 @@
     { id: 'gemini', name: 'Gemini', by: 'Google', cost: 'ai.free' },
     { id: 'claude', name: 'Claude', by: 'Anthropic', cost: 'ai.paid' },
     { id: 'openai', name: 'ChatGPT', by: 'OpenAI', cost: 'ai.paid' },
-    { id: 'groq', name: 'Groq', by: 'Llama · GPT-OSS', cost: 'ai.free' }
+    { id: 'groq', name: 'Groq', by: 'GPT-OSS · Qwen', cost: 'ai.free' }
   ];
   const aiKeys = () => (App.providers && App.providers()) || {};
   /* The AI that will actually answer: the saved choice if its key exists, otherwise the server default. */
