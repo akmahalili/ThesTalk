@@ -107,3 +107,13 @@ Fail Word dibaca terus di peranti dan tidak dimuat naik ke mana-mana.
 - **Tesis:** Projek → **📄 Import DOCX**. BAB/CHAPTER menjadi bab, dan 1.1, 1.2 menjadi sub-bahagian. Rujukan dimasukkan ke senarai rujukan tesis. Jika tesis sedia ada akan diganti, app akan bertanya dahulu dan menyimpan salinan untuk dibatalkan.
 - Fail **.doc** lama perlu disimpan semula sebagai **.docx** dalam Word.
 
+## Analisis Data (v1.7)
+
+Akademik → **Analisis Data**.
+
+1. Pilih jenis analisis (atau biar "Kenal pasti sendiri") dan bahasa tulisan.
+2. Tampal output SmartPLS (Copy to clipboard) atau SPSS (klik kanan jadual → Copy), atau buka fail .csv / .txt / .html.
+3. Tulis hipotesis jika ada, kemudian tekan **Analisis**.
+
+Talkademic memberi: penerangan ringkas, semakan ambang (✓ lulus, ✗ tidak lulus, ? semak), jadual keputusan dan bahagian Dapatan gaya APA yang boleh disunting. Sitasi hanya daripada sumber kaedah yang telah disahkan (contohnya Hair et al., 2019; Henseler et al., 2015). Angka diambil terus daripada output; jika tiada, ditanda [NILAI?]. Hasil boleh disalin, dimasukkan ke bahagian Dapatan paper, atau ke bahagian tesis semasa bersama rujukannya.
+

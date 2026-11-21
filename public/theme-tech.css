@@ -232,3 +232,39 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .recent-list .ra-del{width:36px;height:36px;padding:0;border:0;background:transparent;display:grid;place-items:center;border-radius:10px;flex:0 0 36px}
 .recent-list .ra-del:hover,.recent-list .ra-del:focus-visible{background:color-mix(in srgb,var(--danger) 12%,transparent);border:0}
+
+/* v1.7 Analisis Data */
+#view-analysis .card{margin-bottom:14px}
+#view-analysis .view-head h1 small{font-weight:500;color:var(--muted);font-size:.55em}
+.ana-form{display:flex;flex-direction:column;gap:12px}
+.ana-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ana-form textarea,.ana-result textarea{width:100%;min-width:0;box-sizing:border-box}
+#anaOutput{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.5;tab-size:12;white-space:pre;overflow-x:auto}
+.ana-result textarea{font-size:15px;line-height:1.65}
+.ana-badge{margin:0 0 6px;color:var(--accent-text);font-size:13px}
+.ana-checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.ana-checks li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;column-gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--border)}
+.ana-checks li:last-child{border-bottom:0}
+.ana-checks .st-dot{grid-row:span 2;width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;font-weight:700;font-size:13px;align-self:center}
+.ana-checks .st-pass .st-dot{background:rgba(22,163,74,.14);color:#15803d}
+.ana-checks .st-fail .st-dot{background:rgba(220,38,38,.14);color:#b91c1c}
+.ana-checks .st-check .st-dot{background:rgba(217,119,6,.16);color:#b45309}
+.ana-checks .ck-item{font-weight:600;color:var(--text);overflow-wrap:anywhere}
+.ana-checks .ck-val{font-variant-numeric:tabular-nums;font-weight:600;color:var(--text-2);text-align:right}
+.ana-checks .ck-th{grid-column:2 / 4;font-size:12.5px}
+.ana-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px}
+.ana-table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+.ana-table th,.ana-table td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.ana-table thead th{border-bottom:2px solid var(--text-2);font-weight:600}
+.ana-table td:first-child{white-space:normal;min-width:120px}
+.ana-warn{border-left:3px solid #d97706}
+.ana-warn ul{margin:0;padding-left:18px}
+.ana-refs{margin:10px 0 4px;font-size:13px}
+.ana-refs ol{padding-left:20px;margin:8px 0 0}
+.ana-refs li{margin-bottom:6px;overflow-wrap:anywhere}
+.ana-result .tool-row select{flex:1 1 160px;min-width:0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ana-checks .st-pass .st-dot{color:#4ade80}:root:not([data-theme="light"]) .ana-checks .st-fail .st-dot{color:#f87171}:root:not([data-theme="light"]) .ana-checks .st-check .st-dot{color:#fbbf24}}
+:root[data-theme="dark"] .ana-checks .st-pass .st-dot{color:#4ade80}
+:root[data-theme="dark"] .ana-checks .st-fail .st-dot{color:#f87171}
+:root[data-theme="dark"] .ana-checks .st-check .st-dot{color:#fbbf24}
+@media (max-width:560px){.ana-row{grid-template-columns:minmax(0,1fr)}}
