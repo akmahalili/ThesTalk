@@ -153,7 +153,8 @@ Akademik → **Slaid Pembentangan**.
 2. Tekan **Jana slaid**. Setiap slaid ada cadangan gambar dan nota penyampai.
 3. Ketik teks untuk sunting. Tekan **🖼 Tambah gambar** untuk letak gambar sendiri dari telefon (gambar disimpan dalam peranti ini sahaja).
 4. Susun semula dengan ↑ ↓, buang dengan ×.
-5. **Muat turun PowerPoint**: fail .pptx dengan nota penyampai, dan slaid rujukan untuk sumber yang disebut dalam slaid.
+5. **Tema reka bentuk** (v2.5): pilih Klasik, Galeri, Bilik Gelap, Tropika, Neon atau Pastel, atau tekan 🎲 Rawak. Tema boleh ditukar bila-bila masa dan mengubah pratonton serta fail PowerPoint.
+6. **Muat turun PowerPoint**: fail .pptx dengan nota penyampai, dan slaid rujukan untuk sumber yang disebut dalam slaid.
 
 ## Sync telefon ↔ laptop (v2.2)
 

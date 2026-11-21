@@ -75,3 +75,45 @@ test('POST /api/slides builds a deck from the thesis text', withEnv(env, async (
   await handler(req({ title: 'x', sections: [{ name: 'a', content: 'too short' }] }), short);
   assert.equal(short.statusCode, 400);
 }));
+
+test('clean keeps steps and quote slides, and falls back when they are too thin', () => {
+  const deck = D.clean({ title: 'T', slides: [
+    { layout: 'title', title: 'A' },
+    { layout: 'steps', title: 'Prosedur', steps: [{ label: 'Rintis', text: '30 responden' }, { label: 'Kutip data' }, 'Analisis'] },
+    { layout: 'steps', title: 'Satu', steps: [{ label: 'Hanya satu' }] },
+    { layout: 'quote', quote: 'Imej ialah bukti.', source: 'Bab 1' },
+    { layout: 'quote', source: 'kosong' },
+    { layout: 'end', title: 'Terima kasih' }
+  ] });
+  assert.deepEqual(deck.slides.map(s => s.layout), ['title', 'steps', 'bullets', 'quote', 'end']);
+  assert.deepEqual(deck.slides[1].steps.map(x => x.label), ['Rintis', 'Kutip data', 'Analisis']);
+  assert.match(D.instructions({ language: 'English', kind: 'viva', minutes: 15 }), /at least six different layouts/);
+});
+
+test('every slide theme draws every layout without errors', () => {
+  const ST = require('../public/slidethemes.js');
+  const deck = { title: 'Imej produk', presenter: 'Kema', date: '2026-11-21', kindLabel: 'Proposal', slides: [
+    { id: 'a', layout: 'title', title: 'Imej produk', subtitle: 'Proposal' },
+    { id: 'b', layout: 'section', title: 'Latar', statement: 'Imej ialah bukti.' },
+    { id: 'c', layout: 'bullets', title: 'Masalah', bullets: ['Satu', 'Dua'] },
+    { id: 'd', layout: 'stats', title: 'Sampel', stats: [{ value: '312', label: 'pembeli' }, { value: '5', label: 'konstruk' }] },
+    { id: 'e', layout: 'framework', title: 'Kerangka', nodes: ['A', 'B', 'C'], links: [{ f: 0, t: 1, label: 'H1' }, { f: 1, t: 2 }] },
+    { id: 'f', layout: 'compare', title: 'Jurang', left: { heading: 'Lepas', bullets: ['x'] }, right: { heading: 'Ini', bullets: ['y'] } },
+    { id: 'g', layout: 'image', title: 'Contoh', caption: 'Foto' },
+    { id: 'h', layout: 'steps', title: 'Prosedur', steps: [{ label: 'Satu', text: 'a' }, { label: 'Dua', text: 'b' }, { label: 'Tiga', text: 'c' }] },
+    { id: 'i', layout: 'quote', quote: 'Imej ialah bukti.', source: 'Bab 1' },
+    { id: 'j', layout: 'end', title: 'Terima kasih' }
+  ] };
+  const levels = sl => [[0], [1], [2]].slice(0, sl.nodes.length);
+  for (const theme of ST.ORDER) {
+    const calls = [];
+    const slide = () => { const sl = { addText: (...a) => calls.push(['text', a]), addShape: (...a) => calls.push(['shape', a]), addImage: (...a) => calls.push(['image', a]), addNotes: () => {} }; return sl; };
+    const slides = [];
+    const pres = { ShapeType: { rect: 'rect', roundRect: 'roundRect', ellipse: 'ellipse', line: 'line' }, addSlide: () => { const s = slide(); slides.push(s); return s; } };
+    ST.build(pres, Object.assign({ theme }, deck), { pics: { c: 'data:image/png;base64,AA==' }, refs: [{ apa: 'Hair, J. F. (2019). Title.' }], t: k => k, niceDate: x => x, levels });
+    assert.equal(slides.length, 11, theme + ': ten slides plus one references slide');
+    assert.ok(calls.some(c => c[0] === 'image'), theme + ': the picture is placed');
+    assert.ok(calls.filter(c => c[0] === 'text').every(c => c[1][1] && c[1][1].fontFace), theme + ': every text has a font');
+    assert.ok(slides.every(s => s.background && s.background.color), theme + ': every slide has a background');
+  }
+});
