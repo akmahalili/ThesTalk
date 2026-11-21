@@ -19,6 +19,10 @@ A responsive, installable web application for voice/text brainstorming, thesis c
    - `OPENALEX_API_KEY` — free key from https://openalex.org/settings/api, needed for **Find real references** (see below).
 5. Redeploy after adding environment variables. In the app, press **Connect AI**, enter the access code and verify the badge changes to **AI connected**.
 
+## Free AI option (Gemini)
+
+Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. ThesTalk then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.8-flash` (override with `GEMINI_MODEL`; it falls back to `gemini-3.5-flash-lite` if the model is not found). The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. AI voice transcription still needs `OPENAI_API_KEY`; without it the app uses the browser's speech recognition. The access code is remembered on the device after a successful unlock.
+
 ## Real references (v0.4)
 
 Tick **📚 Find real references** in the Academic Writing Assistant before converting an idea. ThesTalk then:
