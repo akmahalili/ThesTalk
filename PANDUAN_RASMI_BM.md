@@ -86,3 +86,14 @@ Dalam **Jurnal & Paper → Tulis**, kad **Sembang → Paper penuh**:
 
 Semak setiap sitasi sebelum hantar, dan nyatakan penggunaan AI jika jurnal memintanya.
 
+## Perhalusi dengan ChatGPT / Claude (v1.1, percuma guna langganan anda)
+
+Di bawah setiap bahagian paper (tab Tulis):
+
+1. Pilih **Arahan**, contohnya *Perhalusi untuk jurnal Q1–Q2*, *Kembangkan hujah*, *Ringkaskan*, *Semak tatabahasa* atau *Terjemah*.
+2. Tekan **ChatGPT** atau **Claude**. Teks berserta arahan disalin, dan app dibuka. Jika kotak taip kosong, tekan lama dan pilih **Tampal**, kemudian hantar.
+3. Salin jawapan, kembali ke ThesTalk, tekan **📋 Tampal hasil**, kemudian pilih **Ganti bahagian** atau **Tambah di bawah**. Tersilap? Tekan **↶ Batal perubahan**.
+4. Jika jawapan mengandungi sitasi yang tiada dalam senarai rujukan paper, ThesTalk akan beri amaran supaya anda semak (ChatGPT dan Claude kadang-kadang menambah rujukan sendiri).
+
+Di tab **Semak kesediaan**, butang **Minta penilaian ChatGPT / Claude** menghantar seluruh paper untuk dinilai seperti penilai jurnal.
+

@@ -23,6 +23,10 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 
 Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. ThesTalk then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.5-flash-lite`, moving to `gemini-3.1-flash-lite` when a model is busy, missing or over its limit (set `GEMINI_MODEL` to try another model first). On the free tier the Flash-Lite models allow about 500 requests a day each, while Gemini Flash allows only about 20, which is why Flash-Lite is the default. Each conversion with references uses two requests. The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. Voice transcription also runs on Gemini (the browser recording is sent as-is), so the mic works for free; without any AI key the app falls back to the browser's speech recognition. The access code is remembered on the device after a successful unlock.
 
+## Refine with your own ChatGPT / Claude (v1.1)
+
+No API and no extra cost: under each paper section the user picks an instruction (polish for Q1–Q2, expand, shorten, grammar only, translate) and taps **ChatGPT** or **Claude**. ThesTalk copies a prompt that tells the model to keep every citation and placeholder and invent nothing, then opens `https://chatgpt.com/?q=…` or `https://claude.ai/new?q=…` (prefilled when the link is short enough; otherwise the user pastes once). **Paste result** brings the answer back to replace or append to the section, with one-step undo, and warns about author–year citations that are not in the paper's reference list. The readiness tab has the same hand-off for a whole-paper reviewer report.
+
 ## Chat → full paper (v1.0)
 
 In **Jurnal & Paper → Write**, the *Sembang → Paper penuh* card collects casual remarks for the paper (typed, by voice, or imported from the chats). **Generate full paper with references** then runs `POST /api/draft` step by step, each step a short request inside the serverless time limit:

@@ -644,3 +644,14 @@ small{font-size:.78em}
 .draft-steps .step-fail .step-dot{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger)}
 @media (max-width:899px){.draft-go{align-self:stretch}}
 @media (prefers-reduced-motion: reduce){.draft-steps .step-doing .step-dot{animation:none}}
+
+/* ---------- v1.1 Hantar ke ChatGPT / Claude ---------- */
+.handoff{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--border-strong);padding-top:12px;margin-top:4px}
+.card.handoff{border-top:1px solid var(--border);margin-top:0}
+.handoff-title{margin:0;font-size:13.5px}
+.handoff-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.handoff-row select{padding:10px 12px;border:1px solid var(--border-strong);border-radius:11px;font:500 13px var(--font);background:var(--surface);color:var(--text);max-width:100%}
+.app-btn{gap:8px}
+.paste-panel{display:flex;flex-direction:column;gap:10px}
+.paste-panel textarea{min-height:180px}
+@media (max-width:899px){.handoff-row select{flex:1 1 100%}.handoff-row .btn{flex:1 1 auto}}

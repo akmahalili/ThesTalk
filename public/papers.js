@@ -61,6 +61,13 @@
       'qc.refs': 'Sekurang-kurangnya 40 rujukan (panduan umum Q1–Q2)', 'qc.refsBad': '{n} rujukan (panduan umum: 40 atau lebih)',
       'qc.recent': 'Separuh rujukan dari 5 tahun terkini', 'qc.recentBad': '{p}% rujukan dari 5 tahun terkini (sasaran ≥ 50%)',
       'qc.target': 'Jurnal sasaran dipilih', 'qc.targetBad': 'Belum pilih jurnal sasaran',
+      xTitle: 'Perhalusi dengan ChatGPT / Claude (langganan anda)', xHow: 'ThesTalk salin bahagian ini berserta arahan, kemudian buka ChatGPT atau Claude. Hantar di sana, salin jawapan, kemudian tekan Tampal hasil.',
+      xAction: 'Arahan', 'xa.polish': 'Perhalusi untuk jurnal Q1–Q2', 'xa.expand': 'Kembangkan hujah', 'xa.shorten': 'Ringkaskan', 'xa.grammar': 'Semak tatabahasa sahaja', 'xa.translate': 'Terjemah ke bahasa lain',
+      xOpened: 'Teks dah disalin dan {a} dibuka. Kalau kotak taip kosong, tekan lama dan pilih Tampal.', xPaste: 'Tampal hasil', xPasteTitle: 'Hasil dari ChatGPT / Claude', xPastePh: 'Tampal jawapan ChatGPT atau Claude di sini…',
+      xFromClip: 'Tampal dari clipboard', xClipFail: 'Tidak dapat baca clipboard. Tekan lama dalam kotak dan pilih Tampal.', xReplace: 'Ganti bahagian', xAppend: 'Tambah di bawah', xCancel: 'Batal',
+      xDone: 'Bahagian dikemas kini.', xUndo: '↶ Batal perubahan', xUndone: 'Bahagian dikembalikan.',
+      xUnknown: 'Sitasi ini tiada dalam senarai rujukan paper, mungkin ditambah oleh ChatGPT/Claude. Semak sebelum guna: {c}', xEmpty: 'Bahagian ini masih kosong.',
+      xReviewTitle: 'Minta penilaian ChatGPT / Claude', xReviewBody: 'Salin seluruh paper berserta arahan penilai jurnal, kemudian buka app. Jawapan dibaca di sana.',
       dTitle: 'Sembang → Paper penuh', dBody: 'Taip idea, pendapat atau pemerhatian anda secara santai, satu demi satu (boleh guna mikrofon). Bila cukup, tekan Jana paper penuh: ThesTalk susun ikut bahagian jurnal dan masukkan sitasi daripada kajian sebenar secara automatik.',
       dPh: 'cth. I think, gambar close up penting utk org yakin semasa membeli', dAdd: 'Tambah', dMic: 'Cakap untuk menaip', dCount: '{n} idea', dNone: 'Belum ada idea. Mula taip di bawah.',
       dImport: 'Ambil dari sembang ({n})', dImported: '{n} idea diambil dari sembang.', dRemove: 'Buang idea',
@@ -125,6 +132,13 @@
       'qc.refs': 'At least 40 references (general Q1–Q2 guide)', 'qc.refsBad': '{n} references (general guide: 40 or more)',
       'qc.recent': 'Half of references from the last 5 years', 'qc.recentBad': '{p}% of references from the last 5 years (aim for ≥ 50%)',
       'qc.target': 'Target journal chosen', 'qc.targetBad': 'No target journal yet',
+      xTitle: 'Refine with ChatGPT / Claude (your subscription)', xHow: 'ThesTalk copies this section with an instruction, then opens ChatGPT or Claude. Send it there, copy the answer, then tap Paste result.',
+      xAction: 'Instruction', 'xa.polish': 'Polish for a Q1–Q2 journal', 'xa.expand': 'Expand the argument', 'xa.shorten': 'Make it shorter', 'xa.grammar': 'Grammar only', 'xa.translate': 'Translate to the other language',
+      xOpened: 'Text copied and {a} opened. If the message box is empty, long-press and choose Paste.', xPaste: 'Paste result', xPasteTitle: 'Result from ChatGPT / Claude', xPastePh: 'Paste the ChatGPT or Claude answer here…',
+      xFromClip: 'Paste from clipboard', xClipFail: 'Could not read the clipboard. Long-press in the box and choose Paste.', xReplace: 'Replace section', xAppend: 'Add below', xCancel: 'Cancel',
+      xDone: 'Section updated.', xUndo: '↶ Undo change', xUndone: 'Section restored.',
+      xUnknown: 'These citations are not in the paper\'s reference list and may have been added by ChatGPT/Claude. Check them before use: {c}', xEmpty: 'This section is still empty.',
+      xReviewTitle: 'Ask ChatGPT / Claude for a review', xReviewBody: 'Copies the whole paper with journal-reviewer instructions, then opens the app. Read the answer there.',
       dTitle: 'Chat → Full paper', dBody: 'Type your ideas, opinions or observations casually, one at a time (the mic works too). When you have enough, press Generate full paper: ThesTalk organises them into journal sections and adds citations from real studies automatically.',
       dPh: 'e.g. I think close-up photos make people confident when buying', dAdd: 'Add', dMic: 'Speak to type', dCount: '{n} ideas', dNone: 'No ideas yet. Start typing below.',
       dImport: 'Import from chats ({n})', dImported: '{n} ideas imported from your chats.', dRemove: 'Remove idea',
@@ -166,7 +180,7 @@
   }
 
   /* ---------- state ---------- */
-  const view = { tab: 'write', section: 'introduction', busy: '', recent: true, cite: null, manual: '', note: '', progress: null };
+  const view = { tab: 'write', section: 'introduction', busy: '', recent: true, cite: null, manual: '', note: '', progress: null, xAction: 'polish', paste: null, undo: null };
   function store() { const s = App.state(); if (!Array.isArray(s.papers)) s.papers = []; return s; }
   function current() { const s = store(); return s.papers.find(p => p.id === s.activePaper) || s.papers[0] || null; }
   function touch(p) { p.updated = new Date().toISOString(); App.save(); }
@@ -304,7 +318,7 @@
       h('div', { class: 'card paper-section' },
         h('div', { class: 'ps-head' }, h('h2', { text: t('sec.' + view.section) }), count),
         h('p', { class: 'muted small-note', text: t('guide.' + view.section) }),
-        kw, editor),
+        kw, editor, handoffRow(p)),
       citeBox(p),
       refsBox(p),
       h('div', { class: 'tool-row paper-actions' },
@@ -429,6 +443,7 @@
       h('p', { class: 'muted', text: t('fIntro') }),
       h('div', { class: 'card' }, h('h3', { text: t('fQuick') }),
         h('ul', { class: 'quick-checks' }, quickChecks(p).map(([ok, text]) => h('li', { class: ok ? 'ok' : 'bad' }, h('span', { 'aria-hidden': 'true', text: ok ? '✓' : '!' }), ' ', text)))),
+      reviewHandoff(p),
       h('p', { class: 'small-note muted', text: p.target ? t('fFor', { n: p.target.name }) : t('fGeneral') }),
       h('div', { class: 'tool-row' },
         h('button', { type: 'button', class: 'btn btn-primary', disabled: !!view.busy, onclick: () => checkFit(p) }, '🩺 ', t('fGo')),
@@ -683,6 +698,150 @@
     });
   }
 
+  /* ---------- Hand-off to the user's own ChatGPT / Claude ----------
+     No API: the prompt is copied and the app is opened (prefilled when the link is short enough).
+     The answer comes back through "Paste result", with an undo and a check for citations that are
+     not in the paper's reference list. */
+  const APPS = {
+    chatgpt: { name: 'ChatGPT', url: q => 'https://chatgpt.com/?q=' + encodeURIComponent(q), home: 'https://chatgpt.com/' },
+    claude: { name: 'Claude', url: q => 'https://claude.ai/new?q=' + encodeURIComponent(q), home: 'https://claude.ai/new' }
+  };
+  const ACTIONS = {
+    polish: 'Polish this section for an indexed Q1–Q2 journal: sharpen the argument, flow, clarity and academic tone.',
+    expand: 'Expand this section by about 30–50% with deeper argument and explanation. Mark any new claim that needs evidence with {marker}.',
+    shorten: 'Make this section about 30% shorter without losing key points or any citation.',
+    grammar: 'Correct grammar, spelling, punctuation and word choice only. Do not change the content.',
+    translate: 'Translate this section into {other}, in formal academic style, keeping all citations exactly.'
+  };
+  function copyNow(text) {
+    let done = false;
+    try { const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); done = document.execCommand('copy'); ta.remove(); } catch (e) { /* fall back below */ }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(() => {});
+    return done;
+  }
+  function openApp(app, prompt) {
+    copyNow(prompt);
+    const a = APPS[app];
+    const link = a.url(prompt);
+    window.open(link.length <= 6000 ? link : a.home, '_blank', 'noopener');
+    App.toast(t('xOpened', { a: a.name }));
+  }
+  function sectionPrompt(p, key, action) {
+    const ms = isMs(p);
+    const instr = ACTIONS[action].replace('{marker}', ms ? '[PERLU RUJUKAN]' : '[SOURCE NEEDED]').replace('{other}', ms ? 'English' : 'Bahasa Melayu');
+    const outLang = action === 'translate' ? (ms ? 'English' : 'Bahasa Melayu') : (ms ? 'Bahasa Melayu (formal academic, Dewan Bahasa dan Pustaka style)' : 'English (formal academic)');
+    return [
+      'You are an expert academic editor for Scopus/Web of Science indexed journals.',
+      'Task: ' + instr,
+      'Rules:',
+      '- Keep the meaning and every in-text citation exactly as written, for example (Rahman & Lee, 2021). Do not add, remove or change citations or references.',
+      '- Do not invent data, numbers, findings or quotations. Keep placeholders such as [PERLU RUJUKAN], [SOURCE NEEDED] or [DAPATAN 1] as they are.',
+      '- Write in ' + outLang + '. Return only the revised section as plain paragraphs, with no heading, commentary or markdown.',
+      '',
+      'Paper title: ' + (p.title || '-'),
+      p.target ? 'Target journal: ' + p.target.name : '',
+      'Section: ' + paperLabel(key, p),
+      '---',
+      sectionOf(p, key).content.trim(),
+      '---'
+    ].filter(x => x !== '').join('\n');
+  }
+  function reviewPrompt(p) {
+    const ms = isMs(p);
+    const body = ['abstract', ...SECTIONS.filter(k => k !== 'abstract')].map(k => { const c = sectionOf(p, k).content.trim(); return c ? '## ' + paperLabel(k, p) + '\n' + c : ''; }).filter(Boolean).join('\n\n');
+    const refs = (p.references || []).map(r => r.apa).join('\n');
+    return [
+      'Act as a senior reviewer for ' + (p.target ? p.target.name : 'a Scopus/Web of Science indexed Q1–Q2 journal in this field') + '.',
+      'Review the manuscript below. Give: (1) a verdict (ready / minor revision / major revision), (2) the main weaknesses in order of priority, each with the exact part and a concrete fix, (3) strengths, (4) whether it fits the journal\'s scope.',
+      'Do not rewrite the paper. Do not invent references; if a claim needs a source, say so.',
+      'Answer in ' + (ms ? 'Bahasa Melayu' : 'English') + '.',
+      '',
+      'Title: ' + (p.title || '-'),
+      'Keywords: ' + (p.keywords || '-'),
+      '',
+      body,
+      refs ? '\n## ' + (ms ? 'Rujukan' : 'References') + '\n' + refs : ''
+    ].join('\n');
+  }
+
+  /* Author–year citations in pasted text that do not match the paper's reference list. */
+  function unknownCitations(text, p) {
+    const known = new Set();
+    for (const r of p.references || []) {
+      const y = String(r.year || '').slice(0, 4);
+      for (const a of r.authors || []) { const sur = String(a).trim().split(/\s+/).pop(); if (sur) known.add(sur.toLowerCase() + '|' + y); }
+      const m = String(r.apa || '').match(/^([^,(]+)/); if (m) known.add(m[1].trim().split(/\s+/).pop().toLowerCase() + '|' + y);
+    }
+    const found = new Set();
+    const check = (sur, year) => { if (!known.has(sur.toLowerCase() + '|' + year)) found.add(sur + ' (' + year + ')'); };
+    const reParen = /\(([^()]*?\d{4}[a-z]?[^()]*)\)/g;
+    let m;
+    while ((m = reParen.exec(text))) {
+      for (const part of m[1].split(';')) {
+        const c = part.match(/([A-ZÀ-ɏ][\p{L}'’-]+)[^,;]*?,\s*(\d{4})/u);
+        if (c) check(c[1], c[2]);
+      }
+    }
+    const reNarr = /([A-ZÀ-ɏ][\p{L}'’-]+)(?:\s+et al\.|\s+(?:&|and|dan)\s+[A-ZÀ-ɏ][\p{L}'’-]+)?\s+\((\d{4})[a-z]?\)/gu;
+    while ((m = reNarr.exec(text))) check(m[1], m[2]);
+    return [...found].slice(0, 8);
+  }
+
+  function handoffRow(p) {
+    const key = view.section;
+    const sel = h('select', { 'aria-label': t('xAction'), onchange: e => { view.xAction = e.target.value; } },
+      Object.keys(ACTIONS).map(k => h('option', { value: k, text: t('xa.' + k) })));
+    sel.value = view.xAction;
+    const send = app => { if (!sectionOf(p, key).content.trim()) { App.toast(t('xEmpty')); return; } openApp(app, sectionPrompt(p, key, view.xAction)); };
+    const paste = view.paste && view.paste.paperId === p.id && view.paste.key === key ? pastePanel(p, key) : null;
+    const undo = view.undo && view.undo.paperId === p.id && view.undo.key === key
+      ? h('button', { type: 'button', class: 'btn-reset text-action', onclick: () => { sectionOf(p, key).content = view.undo.content; view.undo = null; touch(p); renderBody(); App.toast(t('xUndone')); }, text: t('xUndo') }) : null;
+    return h('div', { class: 'handoff' },
+      h('p', { class: 'handoff-title' }, h('strong', { text: t('xTitle') })),
+      h('p', { class: 'muted small-note', text: t('xHow') }),
+      h('div', { class: 'handoff-row' },
+        sel,
+        h('button', { type: 'button', class: 'btn btn-outline app-btn app-chatgpt', onclick: () => send('chatgpt') }, h('span', { class: 'ai-dot ai-openai', 'aria-hidden': 'true' }), 'ChatGPT'),
+        h('button', { type: 'button', class: 'btn btn-outline app-btn app-claude', onclick: () => send('claude') }, h('span', { class: 'ai-dot ai-claude', 'aria-hidden': 'true' }), 'Claude'),
+        h('button', { type: 'button', class: 'btn btn-primary', onclick: () => { view.paste = { paperId: p.id, key, text: '' }; renderBody(); setTimeout(() => { const el = $('#pasteBox'); if (el) el.focus(); }, 0); } }, '📋 ', t('xPaste'))),
+      undo, paste);
+  }
+
+  function pastePanel(p, key) {
+    const box = h('textarea', { id: 'pasteBox', rows: 8, placeholder: t('xPastePh'), value: view.paste.text, oninput: e => { view.paste.text = e.target.value; warn(); } });
+    const note = h('p', { class: 'result-notes', hidden: true });
+    function warn() { const u = unknownCitations(box.value, p); note.hidden = !u.length; note.textContent = u.length ? t('xUnknown', { c: u.join('; ') }) : ''; }
+    setTimeout(warn, 0);
+    const apply = mode => {
+      const text = box.value.replace(/\*\*/g, '').replace(/^#+\s.*$/gm, '').trim();
+      if (!text) return;
+      const sec = sectionOf(p, key);
+      view.undo = { paperId: p.id, key, content: sec.content };
+      sec.content = mode === 'append' && sec.content.trim() ? sec.content.trim() + '\n\n' + text : text;
+      view.paste = null; touch(p); renderBody();
+      App.toast(t('xDone'));
+    };
+    return h('div', { class: 'conversion-result paste-panel' },
+      h('strong', { text: t('xPasteTitle') }),
+      box,
+      note,
+      h('div', { class: 'tool-row' },
+        navigator.clipboard && navigator.clipboard.readText ? h('button', { type: 'button', class: 'btn-reset text-action', onclick: async () => { try { box.value = await navigator.clipboard.readText(); view.paste.text = box.value; warn(); } catch (e) { App.toast(t('xClipFail')); } }, text: t('xFromClip') }) : null,
+        h('button', { type: 'button', class: 'btn btn-primary', onclick: () => apply('replace'), text: t('xReplace') }),
+        h('button', { type: 'button', class: 'btn btn-outline', onclick: () => apply('append'), text: t('xAppend') }),
+        h('button', { type: 'button', class: 'btn-reset text-action', onclick: () => { view.paste = null; renderBody(); }, text: t('xCancel') })));
+  }
+
+  function reviewHandoff(p) {
+    const send = app => { if (!stats(p).words) { App.toast(t('xEmpty')); return; } openApp(app, reviewPrompt(p)); };
+    return h('div', { class: 'card handoff' },
+      h('p', { class: 'handoff-title' }, h('strong', { text: t('xReviewTitle') })),
+      h('p', { class: 'muted small-note', text: t('xReviewBody') }),
+      h('div', { class: 'handoff-row' },
+        h('button', { type: 'button', class: 'btn btn-outline app-btn', onclick: () => send('chatgpt') }, h('span', { class: 'ai-dot ai-openai', 'aria-hidden': 'true' }), 'ChatGPT'),
+        h('button', { type: 'button', class: 'btn btn-outline app-btn', onclick: () => send('claude') }, h('span', { class: 'ai-dot ai-claude', 'aria-hidden': 'true' }), 'Claude')));
+  }
+
   /* ---------- "My Projects" card ---------- */
   function renderProjectsCard() {
     const box = $('#papersCard');
@@ -696,5 +855,5 @@
       h('div', { class: 'pd-actions' }, h('button', { type: 'button', class: 'btn btn-outline', onclick: () => { shell().go('papers'); setTimeout(newPaper, 0); } }, '＋ ', t('new'))));
   }
 
-  window.ThesTalkPapers = { render, renderProjectsCard, newPaper };
+  window.ThesTalkPapers = { render, renderProjectsCard, newPaper, _test: { unknownCitations, sectionPrompt } };
 })();
