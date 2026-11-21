@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const common = require('../lib/common');
 const status = require('../api/status');
 
-const KEYS = ['GEMINI_API_KEY', 'ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'AI_PROVIDER', 'CLAUDE_MODEL', 'OPENAI_MODEL', 'THESTALK_AI_ACCESS_CODE'];
+const KEYS = ['AI_DISABLED', 'GEMINI_API_KEY', 'ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'AI_PROVIDER', 'CLAUDE_MODEL', 'OPENAI_MODEL', 'THESTALK_AI_ACCESS_CODE'];
 function withEnv(env, fn) {
   return async () => {
     const saved = Object.fromEntries(KEYS.map(k => [k, process.env[k]]));
@@ -95,4 +95,9 @@ test('status lists which AIs are switched on, without secrets', withEnv({ GEMINI
   const locked = { headers: {}, setHeader() {}, end(b) { this.body = JSON.parse(b); } };
   await status({ method: 'GET', headers: {} }, locked);
   assert.deepEqual(locked.body.providers, { gemini: false, claude: false, openai: false });
+}));
+
+test('AI_DISABLED hides an AI even when its key exists', withEnv({ GEMINI_API_KEY: 'g', OPENAI_API_KEY: 'o', AI_DISABLED: 'chatgpt' }, () => {
+  assert.deepEqual(common.available(), { gemini: true, claude: false, openai: false });
+  assert.equal(common.provider('openai'), 'gemini');
 }));
