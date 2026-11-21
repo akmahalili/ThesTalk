@@ -92,3 +92,14 @@ test('voice transcription uses free Gemini when there is no OpenAI key', () => w
     assert.equal(calls[0].body.contents[0].parts[0].inline_data.mime_type, 'audio/webm');
   }
 ));
+
+test('transcription drops timestamp-only output from silent recordings', () => withEnv(
+  { GEMINI_API_KEY: 'test-gemini-key', THESTALK_AI_ACCESS_CODE: 'secure-test-code-16' },
+  async () => {
+    const common = fresh();
+    globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => ({ candidates: [{ content: { parts: [{ text: '00:00' }] } }] }) });
+    assert.equal(await common.transcribeGemini(Buffer.alloc(300), 'audio/webm'), '');
+    globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => ({ candidates: [{ content: { parts: [{ text: '[00:02] Gambar produk penting.' }] } }] }) });
+    assert.equal(await common.transcribeGemini(Buffer.alloc(300), 'audio/webm'), 'Gambar produk penting.');
+  }
+));
