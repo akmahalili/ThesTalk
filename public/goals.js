@@ -30,6 +30,8 @@
   };
   const t = (k, v) => { let s = (S[lang()] && S[lang()][k]) || S.ms[k] || k; if (v) for (const [a, b] of Object.entries(v)) s = s.split('{' + a + '}').join(String(b)); return s; };
   const fmt = n => Number(n || 0).toLocaleString(lang() === 'en' ? 'en-GB' : 'ms-MY');
+  /* replaceChildren turns null into the text "null", so drop empty parts first. */
+  const fill = (el, ...kids) => el.replaceChildren(...kids.flat(Infinity).filter(k => k !== null && k !== undefined && k !== false));
   function h(tag, props, ...kids) {
     const el = document.createElement(tag);
     for (const [k, v] of Object.entries(props || {})) {
@@ -169,7 +171,7 @@
     tick();
     const g = data(), e = g.log[dayKey()] || { words: 0 }, st = streaks(g), next = nextDeadline(g);
     const fresh = !g.touched && !g.deadlines.length;
-    box.replaceChildren(
+    fill(box, 
       h('button', { type: 'button', class: 'btn-reset goal-home', onclick: () => shell().go && shell().go('goals'), 'aria-label': t('title') },
         h('span', { class: 'gh-ring' }, ring(e.words, g.target, 64), h('span', { class: 'gh-pct', text: Math.min(100, Math.round(e.words / g.target * 100)) + '%' })),
         h('span', { class: 'gh-text' },
@@ -192,7 +194,7 @@
     const titleIn = h('input', { type: 'text', maxLength: 120, placeholder: t('dTitlePh'), 'aria-label': t('dTitle') });
     const dateIn = h('input', { type: 'date', min: today, 'aria-label': t('dDate') });
     const sorted = g.deadlines.slice().sort((a, b) => a.date.localeCompare(b.date));
-    root.replaceChildren(
+    fill(root, 
       h('div', { class: 'view-head' }, h('div', {}, h('h1', { id: 'goalsTitle' }, t('title'), ' ', h('small', { text: t('alt') })), h('p', { text: t('sub') }))),
       h('div', { class: 'card goal-today' },
         h('div', { class: 'gt-main' },

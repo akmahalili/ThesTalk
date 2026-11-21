@@ -155,3 +155,14 @@ Akademik → **Slaid Pembentangan**.
 4. Susun semula dengan ↑ ↓, buang dengan ×.
 5. **Muat turun PowerPoint**: fail .pptx dengan nota penyampai, dan slaid rujukan untuk sumber yang disebut dalam slaid.
 
+## Sync telefon ↔ laptop (v2.2)
+
+Profil → **Sync telefon ↔ laptop**. Tiada akaun diperlukan.
+
+1. Di telefon: tekan **🔐 Cipta kod sync**. Salin kod 16 aksara itu.
+2. Di laptop: buka Talkademic, masukkan kod akses AI seperti biasa, kemudian Profil → masukkan kod sync → **Sambung**. Data dari telefon akan dimuatkan.
+3. Dengan **Sync automatik**, perubahan dihantar sendiri dan versi terkini diambil bila app dibuka.
+4. Jika kedua-dua peranti diubah serentak, app akan tanya versi mana yang mahu disimpan. Versi lama boleh dikembalikan dengan **Batalkan pemulihan** di kad Backup.
+
+Data disulitkan dalam peranti sebelum dihantar. Simpan kod sync seperti kata laluan: sesiapa yang ada kod boleh membaca data anda, dan kod yang hilang tidak boleh dipulihkan. Gambar slaid dan kod akses AI tidak disync.
+

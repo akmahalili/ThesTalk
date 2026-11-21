@@ -199,6 +199,7 @@
     try { if (window.TalkademicMatrix && current === 'matrix') window.TalkademicMatrix.render(); } catch (e) { /* not ready yet */ }
     try { if (window.TalkademicGoals) { if (current === 'goals') window.TalkademicGoals.render(); window.TalkademicGoals.home(); } } catch (e) { /* not ready yet */ }
     try { if (window.TalkademicSlides && current === 'slides') window.TalkademicSlides.render(); } catch (e) { /* not ready yet */ }
+    try { if (window.TalkademicSync) window.TalkademicSync.render(); } catch (e) { /* not ready yet */ }
     refresh();
   }
 
@@ -263,6 +264,7 @@
     if (view === 'matrix' && window.TalkademicMatrix) window.TalkademicMatrix.render();
     if (view === 'goals' && window.TalkademicGoals) window.TalkademicGoals.render();
     if (view === 'slides' && window.TalkademicSlides) window.TalkademicSlides.render();
+    if (view === 'settings' && window.TalkademicSync) window.TalkademicSync.render();
     refresh();
     closeSearch();
     window.scrollTo({ top: 0 });
@@ -962,6 +964,12 @@
     }
     applyRestore(parsed.workspace, parsed.ui, parsed.preferences, 'bk.restored');
   }
+  /* Used by sync: keep an undo copy, then switch to the workspace from the other device. */
+  function syncApply(ws, prefs, flashText) {
+    try { App.persist(); localStorage.setItem(UNDO_KEY, JSON.stringify({ at: new Date().toISOString(), workspace: App.state(), ui: Object.assign({}, ui), preferences: readPrefs() })); }
+    catch (e) { localStorage.removeItem(UNDO_KEY); }
+    applyRestore(ws, {}, prefs, flashText);
+  }
   function undoRestore() {
     const u = readUndo();
     if (!u) { localStorage.removeItem(UNDO_KEY); renderBackup(); return; }
@@ -1026,6 +1034,7 @@
   /* ---------- refresh hook used by app.js ---------- */
   let refreshTimer = null;
   function refresh() {
+    try { if (window.TalkademicSync) window.TalkademicSync.changed(); } catch (e) { /* sync not ready */ }
     clearTimeout(refreshTimer);
     refreshTimer = setTimeout(() => {
       renderHome();
@@ -1035,7 +1044,7 @@
     }, 30);
   }
 
-  window.ThesTalkShell = { refresh, onAI, go, t, aiChoice, lang: () => ui.lang, mic: toggleMic, micOn: key => !!mic && mic.key === key };
+  window.ThesTalkShell = { refresh, onAI, go, t, aiChoice, lang: () => ui.lang, mic: toggleMic, micOn: key => !!mic && mic.key === key, syncApply, ui: () => Object.assign({}, ui), prefs: readPrefs };
 
   /* ---------- boot ---------- */
   applyTheme();

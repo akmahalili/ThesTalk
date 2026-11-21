@@ -36,6 +36,8 @@
     }
   };
   const t = (k, v) => { let s = (S[lang()] && S[lang()][k]) || S.ms[k] || k; if (v) for (const [a, b] of Object.entries(v)) s = s.split('{' + a + '}').join(String(b)); return s; };
+  /* replaceChildren turns null into the text "null", so drop empty parts first. */
+  const fill = (el, ...kids) => el.replaceChildren(...kids.flat(Infinity).filter(k => k !== null && k !== undefined && k !== false));
   function h(tag, props, ...kids) {
     const el = document.createElement(tag);
     for (const [k, v] of Object.entries(props || {})) {
@@ -123,7 +125,7 @@
     if (!box) return;
     const icon = { wait: '…', read: '⟳', ai: '⟳', done: '✓', error: '✗' };
     const text = j => j.status === 'wait' ? '' : j.status === 'read' ? t('reading') : j.status === 'ai' ? t('working') : j.status === 'done' ? t('done') : j.error;
-    box.replaceChildren(...queue.slice(-12).map(j => h('li', { class: 'mq-' + j.status }, h('span', { class: 'mq-ic', 'aria-hidden': 'true', text: icon[j.status] }), h('span', { class: 'mq-name', text: j.name }), h('span', { class: 'mq-st', text: text(j) }))));
+    fill(box, ...queue.slice(-12).map(j => h('li', { class: 'mq-' + j.status }, h('span', { class: 'mq-ic', 'aria-hidden': 'true', text: icon[j.status] }), h('span', { class: 'mq-name', text: j.name }), h('span', { class: 'mq-st', text: text(j) }))));
     box.hidden = !queue.length;
   }
 
@@ -135,7 +137,7 @@
     const wl = h('select', { 'aria-label': t('write'), onchange: e => { d.language = e.target.value; App.save(); } }, h('option', { value: 'Bahasa Melayu', text: 'Bahasa Melayu' }), h('option', { value: 'English', text: 'English' }));
     wl.value = d.language;
     const pasteBox = h('textarea', { rows: 7, maxLength: 60000, placeholder: t('pastePh'), id: 'matrixPaste' });
-    root.replaceChildren(
+    fill(root, 
       h('div', { class: 'view-head' }, h('div', {}, h('h1', { id: 'matrixTitle' }, t('title'), ' ', h('small', { text: t('alt') })), h('p', { text: t('sub') }))),
       h('div', { class: 'card ana-form' },
         h('div', { class: 'ana-row' },
