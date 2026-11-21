@@ -27,6 +27,17 @@ Di Vercel Project Settings > Environment Variables, tetapkan **secara rahsia**:
 
 Redeploy selepas menambah konfigurasi. Pada laman aplikasi, tekan `Connect AI` dan masukkan *access code* tadi. Bila lulus, status bertukar menjadi `AI connected`. Tanpa kedua-dua tetapan ini, aplikasi dengan sengaja **tidak** mendakwa menghasilkan teks AI.
 
+## 3b. Aktifkan rujukan jurnal sebenar (v0.4, percuma)
+
+Ciri **📚 Find real references** mencari kertas kajian sebenar di OpenAlex dan memetiknya dalam format APA 7. AI hanya boleh memetik kertas yang betul-betul ditemui, jadi tiada rujukan rekaan.
+
+1. Daftar akaun percuma di https://openalex.org, kemudian salin kunci anda di https://openalex.org/settings/api.
+2. Di Vercel → Project Settings → Environment Variables, tambah `OPENALEX_API_KEY` dengan kunci tadi.
+3. Redeploy.
+4. Dalam aplikasi, tandakan **📚 Find real references** (dan **2015 onwards only** jika mahu kajian terkini) sebelum menukar idea.
+
+Kunci percuma memberi kira-kira $1 penggunaan OpenAlex sehari, iaitu lebih kurang 300 penukaran berujukan. Had harian ditetapkan semula pada 8 pagi waktu Malaysia. Rujukan yang dipetik disimpan dalam **📚 References** di bar sisi dan ditambah sebagai senarai Rujukan/References di hujung fail DOCX. AI hanya membaca abstrak, jadi semak setiap kertas sebelum hantar.
+
 ## 4. Pasang pada Android
 
 Dalam Chrome, buka URL HTTPS aplikasi → menu ⋮ → **Add to Home screen** / **Install app**. PWA akan muncul seperti aplikasi berikon pada telefon. Pemasangan bergantung pada sokongan pelayar.

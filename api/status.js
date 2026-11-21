@@ -1,2 +1,2 @@
 'use strict';const {json,configured,validCode}=require('../lib/common');
-module.exports=async function handler(req,res){if(req.method!=='GET')return json(res,405,{error:'Method not allowed'});const on=configured()&&validCode(req);return json(res,200,{aiEnabled:on,chatEnabled:on,transcriptionEnabled:on,configured:configured()});};
+module.exports=async function handler(req,res){if(req.method!=='GET')return json(res,405,{error:'Method not allowed'});const on=configured()&&validCode(req);return json(res,200,{aiEnabled:on,chatEnabled:on,transcriptionEnabled:on,referencesEnabled:on,referencesKey:on&&!!process.env.OPENALEX_API_KEY,configured:configured()});};
