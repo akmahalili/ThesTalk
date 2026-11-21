@@ -103,3 +103,20 @@ test('/api/draft section rejects unknown sections', withEnv({ GEMINI_API_KEY: 'g
   await require('../api/draft')(req({ mode: 'section', section: 'abstract' }), res);
   assert.equal(res.statusCode, 400);
 }));
+
+test('/api/draft sort: one casual remark gets a section, a formal sentence and a follow-up question', withEnv({ GEMINI_API_KEY: 'g', THESTALK_AI_ACCESS_CODE: 'secure-test-code-16' }, async () => {
+  let body;
+  global.fetch = async (url, opts) => { body = JSON.parse(opts.body); return gemini(JSON.stringify({ section: 'Introduction', part: 'masalah kajian', formal: 'Imej produk yang kabur menjejaskan kepercayaan pengguna.', ask: 'Ok, so apa jurang kajian yg awak nampak?' })); };
+  const res = response();
+  await require('../api/draft')(req({ mode: 'sort', remark: 'gambar blur buat org x percaya seller', empty: ['literature', 'method', 'bogus'], recent: [{ section: 'introduction', text: 'gambar penting' }], title: '', language: 'Bahasa Melayu' }), res);
+  assert.equal(res.statusCode, 200, JSON.stringify(res.body));
+  assert.deepEqual(res.body.sorted, { section: 'introduction', part: 'masalah kajian', formal: 'Imej produk yang kabur menjejaskan kepercayaan pengguna.', ask: 'Ok, so apa jurang kajian yg awak nampak?' });
+  assert.match(body.messages[1].content, /Sections with no ideas yet: literature, method\n/);
+  assert.match(body.messages[1].content, /- \[introduction\] gambar penting/);
+  assert.match(body.messages[0].content, /nk = nak/);
+}));
+
+test('cleanSort maps unknown sections to other', () => {
+  assert.equal(D.cleanSort({ section: 'weather', formal: 'x' }).section, 'other');
+  assert.equal(D.cleanSort({}), null);
+});

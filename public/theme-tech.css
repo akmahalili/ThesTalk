@@ -183,3 +183,37 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 @media (prefers-reduced-motion: reduce){
   .rb-body,.rb-eyes,.rb-arm-wave{animation:none}
 }
+
+/* ---------- v1.4 paper Chat tab: talk, Talkademic sorts ---------- */
+.paper-chat-tab{display:flex;flex-direction:column;gap:12px}
+.outline-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.outline-label{font-size:12px;font-weight:600;color:var(--muted);margin-right:2px}
+.outline-chip{font-size:11.5px;font-weight:600;border-radius:999px;padding:4px 9px;border:1px dashed var(--border-strong);color:var(--muted)}
+.outline-chip b{font-weight:700}
+.outline-chip.has{border-style:solid;border-color:transparent;background:var(--grad-soft);color:var(--accent-text)}
+.pc-card{display:flex;flex-direction:column;gap:10px;padding:14px}
+.paper-chat{list-style:none;margin:0;padding:2px 2px 6px;display:flex;flex-direction:column;gap:10px;max-height:min(58vh,560px);overflow-y:auto;scroll-behavior:smooth}
+.pc-user{display:flex;justify-content:flex-end;align-items:flex-start;gap:4px}
+.pc-user .pc-bubble{background:var(--grad);color:#fff;border-radius:18px 18px 6px 18px;max-width:82%;box-shadow:var(--glow)}
+.pc-user .ref-x{opacity:.5}
+.pc-bot{display:flex;gap:8px;align-items:flex-start}
+.pc-avatar{flex:none;width:28px;height:28px;border-radius:10px;display:grid;place-items:center;background:var(--grad-soft);color:var(--accent-text);font-size:13px}
+.pc-bot .pc-bubble{background:var(--surface-2);border:1px solid var(--glass-border);border-radius:6px 18px 18px 18px;max-width:88%}
+.pc-bubble{padding:10px 13px}
+.pc-bubble p{margin:0;font-size:14px;line-height:1.55}
+.pc-bubble p+p{margin-top:7px}
+.pc-tag{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;font-size:12.5px}
+.pc-move{border:1px solid var(--border-strong);border-radius:999px;padding:3px 8px;font:600 12px var(--font);background:var(--surface);color:var(--accent-text)}
+.pc-part{color:var(--muted);font-weight:600}
+.pc-formal{font-family:var(--serif)}
+.pc-ask{color:var(--accent-text);font-weight:500}
+.pc-ask::before{content:"💬 "}
+.pc-typing{color:var(--muted);animation:pulse 1.1s infinite}
+.pc-send{flex:none}
+.write-empty{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media (max-width:899px){
+  .paper-tabs{grid-template-columns:repeat(3,1fr)}
+  .paper-tabs button{padding:8px 6px;font-size:12px}
+  .paper-chat{max-height:52vh}
+}
+@media (prefers-reduced-motion: reduce){.pc-typing{animation:none}}

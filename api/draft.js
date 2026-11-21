@@ -3,6 +3,7 @@
  * POST /api/draft — "Sembang → Paper penuh".
  *   mode "plan":    { remarks[], title, language, target } → { plan, papers, warnings }
  *   mode "section": { section, points[], papers[], title, language, target } → { text, references }
+ *   mode "sort":    { remark, empty[], recent[], title, language } → { sorted: { section, part, formal, ask } }
  * See lib/draft.js for how the steps fit together.
  */
 const { json, protect, cap, getBody, askAI, pick, fail } = require('../lib/common');
@@ -38,6 +39,18 @@ module.exports = async function handler(req, res) {
         warnings.push(failed ? (failed.reason && failed.reason.message) || 'Reference search failed.' : 'No matching papers were found, so claims that need evidence are marked for references.');
       }
       return json(res, 200, { plan, papers: D.forClient(papers), warnings, ai });
+    }
+
+    if (data.mode === 'sort') {
+      const remark = cap(data.remark, 1500);
+      if (remark.length < 3) return json(res, 400, { error: 'Say a little more first.' });
+      const empty = (Array.isArray(data.empty) ? data.empty : []).filter(k => D.SECTIONS.includes(k));
+      const recent = (Array.isArray(data.recent) ? data.recent : []).slice(-6)
+        .map(r => ({ section: D.SECTIONS.includes(r && r.section) ? r.section : 'other', text: cap(r && r.text, 300) })).filter(r => r.text);
+      const raw = await askAI(D.sortInstructions(language), D.sortInput({ remark, title, empty, recent }), 400, { text: { format: { type: 'json_object' } }, provider: ai });
+      const sorted = D.cleanSort(C.parseJSONLoose(raw));
+      if (!sorted) return json(res, 502, { error: 'AI could not place this idea. Try again.' });
+      return json(res, 200, { sorted, ai });
     }
 
     if (data.mode === 'section') {

@@ -61,6 +61,9 @@
       'qc.refs': 'Sekurang-kurangnya 40 rujukan (panduan umum Q1–Q2)', 'qc.refsBad': '{n} rujukan (panduan umum: 40 atau lebih)',
       'qc.recent': 'Separuh rujukan dari 5 tahun terkini', 'qc.recentBad': '{p}% rujukan dari 5 tahun terkini (sasaran ≥ 50%)',
       'qc.target': 'Jurnal sasaran dipilih', 'qc.targetBad': 'Belum pilih jurnal sasaran',
+      tabChat: 'Sembang', cGreet: 'Ceritakan idea kajian anda secara santai, satu demi satu. Saya letak setiap ayat di bahagian paper yang sesuai, tukar jadi ayat akademik, dan tanya soalan untuk lengkapkan paper. Bila cukup, tekan Susun jadi paper penuh.',
+      cPh: 'Taip atau cakap idea anda…', cSend: 'Hantar', cSorting: 'Menyusun…', cMove: 'Pindah ke bahagian', cUnsorted: 'Belum disusun.', cRetry: 'Susun semula', cOutline: 'Rangka paper', 'sec.other': 'Lain-lain',
+      cGen: 'Susun jadi paper penuh', cEmptyWrite: 'Belum ada draf. Sembang dulu, Talkademic susun jadi paper.', cOpenChat: 'Buka Sembang',
       xTitle: 'Perhalusi dengan ChatGPT / Claude (langganan anda)', xHow: 'Talkademic salin bahagian ini berserta arahan, kemudian buka ChatGPT atau Claude. Hantar di sana, salin jawapan, kemudian tekan Tampal hasil.',
       xAction: 'Arahan', 'xa.polish': 'Perhalusi untuk jurnal Q1–Q2', 'xa.expand': 'Kembangkan hujah', 'xa.shorten': 'Ringkaskan', 'xa.grammar': 'Semak tatabahasa sahaja', 'xa.translate': 'Terjemah ke bahasa lain',
       xOpened: 'Teks dah disalin dan {a} dibuka. Kalau kotak taip kosong, tekan lama dan pilih Tampal.', xPaste: 'Tampal hasil', xPasteTitle: 'Hasil dari ChatGPT / Claude', xPastePh: 'Tampal jawapan ChatGPT atau Claude di sini…',
@@ -132,6 +135,9 @@
       'qc.refs': 'At least 40 references (general Q1–Q2 guide)', 'qc.refsBad': '{n} references (general guide: 40 or more)',
       'qc.recent': 'Half of references from the last 5 years', 'qc.recentBad': '{p}% of references from the last 5 years (aim for ≥ 50%)',
       'qc.target': 'Target journal chosen', 'qc.targetBad': 'No target journal yet',
+      tabChat: 'Chat', cGreet: 'Tell me about your research casually, one idea at a time. I put each one in the right part of the paper, rewrite it academically, and ask questions to complete the paper. When you have enough, tap Build the full paper.',
+      cPh: 'Type or speak your idea…', cSend: 'Send', cSorting: 'Sorting…', cMove: 'Move to section', cUnsorted: 'Not sorted yet.', cRetry: 'Sort again', cOutline: 'Paper outline', 'sec.other': 'Other',
+      cGen: 'Build the full paper', cEmptyWrite: 'No draft yet. Chat first and Talkademic builds the paper.', cOpenChat: 'Open Chat',
       xTitle: 'Refine with ChatGPT / Claude (your subscription)', xHow: 'Talkademic copies this section with an instruction, then opens ChatGPT or Claude. Send it there, copy the answer, then tap Paste result.',
       xAction: 'Instruction', 'xa.polish': 'Polish for a Q1–Q2 journal', 'xa.expand': 'Expand the argument', 'xa.shorten': 'Make it shorter', 'xa.grammar': 'Grammar only', 'xa.translate': 'Translate to the other language',
       xOpened: 'Text copied and {a} opened. If the message box is empty, long-press and choose Paste.', xPaste: 'Paste result', xPasteTitle: 'Result from ChatGPT / Claude', xPastePh: 'Paste the ChatGPT or Claude answer here…',
@@ -180,7 +186,7 @@
   }
 
   /* ---------- state ---------- */
-  const view = { tab: 'write', section: 'introduction', busy: '', recent: true, cite: null, manual: '', note: '', progress: null, xAction: 'polish', paste: null, undo: null };
+  const view = { tab: 'chat', section: 'introduction', busy: '', recent: true, cite: null, manual: '', note: '', progress: null, xAction: 'polish', paste: null, undo: null };
   function store() { const s = App.state(); if (!Array.isArray(s.papers)) s.papers = []; return s; }
   function current() { const s = store(); return s.papers.find(p => p.id === s.activePaper) || s.papers[0] || null; }
   function touch(p) { p.updated = new Date().toISOString(); App.save(); }
@@ -201,9 +207,9 @@
     const s = store(), now = new Date().toISOString();
     const p = { id: App.uid(), title: '', language: lang() === 'en' ? 'English' : 'Bahasa Melayu', keywords: '', sections: SECTIONS.map(key => ({ key, content: '' })), references: [], target: null, journals: null, meta: null, fit: null, created: now, updated: now };
     s.papers.unshift(p); s.activePaper = p.id;
-    view.tab = 'write'; view.section = 'introduction'; view.cite = null;
+    view.tab = 'chat'; view.section = 'introduction'; view.cite = null;
     App.save(); render();
-    setTimeout(() => { const el = $('#paperTitle'); if (el) el.focus(); }, 50);
+    setTimeout(() => { const el = $('#noteInput'); if (el) el.focus(); }, 50);
   }
   function openPaper(id) { store().activePaper = id; view.cite = null; App.save(); }
   function payload(p) {
@@ -237,6 +243,7 @@
     if (view.tab === 'journals') return journalsTab(p);
     if (view.tab === 'meta') return metaTab(p);
     if (view.tab === 'fit') return fitTab(p);
+    if (view.tab === 'chat') return chatTab(p);
     return writeTab(p);
   }
 
@@ -287,7 +294,7 @@
   }
 
   function tabs() {
-    const list = [['write', 'tabWrite'], ['journals', 'tabJournals'], ['meta', 'tabMeta'], ['fit', 'tabFit']];
+    const list = [['chat', 'tabChat'], ['write', 'tabWrite'], ['journals', 'tabJournals'], ['meta', 'tabMeta'], ['fit', 'tabFit']];
     return h('div', { class: 'seg-control paper-tabs', role: 'group', 'aria-label': t('title') },
       list.map(([id, k]) => h('button', { type: 'button', 'data-tab': id, 'aria-pressed': String(view.tab === id), onclick: () => { view.tab = id; renderBody(); }, text: t(k) })));
   }
@@ -312,8 +319,9 @@
     const kw = view.section === 'abstract'
       ? h('label', { class: 'form-field' }, h('span', { text: t('keywords') }), h('input', { id: 'paperKeywords', value: p.keywords || '', maxLength: 400, placeholder: t('keywordsPh'), oninput: e => { p.keywords = e.target.value; touch(p); } }))
       : null;
+    const empty = !SECTIONS.some(k => sectionOf(p, k).content.trim());
     return h('div', { class: 'paper-write' },
-      draftCard(p),
+      empty ? h('div', { class: 'card write-empty' }, h('span', { text: t('cEmptyWrite') }), h('button', { type: 'button', class: 'btn btn-primary', onclick: () => { view.tab = 'chat'; renderBody(); } }, '💬 ', t('cOpenChat'))) : null,
       chips,
       h('div', { class: 'card paper-section' },
         h('div', { class: 'ps-head' }, h('h2', { text: t('sec.' + view.section) }), count),
@@ -602,35 +610,82 @@
     return added;
   }
 
-  function draftCard(p) {
+  /* Chat tab: each casual remark is sorted into a section by the AI (section, element, formal
+     sentence, follow-up question). The sorted remarks then feed "Build the full paper". */
+  const ALL_SECS = ['introduction', 'literature', 'method', 'results', 'discussion', 'conclusion'];
+  function sortedNotes(p) { return (p.notes || []).filter(n => n.section && !n.pending); }
+  async function sortNote(p, note, ask) {
+    if (!App.aiAvailable() && !(ask && await App.ensureAI())) { note.failed = true; note.pending = false; touch(p); renderBody(); return; }
+    note.pending = true; note.failed = false; renderBody();
+    const counts = Object.fromEntries(ALL_SECS.map(k => [k, 0]));
+    sortedNotes(p).forEach(n => { if (counts[n.section] !== undefined) counts[n.section]++; });
+    try {
+      const data = await App.apiPost('/api/draft', { mode: 'sort', remark: note.text, title: p.title, language: p.language,
+        empty: ALL_SECS.filter(k => !counts[k]), recent: sortedNotes(p).filter(n => n !== note).slice(-6).map(n => ({ section: n.section, text: n.text })) });
+      Object.assign(note, { section: data.sorted.section, part: data.sorted.part, formal: data.sorted.formal, ask: data.sorted.ask, pending: false, failed: false });
+    } catch (e) {
+      note.pending = false; note.failed = true;
+    }
+    touch(p); renderBody();
+  }
+  function sendNote(p, text) {
+    const v = String(text || '').trim();
+    if (!v) return;
+    if (!Array.isArray(p.notes)) p.notes = [];
+    const note = { id: App.uid(), text: v.slice(0, 1500) };
+    p.notes.push(note);
+    view.note = '';
+    touch(p);
+    sortNote(p, note, true);
+  }
+  function chatTab(p) {
     const notes = Array.isArray(p.notes) ? p.notes : [];
     const busy = view.busy === 'draft';
-    const box = h('textarea', { id: 'noteInput', rows: 2, maxLength: 1500, placeholder: t('dPh'), value: view.note,
+    const counts = Object.fromEntries(ALL_SECS.map(k => [k, 0]));
+    sortedNotes(p).forEach(n => { if (counts[n.section] !== undefined) counts[n.section]++; });
+    const lastSorted = [...notes].reverse().find(n => n.section && !n.pending);
+    const box = h('textarea', { id: 'noteInput', rows: 2, maxLength: 1500, placeholder: t('cPh'), value: view.note, 'aria-label': t('cPh'),
       oninput: e => { view.note = e.target.value; },
-      onkeydown: e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); add(); } } });
+      onkeydown: e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); send(); } } });
+    function send() { sendNote(p, box.value); setTimeout(() => { const el = $('#noteInput'); if (el) el.focus(); }, 0); }
     const listening = !!(shell().micOn && shell().micOn('paper-note'));
-    const act = h('span', { id: 'noteAct', class: 'chat-activity', role: 'status' });
-    // The mic stays on until tapped again; it finds the live elements even after the card re-renders.
     const mic = h('button', { id: 'noteMic', type: 'button', class: 'icon-btn voice-btn' + (listening ? ' recording' : ''), 'aria-pressed': String(listening), 'aria-label': t('dMic'), title: t('dMic'),
       onclick: () => { if (shell().mic) shell().mic(() => $('#noteMic'), () => $('#noteAct'), () => $('#noteInput'), null, { key: 'paper-note' }); } }, '🎙');
     if (listening) setTimeout(() => { const a = $('#noteAct'); if (a && !a.textContent) a.textContent = shell().t ? shell().t('voice.listening') : ''; }, 0);
-    function add() { addNote(p, box.value); view.note = ''; renderBody(); setTimeout(() => { const el = $('#noteInput'); if (el) el.focus(); }, 0); }
-    const fromChat = chatIdeas(p);
+    const bot = (...kids) => h('li', { class: 'pc-bot' }, h('span', { class: 'pc-avatar', 'aria-hidden': 'true' }, '✦'), h('div', { class: 'pc-bubble' }, ...kids));
+    const items = [bot(h('p', { text: t('cGreet') }))];
+    for (const n of notes) {
+      items.push(h('li', { class: 'pc-user' }, h('div', { class: 'pc-bubble' }, h('p', { text: n.text })),
+        h('button', { type: 'button', class: 'btn-reset ref-x', 'aria-label': t('dRemove'), title: t('dRemove'), disabled: busy, onclick: () => { p.notes = p.notes.filter(x => x !== n); touch(p); renderBody(); } }, '×')));
+      if (n.pending) items.push(bot(h('p', { class: 'pc-typing', text: t('cSorting') })));
+      else if (n.failed || !n.section) items.push(bot(h('p', { class: 'muted', text: t('cUnsorted') + ' ' }, h('button', { type: 'button', class: 'btn-reset text-action', onclick: () => sortNote(p, n, true), text: t('cRetry') }))));
+      else {
+        const move = h('select', { class: 'pc-move', 'aria-label': t('cMove'), onchange: e => { n.section = e.target.value; touch(p); renderBody(); } },
+          [...ALL_SECS, 'other'].map(k => h('option', { value: k, text: t('sec.' + k) })));
+        move.value = n.section;
+        items.push(bot(
+          h('div', { class: 'pc-tag' }, h('span', { 'aria-hidden': 'true' }, '📍'), move, n.part ? h('span', { class: 'pc-part', text: n.part }) : null),
+          n.formal ? h('p', { class: 'pc-formal', text: n.formal }) : null,
+          n === lastSorted && n.ask ? h('p', { class: 'pc-ask', text: n.ask }) : null));
+      }
+    }
     const progress = view.progress && view.progress.paperId === p.id ? h('ol', { class: 'draft-steps' }, view.progress.steps.map(st => h('li', { class: 'step-' + st.s },
       h('span', { class: 'step-dot', 'aria-hidden': 'true', text: st.s === 'done' ? '✓' : st.s === 'fail' ? '!' : st.s === 'doing' ? '…' : '' }), ' ', st.label))) : null;
-    return h('details', { class: 'card draft-card', open: true },
-      h('summary', {}, h('strong', {}, '💬 ', t('dTitle')), ' ', h('span', { class: 'nav-count', text: t('dCount', { n: notes.length }) })),
-      h('p', { class: 'muted small-note', text: t('dBody') }),
-      notes.length
-        ? h('ol', { class: 'note-list' }, notes.map(n => h('li', {}, h('span', { text: n.text }), ' ',
-            h('button', { type: 'button', class: 'btn-reset ref-x', 'aria-label': t('dRemove'), title: t('dRemove'), disabled: busy, onclick: () => { p.notes = p.notes.filter(x => x !== n); touch(p); renderBody(); } }, '×'))))
-        : h('p', { class: 'muted small-note', text: t('dNone') }),
-      h('div', { class: 'note-compose' }, box, mic, h('button', { type: 'button', class: 'btn btn-outline', disabled: busy, onclick: add, text: t('dAdd') })),
-      act,
-      h('div', { class: 'tool-row' },
-        fromChat.length ? h('button', { type: 'button', class: 'btn-reset text-action', disabled: busy, onclick: () => importChat(p), text: t('dImport', { n: fromChat.length }) }) : null,
-        p.prevDraft && !busy ? h('button', { type: 'button', class: 'btn-reset text-action', onclick: () => undoDraft(p), text: t('dUndo') }) : null),
-      h('button', { type: 'button', class: 'btn btn-primary draft-go', disabled: !!view.busy, onclick: () => generatePaper(p) }, '✨ ', t('dGen')),
+    const fromChat = chatIdeas(p);
+    const list = h('ol', { id: 'paperChat', class: 'paper-chat', 'aria-live': 'polite' }, items);
+    setTimeout(() => { const el = $('#paperChat'); if (el) el.scrollTop = el.scrollHeight; }, 0);
+    return h('div', { class: 'paper-chat-tab' },
+      h('div', { class: 'outline-row', role: 'list', 'aria-label': t('cOutline') },
+        h('span', { class: 'outline-label', text: t('cOutline') }),
+        ALL_SECS.map(k => h('span', { role: 'listitem', class: 'outline-chip' + (counts[k] ? ' has' : '') }, t('sec.' + k), ' ', h('b', { text: String(counts[k]) })))),
+      h('div', { class: 'card pc-card' },
+        list,
+        h('div', { class: 'note-compose' }, box, mic, h('button', { type: 'button', class: 'btn btn-primary pc-send', disabled: busy, 'aria-label': t('cSend'), onclick: send }, t('cSend'))),
+        h('span', { id: 'noteAct', class: 'chat-activity', role: 'status' }),
+        h('div', { class: 'tool-row' },
+          fromChat.length ? h('button', { type: 'button', class: 'btn-reset text-action', disabled: busy, onclick: () => importChat(p), text: t('dImport', { n: fromChat.length }) }) : null,
+          p.prevDraft && !busy ? h('button', { type: 'button', class: 'btn-reset text-action', onclick: () => undoDraft(p), text: t('dUndo') }) : null)),
+      h('button', { type: 'button', class: 'btn btn-primary draft-go', disabled: !!view.busy, onclick: () => generatePaper(p) }, '✨ ', t('cGen')),
       progress,
       h('p', { class: 'result-notes', text: t('dNote') }));
   }
@@ -641,6 +696,7 @@
     if (!Array.isArray(p.importedIds)) p.importedIds = [];
     list.forEach(m => { addNote(p, m.text); p.importedIds.push(m.id); });
     touch(p); renderBody();
+    (async () => { for (const n of p.notes.filter(x => !x.section && !x.pending)) await sortNote(p, n, false); })();
     App.toast(t('dImported', { n: list.length }));
   }
 
@@ -655,7 +711,7 @@
   }
 
   async function generatePaper(p) {
-    const notes = (p.notes || []).map(n => n.text).filter(Boolean);
+    const notes = (p.notes || []).filter(n => n.text && n.section !== 'other').map(n => (n.section && ALL_SECS.includes(n.section) ? '[' + n.section + '] ' : '') + n.text + (n.formal ? ' (' + n.formal + ')' : ''));
     if (notes.length < 2) { App.toast(t('dNeed')); return; }
     if (await needAI()) return;
     const hasContent = SECTIONS.some(k => sectionOf(p, k).content.trim());
@@ -686,7 +742,7 @@
         if (meta.meta && meta.meta.abstract) sectionOf(p, 'abstract').content = abstractText(p, meta.meta.abstract);
         if (meta.meta && meta.meta.keywords && meta.meta.keywords.length && !String(p.keywords || '').trim()) p.keywords = meta.meta.keywords.join('; ');
         touch(p); step('abstract', 'done');
-        view.section = 'introduction';
+        view.section = 'introduction'; view.tab = 'write';
         const st = stats(p);
         App.toast(t('dDone', { w: fmt(st.words), r: fmt(st.refs) }));
         setTimeout(render, 0); // title may have changed
