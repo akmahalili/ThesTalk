@@ -1,4 +1,6 @@
-# ThesTalk AI — Installable PWA
+# Talkademic AI — Installable PWA
+
+*Formerly ThesTalk. Renamed to Talkademic in v1.3 because the app now covers everyday chat, journal papers and references, not only theses. Internal storage keys and API headers keep the old `thestalk` prefix so saved work and installed copies keep working.*
 
 **Just Talk. Build Your Thesis.**
 
@@ -8,8 +10,8 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 
 ## Deploy to Vercel (from GitHub)
 
-1. Push **these folder contents** into the repository root at https://github.com/akmahalili/ThesTalk (keep `.env` out of Git).
-2. In Vercel, **Add New → Project → Import Git Repository → `akmahalili/ThesTalk` → Deploy**. Choose framework **Other** if prompted. The app has root-level static assets and API serverless functions.
+1. Push **these folder contents** into the repository root at https://github.com/akmahalili/Talkademic (keep `.env` out of Git).
+2. In Vercel, **Add New → Project → Import Git Repository → `akmahalili/Talkademic` → Deploy**. Choose framework **Other** if prompted. The app has root-level static assets and API serverless functions.
 3. It will have an HTTPS `*.vercel.app` link. On Android Chrome, use **⋮ → Add to Home screen / Install app** for an app icon and standalone experience.
 4. For **actual AI**, go to Vercel → Project → Settings → Environment Variables and configure the following **directly in Vercel**, not in source code:
    - At least one AI key: `GEMINI_API_KEY` (free), `ANTHROPIC_API_KEY` (Claude, paid) or `OPENAI_API_KEY` (ChatGPT, paid). Keep keys private.
@@ -21,7 +23,7 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 
 ## Free AI option (Gemini)
 
-Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. ThesTalk then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.5-flash-lite`, moving to `gemini-3.1-flash-lite` when a model is busy, missing or over its limit (set `GEMINI_MODEL` to try another model first). On the free tier the Flash-Lite models allow about 500 requests a day each, while Gemini Flash allows only about 20, which is why Flash-Lite is the default. Each conversion with references uses two requests. The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. Voice transcription also runs on Gemini (the browser recording is sent as-is), so the mic works for free; without any AI key the app falls back to the browser's speech recognition. The access code is remembered on the device after a successful unlock.
+Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. Talkademic then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.5-flash-lite`, moving to `gemini-3.1-flash-lite` when a model is busy, missing or over its limit (set `GEMINI_MODEL` to try another model first). On the free tier the Flash-Lite models allow about 500 requests a day each, while Gemini Flash allows only about 20, which is why Flash-Lite is the default. Each conversion with references uses two requests. The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. Voice transcription also runs on Gemini (the browser recording is sent as-is), so the mic works for free; without any AI key the app falls back to the browser's speech recognition. The access code is remembered on the device after a successful unlock.
 
 ## Tech look (v1.2)
 
@@ -29,7 +31,7 @@ Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead 
 
 ## Refine with your own ChatGPT / Claude (v1.1)
 
-No API and no extra cost: under each paper section the user picks an instruction (polish for Q1–Q2, expand, shorten, grammar only, translate) and taps **ChatGPT** or **Claude**. ThesTalk copies a prompt that tells the model to keep every citation and placeholder and invent nothing, then opens `https://chatgpt.com/?q=…` or `https://claude.ai/new?q=…` (prefilled when the link is short enough; otherwise the user pastes once). **Paste result** brings the answer back to replace or append to the section, with one-step undo, and warns about author–year citations that are not in the paper's reference list. The readiness tab has the same hand-off for a whole-paper reviewer report.
+No API and no extra cost: under each paper section the user picks an instruction (polish for Q1–Q2, expand, shorten, grammar only, translate) and taps **ChatGPT** or **Claude**. Talkademic copies a prompt that tells the model to keep every citation and placeholder and invent nothing, then opens `https://chatgpt.com/?q=…` or `https://claude.ai/new?q=…` (prefilled when the link is short enough; otherwise the user pastes once). **Paste result** brings the answer back to replace or append to the section, with one-step undo, and warns about author–year citations that are not in the paper's reference list. The readiness tab has the same hand-off for a whole-paper reviewer report.
 
 ## Chat → full paper (v1.0)
 
@@ -52,7 +54,7 @@ The previous draft is kept so it can be restored, and the readiness checklist co
 
 ## Backup & restore (v0.8)
 
-Everything lives in the browser's local storage, so **Settings → Backup & restore** saves the whole workspace (thesis, chats, references, display settings) as `ThesTalk-backup-<title>-<date>.json`. On Android the **Share** button sends it straight to Drive or WhatsApp. **Restore from file** shows what the backup contains, asks before replacing the current project and keeps an undo copy for 7 days. The AI access code is never written to the file. The dashboard shows a reminder once there is work and no backup in the last 7 days. The file logic is in `public/backup.js` and tested in `tests/backup.test.js`.
+Everything lives in the browser's local storage, so **Settings → Backup & restore** saves the whole workspace (thesis, chats, references, display settings) as `Talkademic-backup-<title>-<date>.json`. On Android the **Share** button sends it straight to Drive or WhatsApp. **Restore from file** shows what the backup contains, asks before replacing the current project and keeps an undo copy for 7 days. The AI access code is never written to the file. The dashboard shows a reminder once there is work and no backup in the last 7 days. The file logic is in `public/backup.js` and tested in `tests/backup.test.js`.
 
 ## Choose AI: Gemini, Claude or ChatGPT (v0.7)
 
@@ -74,7 +76,7 @@ Claude Pro and ChatGPT Plus subscriptions do not include API usage. Claude Max/T
 
 ## Real references (v0.4)
 
-Tick **📚 Find real references** in the Academic Writing Assistant before converting an idea. ThesTalk then:
+Tick **📚 Find real references** in the Academic Writing Assistant before converting an idea. Talkademic then:
 
 1. turns the casual idea (BM, English or mixed) into three keyword searches;
 2. searches [OpenAlex](https://openalex.org) for real papers that have abstracts (optionally 2015 onwards only);

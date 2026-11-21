@@ -61,6 +61,6 @@ test('wrong files are refused with a clear code', () => {
 });
 
 test('file name has the date and a safe version of the title', () => {
-  assert.equal(B.backupFilename('Imej Produk: E-Dagang (Malaysia)', new Date(2026, 10, 21)), 'ThesTalk-backup-Imej-Produk-E-Dagang-Malaysia-2026-11-21.json');
-  assert.equal(B.backupFilename('', new Date(2026, 0, 5)), 'ThesTalk-backup-2026-01-05.json');
+  assert.equal(B.backupFilename('Imej Produk: E-Dagang (Malaysia)', new Date(2026, 10, 21)), 'Talkademic-backup-Imej-Produk-E-Dagang-Malaysia-2026-11-21.json');
+  assert.equal(B.backupFilename('', new Date(2026, 0, 5)), 'Talkademic-backup-2026-01-05.json');
 });

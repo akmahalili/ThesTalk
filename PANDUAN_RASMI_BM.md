@@ -1,10 +1,12 @@
-# ThesTalk AI v0.3 — Panduan penerbitan aplikasi sebenar
+# Talkademic AI v0.3 — Panduan penerbitan aplikasi sebenar
+
+*Dahulu dikenali sebagai ThesTalk. Ditukar nama kepada Talkademic (v1.3) kerana aplikasi kini merangkumi sembang harian, paper jurnal dan rujukan, bukan tesis sahaja. Data yang telah disimpan tidak terjejas.*
 
 **Status:** Sumber aplikasi PWA telah siap, tetapi tiada URL awam yang berjaya diterbitkan. Sambungan GitHub dan Vercel dalam ChatGPT menolak operasi cipta/tulis dengan ralat **403 Forbidden** pada 15 November 2026. Jangan tersalah anggap ZIP ini sebagai aplikasi yang telah dilancarkan.
 
 ## 1. Masukkan kod ke GitHub
 
-Repo milik anda: https://github.com/akmahalili/ThesTalk
+Repo milik anda: https://github.com/akmahalili/Talkademic
 
 1. Ekstrak `ThesTalk_PWA_Installable_v0.3.zip`.
 2. Upload semua kandungan **dalam folder** `ThesTalk_PWA_Deploy` ke root repositori (fail `index.html`, `app.js`, folder `api/`, `lib/`, dll). Jangan muat naik `.env` yang mempunyai kunci.
@@ -13,7 +15,7 @@ Repo milik anda: https://github.com/akmahalili/ThesTalk
 ## 2. Terbitkan URL
 
 1. Buka https://vercel.com/new menggunakan akaun anda.
-2. Pilih `Import Git Repository` dan repo `akmahalili/ThesTalk`.
+2. Pilih `Import Git Repository` dan repo `akmahalili/Talkademic`.
 3. Pilih framework **Other**, root directory `./`, kemudian Deploy.
 4. Buka URL HTTPS `.vercel.app` yang Vercel berikan. Ia akan berfungsi sebagai aplikasi penulisan tempatan (AI masih belum diaktifkan).
 
@@ -58,8 +60,8 @@ Dalam Chrome, buka URL HTTPS aplikasi → menu ⋮ → **Add to Home screen** / 
 
 Semua kerja disimpan dalam pelayar sahaja. Untuk elak kehilangan atau untuk pindah ke peranti lain:
 
-1. Pergi ke **Tetapan → Backup & pulih** dan tekan **Simpan backup**. Fail `ThesTalk-backup-…json` akan dimuat turun. Di Android, butang **Kongsi** boleh hantar fail terus ke Google Drive atau WhatsApp.
-2. Di peranti lain, buka ThesTalk dan tekan **Pulih dari fail**, kemudian pilih fail tadi. App akan tunjuk tajuk, bilangan bab, perkataan dan rujukan sebelum menggantikan projek.
+1. Pergi ke **Tetapan → Backup & pulih** dan tekan **Simpan backup**. Fail `Talkademic-backup-…json` akan dimuat turun. Di Android, butang **Kongsi** boleh hantar fail terus ke Google Drive atau WhatsApp.
+2. Di peranti lain, buka Talkademic dan tekan **Pulih dari fail**, kemudian pilih fail tadi. App akan tunjuk tajuk, bilangan bab, perkataan dan rujukan sebelum menggantikan projek.
 3. Tersilap pilih fail? Tekan **↶ Batalkan pemulihan terakhir** (tersedia selama 7 hari).
 
 Kod akses AI tidak disimpan dalam fail backup. Masukkan semula kod di peranti baharu. Papan pemuka akan mengingatkan anda jika belum backup lebih 7 hari.
@@ -69,7 +71,7 @@ Kod akses AI tidak disimpan dalam fail backup. Masukkan semula kod di peranti ba
 Untuk artikel jurnal (berasingan daripada tesis). Buka dari kad **Jurnal & Paper** di Utama, menu Akademik, atau **Projek Saya**.
 
 1. **Tulis**: isi tajuk dan bahagian Abstrak hingga Kesimpulan. Guna **Tulis dengan rujukan sebenar** untuk menjana perenggan bersitasi daripada kajian sebenar. Eksport ke DOCX bila siap.
-2. **Jurnal sasaran**: tekan **Cari jurnal sesuai**. ThesTalk cari jurnal yang sudah menerbitkan kajian serupa dan tunjuk h-index, impak 2 tahun, akses terbuka/APC serta senarai seperti CWTS Core, ABDC dan SINTA. Tekan **Semak kuartil (Scimago)** untuk sahkan Q1–Q4 dan status Scopus, kemudian **Pilih sebagai sasaran**.
+2. **Jurnal sasaran**: tekan **Cari jurnal sesuai**. Talkademic cari jurnal yang sudah menerbitkan kajian serupa dan tunjuk h-index, impak 2 tahun, akses terbuka/APC serta senarai seperti CWTS Core, ABDC dan SINTA. Tekan **Semak kuartil (Scimago)** untuk sahkan Q1–Q4 dan status Scopus, kemudian **Pilih sebagai sasaran**.
 3. **Abstrak & tajuk**: jana abstrak berstruktur, lima pilihan tajuk dan kata kunci.
 4. **Semak kesediaan**: semakan pantas (tanpa AI) dan semakan AI yang menyenaraikan apa perlu dibaiki, ikut keutamaan, untuk jurnal sasaran.
 
@@ -80,7 +82,7 @@ Semua nombor jurnal datang daripada OpenAlex, bukan AI. Impak 2 tahun bukan Impa
 Dalam **Jurnal & Paper → Tulis**, kad **Sembang → Paper penuh**:
 
 1. Taip idea secara santai, satu demi satu, dan tekan Enter atau **Tambah**. Boleh juga guna 🎙 atau **Ambil dari sembang** untuk mengambil ayat daripada Sembang.
-2. Tekan **Jana paper penuh dengan rujukan**. ThesTalk menyusun idea ikut bahagian jurnal, mencari kajian sebenar di OpenAlex, kemudian menulis Pengenalan hingga Kesimpulan serta abstrak dan kata kunci, dengan sitasi APA dimasukkan secara automatik. Ia mengambil masa kira-kira 30–60 saat.
+2. Tekan **Jana paper penuh dengan rujukan**. Talkademic menyusun idea ikut bahagian jurnal, mencari kajian sebenar di OpenAlex, kemudian menulis Pengenalan hingga Kesimpulan serta abstrak dan kata kunci, dengan sitasi APA dimasukkan secara automatik. Ia mengambil masa kira-kira 30–60 saat.
 3. Isi sendiri tanda seperti [PERLU RUJUKAN], [SAIZ SAMPEL] dan [DAPATAN 1]. AI tidak mereka data. Semak kesediaan akan mengira tanda yang masih ada.
 4. Tak puas hati? Tekan **↶ Kembalikan draf sebelum jana**.
 
@@ -92,8 +94,8 @@ Di bawah setiap bahagian paper (tab Tulis):
 
 1. Pilih **Arahan**, contohnya *Perhalusi untuk jurnal Q1–Q2*, *Kembangkan hujah*, *Ringkaskan*, *Semak tatabahasa* atau *Terjemah*.
 2. Tekan **ChatGPT** atau **Claude**. Teks berserta arahan disalin, dan app dibuka. Jika kotak taip kosong, tekan lama dan pilih **Tampal**, kemudian hantar.
-3. Salin jawapan, kembali ke ThesTalk, tekan **📋 Tampal hasil**, kemudian pilih **Ganti bahagian** atau **Tambah di bawah**. Tersilap? Tekan **↶ Batal perubahan**.
-4. Jika jawapan mengandungi sitasi yang tiada dalam senarai rujukan paper, ThesTalk akan beri amaran supaya anda semak (ChatGPT dan Claude kadang-kadang menambah rujukan sendiri).
+3. Salin jawapan, kembali ke Talkademic, tekan **📋 Tampal hasil**, kemudian pilih **Ganti bahagian** atau **Tambah di bawah**. Tersilap? Tekan **↶ Batal perubahan**.
+4. Jika jawapan mengandungi sitasi yang tiada dalam senarai rujukan paper, Talkademic akan beri amaran supaya anda semak (ChatGPT dan Claude kadang-kadang menambah rujukan sendiri).
 
 Di tab **Semak kesediaan**, butang **Minta penilaian ChatGPT / Claude** menghantar seluruh paper untuk dinilai seperti penilai jurnal.
 

@@ -1,4 +1,4 @@
-/* ThesTalk shell: navigation, dashboard, BM/EN interface, light/dark theme,
+/* Talkademic shell: navigation, dashboard, BM/EN interface, light/dark theme,
    first-run onboarding, casual chat, proofreading, local search.
    Works on top of app.js through window.ThesTalkApp. */
 (() => {
@@ -20,7 +20,7 @@
       'voice.speak': 'Cakap untuk menaip', 'voice.listening': '🎙 Sedang mendengar… tekan lagi untuk berhenti', 'voice.transcribing': '🎙 Menukar suara kepada teks…',
       'voice.unsupported': 'Pelayar ini tidak menyokong input suara. Cuba Chrome.', 'voice.denied': 'Akses mikrofon ditolak. Benarkan mikrofon dalam tetapan pelayar.',
       'tts.listen': 'Dengar', 'tts.listenShort': 'Dengar', 'tts.unsupported': 'Pelayar ini tidak boleh membaca teks dengan suara.', 'tts.empty': 'Tiada teks untuk dibaca.',
-      'tts.sample': 'Hai! Ini suara ThesTalk. Saya boleh bacakan jawapan dan draf tesis anda.', 'tts.hasMs': 'Suara Bahasa Melayu tersedia ✓', 'tts.noMs': 'Suara Bahasa Melayu tidak dijumpai pada peranti ini.',
+      'tts.sample': 'Hai! Ini suara Talkademic. Saya boleh bacakan jawapan dan draf tesis anda.', 'tts.hasMs': 'Suara Bahasa Melayu tersedia ✓', 'tts.noMs': 'Suara Bahasa Melayu tidak dijumpai pada peranti ini.',
       'lib.exportLabel': 'Eksport ke Mendeley / Zotero / EndNote', 'lib.exportHelp': 'Di Mendeley atau Zotero, pilih Import dan pilih fail ini.', 'lib.exportEmpty': 'Belum ada rujukan untuk dieksport.', 'lib.exported': 'Fail {file} dimuat turun.',
       'set.voice': 'Suara', 'set.autoSpeak': 'Baca jawapan AI secara automatik', 'set.voiceSend': 'Hantar terus selepas saya bercakap (Sembang Santai)', 'set.testVoice': 'Uji suara',
       'set.voiceHelp': 'Tiada suara BM? Di Android: Tetapan → Teks-ke-pertuturan → Enjin Google → pasang Bahasa Melayu.',
@@ -30,7 +30,7 @@
       'hub.thesis': 'Pembantu Tesis', 'hub.thesis.d': 'Tulis bab tesis dengan sokongan AI.', 'hub.research': 'Pembantu Penyelidikan', 'hub.research.d': 'Sembang idea, kemudian tukar kepada tulisan akademik bersitasi.',
       'hub.papers.d': 'Sembang jadi paper penuh, cari jurnal berindeks, semak sebelum hantar.', 'hub.writing': 'Penulisan Akademik', 'hub.writing.d': 'Tukar idea santai kepada perenggan akademik.',
       'hub.proof': 'Semakan Bahasa & Gaya', 'hub.proof.d': 'Betulkan tatabahasa dan nada akademik.', 'hub.refs': 'Rujukan & Sitasi', 'hub.refs.d': 'Senarai rujukan tesis, eksport ke Mendeley atau Zotero.',
-      'set.role': 'Peranan (pilihan)', 'set.rolePh': 'cth. Penyelidik PhD, UiTM', 'fab.newPaper': 'Paper baharu', 'ob.welcome': 'Selamat datang ke ThesTalk',
+      'set.role': 'Peranan (pilihan)', 'set.rolePh': 'cth. Penyelidik PhD, UiTM', 'fab.newPaper': 'Paper baharu', 'ob.welcome': 'Selamat datang ke Talkademic',
       'nav.papers': 'Jurnal & Paper', 'card.papers': 'Jurnal & Paper', 'card.papers.d': 'Tulis artikel, cari jurnal berindeks dan semak sebelum hantar.',
       'nav.projects': 'Projek Saya', 'nav.projectsShort': 'Projek', 'nav.library': 'Perpustakaan', 'nav.settings': 'Tetapan', 'nav.profile': 'Profil',
       'bk.title': 'Backup & pulih', 'bk.body': 'Semua kerja disimpan dalam pelayar ini sahaja. Simpan fail backup, kemudian pulihkan di telefon atau laptop lain.',
@@ -39,11 +39,11 @@
       'bk.confirm': 'Pulihkan backup "{t}" ({d})?\n{c} bab · {w} perkataan · {r} rujukan\n\nProjek semasa akan diganti. Salinan disimpan supaya anda boleh batalkan.',
       'bk.unknownDate': 'tarikh tidak diketahui', 'bk.noUndo': 'Ruang storan tidak cukup untuk simpan salinan batal. Teruskan tanpa salinan?',
       'bk.restored': 'Backup dipulihkan.', 'bk.undoConfirm': 'Kembalikan projek seperti sebelum pemulihan terakhir?', 'bk.undone': 'Pemulihan dibatalkan.',
-      'bk.err.empty': 'Fail itu kosong.', 'bk.err.not-json': 'Ini bukan fail backup ThesTalk.', 'bk.err.not-thestalk': 'Ini bukan fail backup ThesTalk.', 'bk.err.too-large': 'Fail terlalu besar.',
-      'bk.err.newer-format': 'Backup ini dari versi ThesTalk yang lebih baharu. Muat semula app dan cuba lagi.', 'bk.err.storage': 'Storan pelayar penuh, jadi backup tidak dapat dipulihkan.',
+      'bk.err.empty': 'Fail itu kosong.', 'bk.err.not-json': 'Ini bukan fail backup Talkademic.', 'bk.err.not-thestalk': 'Ini bukan fail backup Talkademic.', 'bk.err.too-large': 'Fail terlalu besar.',
+      'bk.err.newer-format': 'Backup ini dari versi Talkademic yang lebih baharu. Muat semula app dan cuba lagi.', 'bk.err.storage': 'Storan pelayar penuh, jadi backup tidak dapat dipulihkan.',
       'bk.nudgeNever': 'Kerja anda hanya ada dalam pelayar ini. Simpan backup supaya tidak hilang.', 'bk.nudgeOld': 'Backup terakhir {n} hari lalu. Simpan yang baharu?', 'bk.saveNow': 'Backup sekarang',
       'theme.toggle': 'Tukar tema', 'saved.title': 'Disimpan pada peranti ini', 'saved.body': 'Kandungan kekal dalam pelayar ini sahaja. Simpan backup di Tetapan supaya tidak hilang.',
-      'search.label': 'Cari dalam ThesTalk', 'search.ph': 'Cari dalam ThesTalk…', 'search.empty': 'Tiada hasil untuk carian ini.',
+      'search.label': 'Cari dalam Talkademic', 'search.ph': 'Cari dalam Talkademic…', 'search.empty': 'Tiada hasil untuk carian ini.',
       'search.casual': 'Sembang', 'search.academic': 'Sembang akademik', 'search.section': 'Seksyen tesis', 'search.ref': 'Rujukan',
       'greet.name': 'Selamat datang, {name} 👋', 'greet': 'Selamat datang 👋', 'home.sub': 'Sahabat anda untuk sembang, belajar dan menyelidik.',
       'mode.casual': 'Sembang', 'mode.academic': 'Akademik', 'home.askLabel': 'Tanya apa sahaja', 'home.ask': 'Tanya apa sahaja…', 'home.askSend': 'Hantar',
@@ -55,8 +55,8 @@
       'home.recent': 'Aktiviti Terkini', 'recent.empty': 'Belum ada aktiviti. Mula dengan bertanya sesuatu.',
       'recent.casual': 'Sembang', 'recent.academic': 'Penyelidikan', 'recent.draft': 'Draf akademik', 'time.now': 'baru sahaja',
       'casual.eyebrow': 'Mod Sembang', 'casual.sub': 'Tanya apa sahaja dalam BM atau English: idea, hiburan, penulisan atau saranan.', 'casual.clear': 'Kosongkan sembang',
-      'casual.welcome': 'Hai! 👋 Saya ThesTalk. Tanya apa sahaja, dalam BM atau English. Nak idea, cadangan hiburan, bantuan menulis atau saranan? Saya sedia membantu.',
-      'casual.noai': 'Mesej disimpan. Untuk balasan AI, sambungkan AI di Tetapan.', 'casual.working': 'ThesTalk sedang menaip…', 'casual.confirmClear': 'Kosongkan sembang santai ini?',
+      'casual.welcome': 'Hai! 👋 Saya Talkademic. Tanya apa sahaja, dalam BM atau English. Nak idea, cadangan hiburan, bantuan menulis atau saranan? Saya sedia membantu.',
+      'casual.noai': 'Mesej disimpan. Untuk balasan AI, sambungkan AI di Tetapan.', 'casual.working': 'Talkademic sedang menaip…', 'casual.confirmClear': 'Kosongkan sembang santai ini?',
       'prompt.idea': 'Bagi saya 5 idea kreatif untuk ', 'prompt.fun': 'Cadangkan aktiviti santai yang menarik untuk hujung minggu ini.', 'prompt.write': 'Tolong perbaiki ayat ini supaya lebih jelas: ', 'prompt.suggest': 'Apa saranan anda tentang ',
       'send': 'Hantar', 'save': 'Simpan', 'copy': 'Salin', 'cancel': 'Batal', 'close': 'Tutup', 'export': 'Eksport DOCX', 'draft': 'DRAF',
       'ws.crumb': 'Akademik', 'ws.heading': 'Dari idea ke tesis.', 'ws.welcomeT': 'Perjalanan penyelidikan anda bermula dengan perbualan.', 'ws.welcomeB': 'Tulis secara santai, tukar idea kepada draf, dan tentukan apa yang masuk ke dalam tesis.',
@@ -68,7 +68,7 @@
       'ws.convertHelp': 'Pilih mesej dalam sembang dan tekan Convert. Draf akademik muncul di sini untuk semakan anda. Tiada apa dimasukkan secara automatik.',
       'ws.withRefs': 'Cari rujukan jurnal sebenar', 'ws.recentRefs': '2015 ke atas sahaja', 'ws.emptyT': 'Idea seterusnya bermula di sini', 'ws.emptyB': 'Pilih mesej daripada perbualan untuk menghasilkan draf.',
       'ws.refsCited': 'Rujukan dipetik · OpenAlex', 'ws.allFound': 'Semua kajian ditemui', 'ws.insert': 'Masukkan ke seksyen terpilih', 'ws.regenerate': 'Jana semula',
-      'proof.title': 'Semakan Tatabahasa & Gaya', 'proof.sub': 'Tampal teks anda. ThesTalk membetulkan tatabahasa, ejaan dan kejelasan tanpa mengubah maksud atau sitasi.', 'proof.input': 'Teks anda',
+      'proof.title': 'Semakan Tatabahasa & Gaya', 'proof.sub': 'Tampal teks anda. Talkademic membetulkan tatabahasa, ejaan dan kejelasan tanpa mengubah maksud atau sitasi.', 'proof.input': 'Teks anda',
       'proof.ph': 'Tampal perenggan anda di sini…', 'proof.btn': 'Semak teks', 'proof.result': 'Teks disemak', 'proof.note': 'Semak setiap perubahan sebelum guna. Fakta dan sitasi tidak disahkan oleh semakan ini.',
       'proof.insert': 'Masukkan ke seksyen tesis terpilih', 'proof.empty': 'Tampal sekurang-kurangnya satu ayat dahulu.', 'proof.needsAI': 'Semakan memerlukan AI. Sambungkan AI di Tetapan.',
       'proof.working': 'Sedang menyemak…', 'proof.done': 'Siap. Bandingkan dengan teks asal sebelum guna.', 'proof.confirm': 'Masukkan teks disemak ke dalam {section}?', 'proof.inserted': 'Dimasukkan ke dalam {section}.', 'proof.copied': 'Teks disalin.',
@@ -89,7 +89,7 @@
       'voice.speak': 'Speak to type', 'voice.listening': '🎙 Listening… tap again to stop', 'voice.transcribing': '🎙 Turning speech into text…',
       'voice.unsupported': 'This browser does not support voice input. Try Chrome.', 'voice.denied': 'Microphone access was blocked. Allow the microphone in your browser settings.',
       'tts.listen': 'Listen', 'tts.listenShort': 'Listen', 'tts.unsupported': 'This browser cannot read text aloud.', 'tts.empty': 'Nothing to read yet.',
-      'tts.sample': 'Hi! This is the ThesTalk voice. I can read your answers and thesis drafts aloud.', 'tts.hasMs': 'Malay voice available ✓', 'tts.noMs': 'No Malay voice found on this device.',
+      'tts.sample': 'Hi! This is the Talkademic voice. I can read your answers and thesis drafts aloud.', 'tts.hasMs': 'Malay voice available ✓', 'tts.noMs': 'No Malay voice found on this device.',
       'lib.exportLabel': 'Export to Mendeley / Zotero / EndNote', 'lib.exportHelp': 'In Mendeley or Zotero, choose Import and pick this file.', 'lib.exportEmpty': 'No references to export yet.', 'lib.exported': '{file} downloaded.',
       'set.voice': 'Voice', 'set.autoSpeak': 'Read AI replies aloud automatically', 'set.voiceSend': 'Send right after I finish speaking (Casual Chat)', 'set.testVoice': 'Test voice',
       'set.voiceHelp': 'No Malay voice? On Android: Settings → Text-to-speech → Google engine → install Malay.',
@@ -99,7 +99,7 @@
       'hub.thesis': 'Thesis Assistant', 'hub.thesis.d': 'Write thesis chapters with AI support.', 'hub.research': 'Research Assistant', 'hub.research.d': 'Chat through ideas, then turn them into cited academic writing.',
       'hub.papers.d': 'Turn chat into a full paper, find indexed journals, check before submitting.', 'hub.writing': 'Academic Writing', 'hub.writing.d': 'Turn casual ideas into academic paragraphs.',
       'hub.proof': 'Proofread & Style', 'hub.proof.d': 'Fix grammar and academic tone.', 'hub.refs': 'Citations & References', 'hub.refs.d': 'Your thesis reference list, export to Mendeley or Zotero.',
-      'set.role': 'Role (optional)', 'set.rolePh': 'e.g. PhD researcher, UiTM', 'fab.newPaper': 'New paper', 'ob.welcome': 'Welcome to ThesTalk',
+      'set.role': 'Role (optional)', 'set.rolePh': 'e.g. PhD researcher, UiTM', 'fab.newPaper': 'New paper', 'ob.welcome': 'Welcome to Talkademic',
       'nav.papers': 'Journal Papers', 'card.papers': 'Journal Papers', 'card.papers.d': 'Write articles, find indexed journals and check before submitting.',
       'nav.projects': 'My Projects', 'nav.projectsShort': 'Projects', 'nav.library': 'Library', 'nav.settings': 'Settings', 'nav.profile': 'Profile',
       'bk.title': 'Backup & restore', 'bk.body': 'All your work is stored only in this browser. Save a backup file, then restore it on another phone or laptop.',
@@ -108,11 +108,11 @@
       'bk.confirm': 'Restore backup "{t}" ({d})?\n{c} chapters · {w} words · {r} references\n\nThe current project will be replaced. A copy is kept so you can undo.',
       'bk.unknownDate': 'unknown date', 'bk.noUndo': 'Not enough storage to keep an undo copy. Continue without it?',
       'bk.restored': 'Backup restored.', 'bk.undoConfirm': 'Go back to the project as it was before the last restore?', 'bk.undone': 'Restore undone.',
-      'bk.err.empty': 'The file is empty.', 'bk.err.not-json': 'This is not a ThesTalk backup file.', 'bk.err.not-thestalk': 'This is not a ThesTalk backup file.', 'bk.err.too-large': 'The file is too large.',
-      'bk.err.newer-format': 'This backup is from a newer ThesTalk. Reload the app and try again.', 'bk.err.storage': 'Browser storage is full, so the backup could not be restored.',
+      'bk.err.empty': 'The file is empty.', 'bk.err.not-json': 'This is not a Talkademic backup file.', 'bk.err.not-thestalk': 'This is not a Talkademic backup file.', 'bk.err.too-large': 'The file is too large.',
+      'bk.err.newer-format': 'This backup is from a newer Talkademic. Reload the app and try again.', 'bk.err.storage': 'Browser storage is full, so the backup could not be restored.',
       'bk.nudgeNever': 'Your work exists only in this browser. Save a backup so you don\'t lose it.', 'bk.nudgeOld': 'Last backup was {n} days ago. Save a new one?', 'bk.saveNow': 'Back up now',
       'theme.toggle': 'Switch theme', 'saved.title': 'Saved on this device', 'saved.body': 'Your content stays only in this browser. Save a backup in Settings so you don\'t lose it.',
-      'search.label': 'Search in ThesTalk', 'search.ph': 'Search in ThesTalk…', 'search.empty': 'No results for this search.',
+      'search.label': 'Search in Talkademic', 'search.ph': 'Search in Talkademic…', 'search.empty': 'No results for this search.',
       'search.casual': 'Chat', 'search.academic': 'Academic chat', 'search.section': 'Thesis section', 'search.ref': 'Reference',
       'greet.name': 'Welcome, {name} 👋', 'greet': 'Welcome 👋', 'home.sub': 'Your companion for chat, learning and research.',
       'mode.casual': 'Chat', 'mode.academic': 'Academic', 'home.askLabel': 'Ask me anything', 'home.ask': 'Ask me anything…', 'home.askSend': 'Send',
@@ -124,8 +124,8 @@
       'home.recent': 'Recent Activity', 'recent.empty': 'No activity yet. Start by asking something.',
       'recent.casual': 'Chat', 'recent.academic': 'Research', 'recent.draft': 'Academic draft', 'time.now': 'just now',
       'casual.eyebrow': 'Chat mode', 'casual.sub': 'Ask anything in Malay or English: ideas, entertainment, writing or suggestions.', 'casual.clear': 'Clear chat',
-      'casual.welcome': 'Hi! 👋 I’m ThesTalk. Ask me anything, in Malay or English. Need ideas, something fun to do, help with writing or a suggestion? I’m here to help.',
-      'casual.noai': 'Message saved. For AI replies, connect AI in Settings.', 'casual.working': 'ThesTalk is typing…', 'casual.confirmClear': 'Clear this casual chat?',
+      'casual.welcome': 'Hi! 👋 I’m Talkademic. Ask me anything, in Malay or English. Need ideas, something fun to do, help with writing or a suggestion? I’m here to help.',
+      'casual.noai': 'Message saved. For AI replies, connect AI in Settings.', 'casual.working': 'Talkademic is typing…', 'casual.confirmClear': 'Clear this casual chat?',
       'prompt.idea': 'Give me 5 creative ideas for ', 'prompt.fun': 'Suggest a fun, relaxing activity for this weekend.', 'prompt.write': 'Please improve this text so it reads more clearly: ', 'prompt.suggest': 'What do you suggest about ',
       'send': 'Send', 'save': 'Save', 'copy': 'Copy', 'cancel': 'Cancel', 'close': 'Close', 'export': 'Export DOCX', 'draft': 'DRAFT',
       'ws.crumb': 'Academic', 'ws.heading': 'From thoughts to thesis.', 'ws.welcomeT': 'Your research journey starts with a conversation.', 'ws.welcomeB': 'Write naturally, convert your thoughts into a draft, and decide what belongs in your thesis.',
@@ -137,7 +137,7 @@
       'ws.convertHelp': 'Choose a message in the chat and press Convert. Your academic draft appears here for your review. Nothing is inserted automatically.',
       'ws.withRefs': 'Find real references', 'ws.recentRefs': '2015 onwards only', 'ws.emptyT': 'Your next idea starts here', 'ws.emptyB': 'Pick a message from your conversation to create a draft.',
       'ws.refsCited': 'References cited · OpenAlex', 'ws.allFound': 'All papers found', 'ws.insert': 'Insert into selected section', 'ws.regenerate': 'Regenerate',
-      'proof.title': 'Proofread & Style', 'proof.sub': 'Paste your text. ThesTalk fixes grammar, spelling and clarity without changing the meaning or citations.', 'proof.input': 'Your text',
+      'proof.title': 'Proofread & Style', 'proof.sub': 'Paste your text. Talkademic fixes grammar, spelling and clarity without changing the meaning or citations.', 'proof.input': 'Your text',
       'proof.ph': 'Paste your paragraph here…', 'proof.btn': 'Check text', 'proof.result': 'Checked text', 'proof.note': 'Review every change before using it. This check does not verify facts or citations.',
       'proof.insert': 'Insert into selected thesis section', 'proof.empty': 'Paste at least one sentence first.', 'proof.needsAI': 'Proofreading needs AI. Connect AI in Settings.',
       'proof.working': 'Checking…', 'proof.done': 'Done. Compare with your original before using it.', 'proof.confirm': 'Insert the checked text into {section}?', 'proof.inserted': 'Inserted into {section}.', 'proof.copied': 'Text copied.',
@@ -216,7 +216,7 @@
     $('#profileRole').value = ui.role || '';
     $('#profileAvatar').textContent = initials(name || t('default.name'));
     $('#profileHeroName').textContent = name || t('default.name');
-    $('#profileHeroRole').textContent = ui.role || 'ThesTalk';
+    $('#profileHeroRole').textContent = ui.role || 'Talkademic';
   }
 
   /* ---------- navigation ---------- */
@@ -870,7 +870,7 @@
   }
   async function shareBackup() {
     const f = backupFile();
-    try { await navigator.share({ files: [f], title: 'ThesTalk backup' }); markBackedUp(); }
+    try { await navigator.share({ files: [f], title: 'Talkademic backup' }); markBackedUp(); }
     catch (e) { if (!e || e.name !== 'AbortError') App.toast(t('bk.shareFail')); }
   }
   /* Replace the workspace, then reload so every view starts clean from the restored data. */

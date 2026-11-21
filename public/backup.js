@@ -1,4 +1,4 @@
-/* ThesTalk backup files: build one from the workspace and read one back safely.
+/* Talkademic backup files: build one from the workspace and read one back safely.
    Works in the browser (window.ThesTalkBackup) and in Node tests (module.exports). */
 (function (root, factory) {
   const api = factory();
@@ -37,7 +37,7 @@
 
   function makeBackup(workspace, ui, preferences, now) {
     return {
-      app: 'ThesTalk',
+      app: 'Talkademic',
       kind: KIND,
       format: FORMAT,
       exportedAt: (now || new Date()).toISOString(),
@@ -65,7 +65,7 @@
     return out;
   }
 
-  /* Accepts a ThesTalk backup file, or a raw workspace copied from storage. */
+  /* Accepts a Talkademic backup file, or a raw workspace copied from storage. */
   function parseBackup(text) {
     if (typeof text !== 'string' || !text.trim()) throw backupError('empty');
     if (text.length > MAX_BYTES) throw backupError('too-large');
@@ -90,7 +90,7 @@
     const d = now || new Date();
     const date = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
     const slug = String(title || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
-    return 'ThesTalk-backup-' + (slug ? slug + '-' : '') + date + '.json';
+    return 'Talkademic-backup-' + (slug ? slug + '-' : '') + date + '.json';
   }
 
   return { KIND, FORMAT, makeBackup, parseBackup, backupFilename, summary, validWorkspace };

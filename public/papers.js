@@ -1,4 +1,4 @@
-/* ThesTalk "Jurnal & Paper": journal articles alongside the thesis.
+/* Talkademic "Jurnal & Paper": journal articles alongside the thesis.
    Papers live in the same workspace (state.papers), so they are saved, backed up and restored with it.
    Journals and their numbers come from OpenAlex (/api/journals); AI only writes and reviews (/api/paper, /api/cite). */
 (function () {
@@ -29,7 +29,7 @@
       'guide.conclusion': 'Ringkasan sumbangan, had kajian, cadangan kajian akan datang.',
       words: '{n} perkataan', keywords: 'Kata kunci', keywordsPh: 'cth. imej produk; niat pembelian; e-dagang; Malaysia',
       secPh: 'Tulis atau tampal bahagian {s} di sini…',
-      citeTitle: 'Tulis dengan rujukan sebenar', citeBody: 'Taip idea secara santai. ThesTalk cari kajian sebenar (OpenAlex) dan tulis perenggan akademik dengan sitasi APA.',
+      citeTitle: 'Tulis dengan rujukan sebenar', citeBody: 'Taip idea secara santai. Talkademic cari kajian sebenar (OpenAlex) dan tulis perenggan akademik dengan sitasi APA.',
       citePh: 'cth. gambar close up buat pembeli lebih yakin sebab nampak kualiti produk', citeBtn: 'Jana perenggan', citeBusy: 'Mencari kajian dan menulis… (sehingga 1 minit)',
       insertInto: 'Masukkan ke {s}', discard: 'Buang', citeAdded: 'Perenggan dimasukkan. {n} rujukan ditambah.',
       refs: 'Rujukan paper', noRefs: 'Belum ada rujukan. Guna "Tulis dengan rujukan sebenar" untuk menambah.', copyRefs: 'Salin rujukan', copied: 'Rujukan disalin.', remove: 'Buang rujukan',
@@ -61,14 +61,14 @@
       'qc.refs': 'Sekurang-kurangnya 40 rujukan (panduan umum Q1–Q2)', 'qc.refsBad': '{n} rujukan (panduan umum: 40 atau lebih)',
       'qc.recent': 'Separuh rujukan dari 5 tahun terkini', 'qc.recentBad': '{p}% rujukan dari 5 tahun terkini (sasaran ≥ 50%)',
       'qc.target': 'Jurnal sasaran dipilih', 'qc.targetBad': 'Belum pilih jurnal sasaran',
-      xTitle: 'Perhalusi dengan ChatGPT / Claude (langganan anda)', xHow: 'ThesTalk salin bahagian ini berserta arahan, kemudian buka ChatGPT atau Claude. Hantar di sana, salin jawapan, kemudian tekan Tampal hasil.',
+      xTitle: 'Perhalusi dengan ChatGPT / Claude (langganan anda)', xHow: 'Talkademic salin bahagian ini berserta arahan, kemudian buka ChatGPT atau Claude. Hantar di sana, salin jawapan, kemudian tekan Tampal hasil.',
       xAction: 'Arahan', 'xa.polish': 'Perhalusi untuk jurnal Q1–Q2', 'xa.expand': 'Kembangkan hujah', 'xa.shorten': 'Ringkaskan', 'xa.grammar': 'Semak tatabahasa sahaja', 'xa.translate': 'Terjemah ke bahasa lain',
       xOpened: 'Teks dah disalin dan {a} dibuka. Kalau kotak taip kosong, tekan lama dan pilih Tampal.', xPaste: 'Tampal hasil', xPasteTitle: 'Hasil dari ChatGPT / Claude', xPastePh: 'Tampal jawapan ChatGPT atau Claude di sini…',
       xFromClip: 'Tampal dari clipboard', xClipFail: 'Tidak dapat baca clipboard. Tekan lama dalam kotak dan pilih Tampal.', xReplace: 'Ganti bahagian', xAppend: 'Tambah di bawah', xCancel: 'Batal',
       xDone: 'Bahagian dikemas kini.', xUndo: '↶ Batal perubahan', xUndone: 'Bahagian dikembalikan.',
       xUnknown: 'Sitasi ini tiada dalam senarai rujukan paper, mungkin ditambah oleh ChatGPT/Claude. Semak sebelum guna: {c}', xEmpty: 'Bahagian ini masih kosong.',
       xReviewTitle: 'Minta penilaian ChatGPT / Claude', xReviewBody: 'Salin seluruh paper berserta arahan penilai jurnal, kemudian buka app. Jawapan dibaca di sana.',
-      dTitle: 'Sembang → Paper penuh', dBody: 'Taip idea, pendapat atau pemerhatian anda secara santai, satu demi satu (boleh guna mikrofon). Bila cukup, tekan Jana paper penuh: ThesTalk susun ikut bahagian jurnal dan masukkan sitasi daripada kajian sebenar secara automatik.',
+      dTitle: 'Sembang → Paper penuh', dBody: 'Taip idea, pendapat atau pemerhatian anda secara santai, satu demi satu (boleh guna mikrofon). Bila cukup, tekan Jana paper penuh: Talkademic susun ikut bahagian jurnal dan masukkan sitasi daripada kajian sebenar secara automatik.',
       dPh: 'cth. I think, gambar close up penting utk org yakin semasa membeli', dAdd: 'Tambah', dMic: 'Cakap untuk menaip', dCount: '{n} idea', dNone: 'Belum ada idea. Mula taip di bawah.',
       dImport: 'Ambil dari sembang ({n})', dImported: '{n} idea diambil dari sembang.', dRemove: 'Buang idea',
       dGen: 'Jana paper penuh dengan rujukan', dNeed: 'Tambah sekurang-kurangnya 2 idea dahulu.',
@@ -100,7 +100,7 @@
       'guide.conclusion': 'Summary of contribution, limitations, future research.',
       words: '{n} words', keywords: 'Keywords', keywordsPh: 'e.g. product image; purchase intention; e-commerce; Malaysia',
       secPh: 'Write or paste the {s} here…',
-      citeTitle: 'Write with real references', citeBody: 'Type an idea casually. ThesTalk finds real studies (OpenAlex) and writes an academic paragraph with APA citations.',
+      citeTitle: 'Write with real references', citeBody: 'Type an idea casually. Talkademic finds real studies (OpenAlex) and writes an academic paragraph with APA citations.',
       citePh: 'e.g. close-up photos make buyers more confident because they can see product quality', citeBtn: 'Write paragraph', citeBusy: 'Finding studies and writing… (up to a minute)',
       insertInto: 'Insert into {s}', discard: 'Discard', citeAdded: 'Paragraph inserted. {n} references added.',
       refs: 'Paper references', noRefs: 'No references yet. Use "Write with real references" to add some.', copyRefs: 'Copy references', copied: 'References copied.', remove: 'Remove reference',
@@ -132,14 +132,14 @@
       'qc.refs': 'At least 40 references (general Q1–Q2 guide)', 'qc.refsBad': '{n} references (general guide: 40 or more)',
       'qc.recent': 'Half of references from the last 5 years', 'qc.recentBad': '{p}% of references from the last 5 years (aim for ≥ 50%)',
       'qc.target': 'Target journal chosen', 'qc.targetBad': 'No target journal yet',
-      xTitle: 'Refine with ChatGPT / Claude (your subscription)', xHow: 'ThesTalk copies this section with an instruction, then opens ChatGPT or Claude. Send it there, copy the answer, then tap Paste result.',
+      xTitle: 'Refine with ChatGPT / Claude (your subscription)', xHow: 'Talkademic copies this section with an instruction, then opens ChatGPT or Claude. Send it there, copy the answer, then tap Paste result.',
       xAction: 'Instruction', 'xa.polish': 'Polish for a Q1–Q2 journal', 'xa.expand': 'Expand the argument', 'xa.shorten': 'Make it shorter', 'xa.grammar': 'Grammar only', 'xa.translate': 'Translate to the other language',
       xOpened: 'Text copied and {a} opened. If the message box is empty, long-press and choose Paste.', xPaste: 'Paste result', xPasteTitle: 'Result from ChatGPT / Claude', xPastePh: 'Paste the ChatGPT or Claude answer here…',
       xFromClip: 'Paste from clipboard', xClipFail: 'Could not read the clipboard. Long-press in the box and choose Paste.', xReplace: 'Replace section', xAppend: 'Add below', xCancel: 'Cancel',
       xDone: 'Section updated.', xUndo: '↶ Undo change', xUndone: 'Section restored.',
       xUnknown: 'These citations are not in the paper\'s reference list and may have been added by ChatGPT/Claude. Check them before use: {c}', xEmpty: 'This section is still empty.',
       xReviewTitle: 'Ask ChatGPT / Claude for a review', xReviewBody: 'Copies the whole paper with journal-reviewer instructions, then opens the app. Read the answer there.',
-      dTitle: 'Chat → Full paper', dBody: 'Type your ideas, opinions or observations casually, one at a time (the mic works too). When you have enough, press Generate full paper: ThesTalk organises them into journal sections and adds citations from real studies automatically.',
+      dTitle: 'Chat → Full paper', dBody: 'Type your ideas, opinions or observations casually, one at a time (the mic works too). When you have enough, press Generate full paper: Talkademic organises them into journal sections and adds citations from real studies automatically.',
       dPh: 'e.g. I think close-up photos make people confident when buying', dAdd: 'Add', dMic: 'Speak to type', dCount: '{n} ideas', dNone: 'No ideas yet. Start typing below.',
       dImport: 'Import from chats ({n})', dImported: '{n} ideas imported from your chats.', dRemove: 'Remove idea',
       dGen: 'Generate full paper with references', dNeed: 'Add at least 2 ideas first.',
@@ -573,7 +573,7 @@
     const doc = { project: { title: p.title.trim() || t('untitled'), university: p.target ? (ms ? 'Jurnal sasaran: ' : 'Target journal: ') + p.target.name : '', degree: '', language: p.language }, chapters, references: p.references || [] };
     try {
       const blob = window.ThesTalkDocx.makeDocument(doc);
-      const name = (p.title || 'ThesTalk_Paper').replace(/[^a-zA-Z0-9-_ ]/g, '').trim().replace(/\s+/g, '_').slice(0, 64) || 'ThesTalk_Paper';
+      const name = (p.title || 'Talkademic_Paper').replace(/[^a-zA-Z0-9-_ ]/g, '').trim().replace(/\s+/g, '_').slice(0, 64) || 'Talkademic_Paper';
       const url = URL.createObjectURL(blob), a = document.createElement('a');
       a.href = url; a.download = name + '.docx'; a.hidden = true; document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 5000);

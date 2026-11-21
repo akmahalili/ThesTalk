@@ -1,4 +1,4 @@
-/* ThesTalk reference export: RIS (Mendeley, Zotero, EndNote) and BibTeX.
+/* Talkademic reference export: RIS (Mendeley, Zotero, EndNote) and BibTeX.
    Works in the browser (window.ThesTalkRefExport) and in Node (module.exports). */
 (function (root) {
   'use strict';
