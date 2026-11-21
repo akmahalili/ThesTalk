@@ -1,0 +1,185 @@
+/* ThesTalk v1.2 — "tech" layer over styles.css, following the owner's mockup:
+   purple gradient brand, light and dark modes, glass surfaces, a cyan signal accent used sparingly,
+   and one memorable element: the AI robot in the hero with its signal waves.
+   Radius hierarchy: hero 28 · panels 20 · rows 16 · icon chips 14 · pills 999. */
+
+:root{
+  --bg:#f3f0ff; --surface:#ffffff; --surface-2:#f8f6ff; --surface-3:#efeafe;
+  --border:#e5def9; --border-strong:#d4c9f4;
+  --text:#1b1435; --text-2:#463d66; --muted:#7f779e;
+  --primary:#7c4dff; --primary-hover:#6a3cf0; --primary-soft:#efe8ff; --primary-soft-2:#ddd0ff; --accent-text:#6a3ff0;
+  --hero-1:#efe6ff; --hero-2:#f7f4ff; --hero-text:#1f1450;
+  --signal:#0fb5cf;
+  --grad:linear-gradient(135deg,#9061ff 0%,#7457fb 50%,#5b7cfa 100%);
+  --grad-soft:linear-gradient(135deg,rgba(144,97,255,.14),rgba(91,124,250,.12));
+  --glass:rgba(255,255,255,.74); --glass-strong:rgba(255,255,255,.88); --glass-border:rgba(124,77,255,.14);
+  --glow:0 10px 26px -8px rgba(116,87,251,.55);
+  --shadow:0 1px 0 rgba(255,255,255,.7) inset,0 12px 30px -14px rgba(60,32,150,.22);
+  --shadow-lg:0 30px 70px -20px rgba(40,22,110,.35);
+  --radius:20px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d0a22; --surface:#17123a; --surface-2:#1c1644; --surface-3:#251e55;
+    --border:rgba(167,139,250,.16); --border-strong:rgba(167,139,250,.3);
+    --text:#efeaff; --text-2:#cfc6f3; --muted:#958dc2;
+    --primary:#8f6bff; --primary-hover:#a184ff; --primary-soft:rgba(143,107,255,.16); --primary-soft-2:rgba(143,107,255,.3); --accent-text:#bda8ff;
+    --hero-1:#241a62; --hero-2:#120e34; --hero-text:#f5f1ff;
+    --signal:#3ee6f5;
+    --grad-soft:linear-gradient(135deg,rgba(144,97,255,.22),rgba(91,124,250,.16));
+    --glass:rgba(26,20,64,.6); --glass-strong:rgba(26,20,64,.82); --glass-border:rgba(167,139,250,.18);
+    --glow:0 10px 30px -6px rgba(124,92,255,.65);
+    --shadow:0 1px 0 rgba(255,255,255,.05) inset,0 16px 34px -16px rgba(0,0,0,.7);
+    --shadow-lg:0 30px 70px -20px rgba(0,0,0,.75);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d0a22; --surface:#17123a; --surface-2:#1c1644; --surface-3:#251e55;
+  --border:rgba(167,139,250,.16); --border-strong:rgba(167,139,250,.3);
+  --text:#efeaff; --text-2:#cfc6f3; --muted:#958dc2;
+  --primary:#8f6bff; --primary-hover:#a184ff; --primary-soft:rgba(143,107,255,.16); --primary-soft-2:rgba(143,107,255,.3); --accent-text:#bda8ff;
+  --hero-1:#241a62; --hero-2:#120e34; --hero-text:#f5f1ff;
+  --signal:#3ee6f5;
+  --grad-soft:linear-gradient(135deg,rgba(144,97,255,.22),rgba(91,124,250,.16));
+  --glass:rgba(26,20,64,.6); --glass-strong:rgba(26,20,64,.82); --glass-border:rgba(167,139,250,.18);
+  --glow:0 10px 30px -6px rgba(124,92,255,.65);
+  --shadow:0 1px 0 rgba(255,255,255,.05) inset,0 16px 34px -16px rgba(0,0,0,.7);
+  --shadow-lg:0 30px 70px -20px rgba(0,0,0,.75);
+}
+
+/* ---------- backdrop: faint circuit dot-grid and two soft lights ---------- */
+body{background-color:var(--bg)}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(900px 620px at -8% -12%,rgba(124,77,255,.18),transparent 62%),
+    radial-gradient(760px 560px at 108% 104%,rgba(45,212,232,.10),transparent 60%),
+    radial-gradient(circle,rgba(124,77,255,.16) 1px,transparent 1.4px) 0 0/22px 22px;
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.55) 55%,rgba(0,0,0,.25) 100%);
+          mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.55) 55%,rgba(0,0,0,.25) 100%);
+}
+:root[data-theme="dark"] body::before{
+  background:
+    radial-gradient(900px 620px at -8% -12%,rgba(124,77,255,.32),transparent 62%),
+    radial-gradient(760px 560px at 108% 104%,rgba(45,212,232,.16),transparent 60%),
+    radial-gradient(circle,rgba(167,139,250,.14) 1px,transparent 1.4px) 0 0/22px 22px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) body::before{
+    background:
+      radial-gradient(900px 620px at -8% -12%,rgba(124,77,255,.32),transparent 62%),
+      radial-gradient(760px 560px at 108% 104%,rgba(45,212,232,.16),transparent 60%),
+      radial-gradient(circle,rgba(167,139,250,.14) 1px,transparent 1.4px) 0 0/22px 22px;
+  }
+}
+
+/* ---------- glass surfaces (blur only on the large, few ones) ---------- */
+.sidebar{background:var(--glass);border-right:1px solid var(--glass-border);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%)}
+.card,.panel,.tile,.mode-card,.journal-card,.hub-row,.mode-switch,.ask-box,.ai-pill,.avatar-chip,.paper-target,.issue{background:var(--glass-strong);border-color:var(--glass-border)}
+.card,.panel,.mode-card,.tile,.journal-card{box-shadow:var(--shadow)}
+.ask-box,.mode-switch{-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid color-mix(in srgb,var(--primary) 55%,transparent);outline-offset:2px}
+
+/* ---------- brand gradient on the things you press ---------- */
+.btn-primary{background:var(--grad);box-shadow:var(--glow);border:0}
+.btn-primary:hover:not(:disabled){filter:brightness(1.08);background:var(--grad)}
+.nav-item.active,.mode-switch button[aria-selected="true"],.seg-control button[aria-pressed="true"],.lang-toggle button[aria-pressed="true"],.sec-chip.active,.mobile-tab.active{background:var(--grad);border-color:transparent;box-shadow:var(--glow)}
+.nav-item:hover:not(.active){background:var(--primary-soft)}
+.brand-logo{filter:drop-shadow(0 6px 12px rgba(124,77,255,.35))}
+
+/* icon chips: gradient, white glyph, soft glow */
+.mc-icon,.hub-ic,.pd-icon{background:var(--grad);color:#fff;box-shadow:var(--glow);border-radius:14px}
+.mc-icon .ic,.hub-ic .ic{stroke:#fff}
+.tile .ic{box-sizing:content-box;padding:10px;border-radius:14px;background:var(--grad-soft);color:var(--primary);margin-bottom:6px}
+.tile:hover:not(:disabled){border-color:color-mix(in srgb,var(--primary) 45%,transparent)}
+.mode-card:hover{border-color:color-mix(in srgb,var(--primary) 45%,transparent)}
+.status-chip:not(.local){background:color-mix(in srgb,var(--signal) 14%,transparent);color:color-mix(in srgb,var(--signal) 70%,var(--text))}
+
+/* ---------- hero: the one memorable thing ---------- */
+.hero{border-radius:28px;background:linear-gradient(125deg,var(--hero-1) 0%,var(--hero-2) 70%);border:1px solid var(--glass-border);box-shadow:var(--shadow);min-height:180px;isolation:isolate}
+.hero::after{display:none}
+.hero-text{position:relative;z-index:2}
+.hero h1{font-size:clamp(24px,3.2vw,34px);letter-spacing:-.8px}
+.hero-signal{position:absolute;left:0;right:0;bottom:-6px;width:100%;height:62%;z-index:0;pointer-events:none;opacity:.55}
+.hero-signal path{fill:none;stroke:url(#sigGrad);stroke-width:1.6}
+.hero-signal path:nth-child(2){stroke-width:1;opacity:.6}
+.hero-signal path:nth-child(3){stroke-width:2.4;opacity:.8}
+.hero-art.robot{width:min(190px,34%);height:auto;z-index:1;filter:drop-shadow(0 18px 24px rgba(91,62,224,.28))}
+#robot .rb-shadow{fill:rgba(60,32,150,.18)}
+.robot,.ob-robot{overflow:visible}
+@keyframes rb-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes rb-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes rb-wave{0%,70%,100%{transform:rotate(0)}78%{transform:rotate(-12deg)}86%{transform:rotate(8deg)}}
+.rb-body{animation:rb-float 5s ease-in-out infinite;transform-box:fill-box}
+.rb-eyes{animation:rb-blink 6s infinite;transform-origin:110px 102px}
+.rb-arm-wave{animation:rb-wave 6s ease-in-out infinite;transform-origin:148px 152px;transform-box:view-box}
+:root[data-theme="dark"] .hero-signal{opacity:.9;filter:drop-shadow(0 0 6px rgba(62,230,245,.5))}
+:root[data-theme="dark"] .hero-art.robot{filter:drop-shadow(0 0 30px rgba(124,92,255,.45))}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .hero-signal{opacity:.9;filter:drop-shadow(0 0 6px rgba(62,230,245,.5))}
+  :root:not([data-theme="light"]) .hero-art.robot{filter:drop-shadow(0 0 30px rgba(124,92,255,.45))}
+}
+
+/* ---------- home: ask box with mic, mode cards ---------- */
+.ask-box{border-radius:18px;padding:6px 6px 6px 16px}
+.ask-box:focus-within{border-color:color-mix(in srgb,var(--primary) 60%,transparent);box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 14%,transparent)}
+.ask-mic{width:40px;height:40px;border-radius:12px;font-size:17px;flex:none}
+.ask-send{background:var(--grad);box-shadow:var(--glow)}
+.ask-act{margin:-10px 4px 14px;min-height:0}
+.ask-act:empty{display:none}
+.mode-card{border-radius:20px}
+
+/* ---------- Akademik hub (mockup screen 5) ---------- */
+.hub-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;max-width:1000px}
+.hub-row{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1px solid var(--glass-border);border-radius:16px;padding:14px 14px 14px 12px;color:var(--text);box-shadow:var(--shadow);cursor:pointer}
+.hub-row:hover{border-color:color-mix(in srgb,var(--primary) 45%,transparent)}
+.hub-ic{width:46px;height:46px;flex:none;display:grid;place-items:center}
+.hub-text{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.hub-text strong{font-size:14.5px}
+.hub-text small{color:var(--muted);font-size:11.5px}
+.hub-text span{font-size:12.5px;color:var(--text-2);margin-top:4px}
+.hub-chev{color:var(--muted);width:18px;height:18px}
+
+/* ---------- settings: profile header ---------- */
+.profile-hero{display:flex;align-items:center;gap:14px;grid-column:1/-1;background:var(--grad-soft),var(--glass-strong)}
+.profile-hero strong{display:block;font-size:17px}
+.profile-hero small{color:var(--muted);font-size:12.5px}
+.avatar-circle{background:var(--grad)!important;color:#fff!important;box-shadow:var(--glow)}
+.avatar-circle.big{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:19px;flex:none}
+
+/* ---------- onboarding with the robot ---------- */
+.ob-card{background:linear-gradient(165deg,rgba(44,30,110,.9),rgba(16,12,48,.94));border:1px solid rgba(167,139,250,.28);box-shadow:0 30px 80px -20px rgba(20,10,70,.7),0 0 0 1px rgba(255,255,255,.04) inset;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.ob-robot{width:132px;height:132px;display:block;margin:-6px auto 2px;filter:drop-shadow(0 0 28px rgba(124,92,255,.55))}
+.ob-welcome{margin:0 0 6px;text-align:center;font-weight:700;font-size:15px;color:#c9b6ff}
+
+/* ---------- AI pill and journal/paper bits pick up the brand ---------- */
+.ai-pill .ai-spark{color:var(--signal)}
+.jc-pill{background:var(--grad-soft)}
+.ready-ready{background:color-mix(in srgb,var(--signal) 16%,transparent)}
+
+/* ---------- FAB (projects, phones only) ---------- */
+.fab{display:none}
+
+/* ---------- phones: floating glass bottom bar like the mockup ---------- */
+@media (max-width:899px){
+  .topbar{background:color-mix(in srgb,var(--bg) 72%,transparent);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}
+  .bottom-nav{left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));border-radius:22px;background:var(--glass-strong);border:1px solid var(--glass-border);box-shadow:var(--shadow-lg);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);padding:6px 4px}
+  .bottom-nav button{border-radius:16px;gap:2px}
+  .bottom-nav button .ic{width:36px;height:30px;padding:5px 8px;border-radius:12px;box-sizing:border-box;transition:background .2s}
+  .bottom-nav button.active{color:var(--accent-text)}
+  .bottom-nav button.active .ic{background:var(--grad);color:#fff;stroke:#fff;box-shadow:var(--glow)}
+  .main-content{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+  .hero{min-height:150px;padding:20px 18px}
+  .hero-art.robot{width:122px;margin-right:-6px}
+  .hero-sub{max-width:28ch}
+  .hub-list{grid-template-columns:1fr}
+  .fab{display:grid;place-items:center;position:fixed;right:18px;bottom:calc(96px + env(safe-area-inset-bottom));width:56px;height:56px;border:0;border-radius:18px;background:var(--grad);color:#fff;font-size:26px;box-shadow:var(--glow),var(--shadow-lg);z-index:30}
+  #view-projects[hidden] ~ .fab,#view-projects[hidden] .fab{display:none}
+}
+@media (max-width:400px){
+  .hero-art.robot{display:block;width:100px;margin-right:-8px}
+  .hero{gap:6px}
+}
+@media (prefers-reduced-motion: reduce){
+  .rb-body,.rb-eyes,.rb-arm-wave{animation:none}
+}

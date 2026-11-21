@@ -8,7 +8,7 @@
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
   const UI_KEY = 'thestalk_ui_v1';
-  const VIEWS = ['home', 'casual', 'academic', 'proofread', 'papers', 'projects', 'library', 'settings'];
+  const VIEWS = ['home', 'casual', 'hub', 'academic', 'proofread', 'papers', 'projects', 'library', 'settings'];
 
   const ui = Object.assign({ lang: 'ms', theme: 'system', name: '', mode: 'casual', onboarded: false, academicOpen: true, autoSpeak: false, voiceAutoSend: false, ai: 'gemini' }, readUI());
   function readUI() { try { return JSON.parse(localStorage.getItem(UI_KEY) || '{}') || {}; } catch (e) { return {}; } }
@@ -26,6 +26,11 @@
       'set.voiceHelp': 'Tiada suara BM? Di Android: Tetapan → Teks-ke-pertuturan → Enjin Google → pasang Bahasa Melayu.',
       'brand.tag': 'Sembang • Belajar • Menyelidik',
       'nav.dashboard': 'Dashboard', 'nav.home': 'Utama', 'nav.casual': 'Sembang', 'nav.academic': 'Akademik', 'nav.academicUp': 'AKADEMIK',
+      'hub.title': 'Ruang Akademik', 'hub.sub': 'Semua alat akademik di satu tempat.',
+      'hub.thesis': 'Pembantu Tesis', 'hub.thesis.d': 'Tulis bab tesis dengan sokongan AI.', 'hub.research': 'Pembantu Penyelidikan', 'hub.research.d': 'Sembang idea, kemudian tukar kepada tulisan akademik bersitasi.',
+      'hub.papers.d': 'Sembang jadi paper penuh, cari jurnal berindeks, semak sebelum hantar.', 'hub.writing': 'Penulisan Akademik', 'hub.writing.d': 'Tukar idea santai kepada perenggan akademik.',
+      'hub.proof': 'Semakan Bahasa & Gaya', 'hub.proof.d': 'Betulkan tatabahasa dan nada akademik.', 'hub.refs': 'Rujukan & Sitasi', 'hub.refs.d': 'Senarai rujukan tesis, eksport ke Mendeley atau Zotero.',
+      'set.role': 'Peranan (pilihan)', 'set.rolePh': 'cth. Penyelidik PhD, UiTM', 'fab.newPaper': 'Paper baharu', 'ob.welcome': 'Selamat datang ke ThesTalk',
       'nav.papers': 'Jurnal & Paper', 'card.papers': 'Jurnal & Paper', 'card.papers.d': 'Tulis artikel, cari jurnal berindeks dan semak sebelum hantar.',
       'nav.projects': 'Projek Saya', 'nav.projectsShort': 'Projek', 'nav.library': 'Perpustakaan', 'nav.settings': 'Tetapan', 'nav.profile': 'Profil',
       'bk.title': 'Backup & pulih', 'bk.body': 'Semua kerja disimpan dalam pelayar ini sahaja. Simpan fail backup, kemudian pulihkan di telefon atau laptop lain.',
@@ -90,6 +95,11 @@
       'set.voiceHelp': 'No Malay voice? On Android: Settings → Text-to-speech → Google engine → install Malay.',
       'brand.tag': 'Chat • Learn • Research',
       'nav.dashboard': 'Dashboard', 'nav.home': 'Home', 'nav.casual': 'Chat', 'nav.academic': 'Academic', 'nav.academicUp': 'ACADEMIC',
+      'hub.title': 'Academic Workspace', 'hub.sub': 'All your academic tools in one place.',
+      'hub.thesis': 'Thesis Assistant', 'hub.thesis.d': 'Write thesis chapters with AI support.', 'hub.research': 'Research Assistant', 'hub.research.d': 'Chat through ideas, then turn them into cited academic writing.',
+      'hub.papers.d': 'Turn chat into a full paper, find indexed journals, check before submitting.', 'hub.writing': 'Academic Writing', 'hub.writing.d': 'Turn casual ideas into academic paragraphs.',
+      'hub.proof': 'Proofread & Style', 'hub.proof.d': 'Fix grammar and academic tone.', 'hub.refs': 'Citations & References', 'hub.refs.d': 'Your thesis reference list, export to Mendeley or Zotero.',
+      'set.role': 'Role (optional)', 'set.rolePh': 'e.g. PhD researcher, UiTM', 'fab.newPaper': 'New paper', 'ob.welcome': 'Welcome to ThesTalk',
       'nav.papers': 'Journal Papers', 'card.papers': 'Journal Papers', 'card.papers.d': 'Write articles, find indexed journals and check before submitting.',
       'nav.projects': 'My Projects', 'nav.projectsShort': 'Projects', 'nav.library': 'Library', 'nav.settings': 'Settings', 'nav.profile': 'Profile',
       'bk.title': 'Backup & restore', 'bk.body': 'All your work is stored only in this browser. Save a backup file, then restore it on another phone or laptop.',
@@ -203,6 +213,10 @@
     $('#heroTitle').textContent = name ? t('greet.name', { name }) : t('greet');
     $('#heroAlt').textContent = name ? tr(otherLang(ui.lang), 'greet.name', { name }).replace(' 👋', '') : tr(otherLang(ui.lang), 'greet').replace(' 👋', '');
     $('#profileName').value = name;
+    $('#profileRole').value = ui.role || '';
+    $('#profileAvatar').textContent = initials(name || t('default.name'));
+    $('#profileHeroName').textContent = name || t('default.name');
+    $('#profileHeroRole').textContent = ui.role || 'ThesTalk';
   }
 
   /* ---------- navigation ---------- */
@@ -222,7 +236,7 @@
     $$('.side-nav .nav-item[data-go]').forEach(b => b.classList.toggle('active', b.dataset.go === view));
     $('#academicToggle').classList.toggle('active', view === 'academic' || view === 'proofread' || view === 'papers');
     $$('.nav-sub').forEach(b => b.classList.toggle('active', (b.dataset.go === view) && (view !== 'academic' || b.dataset.focus === (focus || lastFocus))));
-    const bottomMap = { academic: 'projects', proofread: 'home', papers: 'projects' };
+    const bottomMap = { academic: 'hub', proofread: 'hub', papers: 'hub', library: 'hub' };
     const bottom = bottomMap[view] || view;
     $$('.bottom-nav button').forEach(b => { const on = b.dataset.go === bottom; b.classList.toggle('active', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     if (view === 'academic') applyFocus(focus);
@@ -636,6 +650,8 @@
     m.limit = setTimeout(() => { if (mic === m) stopMic(); }, MAX_MS);
     micStatus();
   }
+  $('#askMic').addEventListener('click', () => toggleMic($('#askMic'), $('#askAct'), $('#askInput'), null));
+  $('#fabNewPaper').addEventListener('click', () => { go('papers'); setTimeout(() => window.ThesTalkPapers && window.ThesTalkPapers.newPaper(), 0); });
   const toggleCasualMic = () => toggleMic($('#casualMic'), $('#casualActivity'), $('#casualInput'), afterVoice);
   $('#casualMic').addEventListener('click', toggleCasualMic);
   $('#voiceBtn').onclick = () => toggleMic($('#voiceBtn'), $('#chatActivity'), $('#chatInput'),
@@ -666,7 +682,7 @@
   /* ---------- settings ---------- */
   $('#profileForm').addEventListener('submit', e => {
     e.preventDefault();
-    ui.name = $('#profileName').value.trim().slice(0, 60); saveUI();
+    ui.name = $('#profileName').value.trim().slice(0, 60); ui.role = $('#profileRole').value.trim().slice(0, 80); saveUI();
     renderIdentity(); renderCasual(); App.toast(t('set.saved'));
   });
   $$('[data-lang]').forEach(b => b.addEventListener('click', () => { ui.lang = b.dataset.lang === 'en' ? 'en' : 'ms'; saveUI(); applyI18n(); }));
@@ -788,6 +804,7 @@
   let obLang = ui.lang, obMode = ui.mode;
   function renderOnboarding() {
     const o = otherLang(obLang);
+    $('#obWelcome').textContent = tr(obLang, 'ob.welcome');
     $('#obTitle1').textContent = tr(obLang, 'ob.lang'); $$('.ob-alt')[0].textContent = tr(o, 'ob.lang');
     $('#obNameLabel').textContent = tr(obLang, 'ob.name'); $('#obName').placeholder = tr(obLang, 'ob.namePh');
     $('#obNext').textContent = tr(obLang, 'ob.next');

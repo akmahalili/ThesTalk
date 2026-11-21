@@ -847,12 +847,12 @@
     const box = $('#papersCard');
     if (!box) return;
     const list = store().papers;
-    box.replaceChildren(
+    box.replaceChildren(...[
       h('div', { class: 'pd-top' }, h('span', { class: 'pd-icon' }, '📄'), h('div', {}, h('h2', { text: t('projTitle') }), h('p', { class: 'muted', text: list.length ? '' : t('projEmpty') }))),
       list.length ? h('ul', { class: 'pd-chapters paper-proj-list' }, list.map(p => h('li', {},
         h('button', { type: 'button', class: 'btn-reset text-action', onclick: () => { openPaper(p.id); shell().go('papers'); }, text: p.title.trim() || t('untitled') }),
         h('span', { class: 'w', text: fmt(stats(p).words) + ' · ' + (p.target ? p.target.name : '—') })))) : null,
-      h('div', { class: 'pd-actions' }, h('button', { type: 'button', class: 'btn btn-outline', onclick: () => { shell().go('papers'); setTimeout(newPaper, 0); } }, '＋ ', t('new'))));
+      h('div', { class: 'pd-actions' }, h('button', { type: 'button', class: 'btn btn-outline', onclick: () => { shell().go('papers'); setTimeout(newPaper, 0); } }, '＋ ', t('new')))].filter(Boolean));
   }
 
   window.ThesTalkPapers = { render, renderProjectsCard, newPaper, _test: { unknownCitations, sectionPrompt } };
