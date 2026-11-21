@@ -61,6 +61,8 @@
       'qc.refs': 'Sekurang-kurangnya 40 rujukan (panduan umum Q1–Q2)', 'qc.refsBad': '{n} rujukan (panduan umum: 40 atau lebih)',
       'qc.recent': 'Separuh rujukan dari 5 tahun terkini', 'qc.recentBad': '{p}% rujukan dari 5 tahun terkini (sasaran ≥ 50%)',
       'qc.target': 'Jurnal sasaran dipilih', 'qc.targetBad': 'Belum pilih jurnal sasaran',
+      iImport: 'Import DOCX', iDone: 'Diimport "{t}": {s} bahagian dikenal pasti, {w} perkataan, {r} rujukan.', iNone: 'Tiada tajuk bahagian dikenal pasti, jadi semua teks dimasukkan ke Pengenalan. Pindahkan ke bahagian yang betul.', iSkipped: ' {n} baris hadapan (nama penulis, afiliasi) tidak dimasukkan.',
+      'ie.old-doc': 'Fail .doc lama tidak disokong. Buka dalam Word dan Simpan Sebagai .docx.', 'ie.not-docx': 'Ini bukan fail Word .docx.', 'ie.too-large': 'Fail terlalu besar (had 25 MB).', 'ie.empty': 'Tiada teks ditemui dalam dokumen ini.', 'ie.old-browser': 'Pelayar ini terlalu lama untuk import. Kemas kini Chrome atau Safari.',
       tabChat: 'Sembang', cGreet: 'Ceritakan idea kajian anda secara santai, satu demi satu. Saya letak setiap ayat di bahagian paper yang sesuai, tukar jadi ayat akademik, dan tanya soalan untuk lengkapkan paper. Bila cukup, tekan Susun jadi paper penuh.',
       cPh: 'Taip atau cakap idea anda…', cSend: 'Hantar', cSorting: 'Menyusun…', cMove: 'Pindah ke bahagian', cUnsorted: 'Belum disusun.', cRetry: 'Susun semula', cOutline: 'Rangka paper', 'sec.other': 'Lain-lain',
       cGen: 'Susun jadi paper penuh', cEmptyWrite: 'Belum ada draf. Sembang dulu, Talkademic susun jadi paper.', cOpenChat: 'Buka Sembang',
@@ -135,6 +137,8 @@
       'qc.refs': 'At least 40 references (general Q1–Q2 guide)', 'qc.refsBad': '{n} references (general guide: 40 or more)',
       'qc.recent': 'Half of references from the last 5 years', 'qc.recentBad': '{p}% of references from the last 5 years (aim for ≥ 50%)',
       'qc.target': 'Target journal chosen', 'qc.targetBad': 'No target journal yet',
+      iImport: 'Import DOCX', iDone: 'Imported "{t}": {s} sections recognised, {w} words, {r} references.', iNone: 'No section headings were recognised, so all text went into the Introduction. Move it to the right sections.', iSkipped: ' {n} front-matter lines (authors, affiliations) were left out.',
+      'ie.old-doc': 'Old .doc files are not supported. Open it in Word and Save As .docx.', 'ie.not-docx': 'This is not a Word .docx file.', 'ie.too-large': 'The file is too large (25 MB limit).', 'ie.empty': 'No text was found in this document.', 'ie.old-browser': 'This browser is too old to import. Update Chrome or Safari.',
       tabChat: 'Chat', cGreet: 'Tell me about your research casually, one idea at a time. I put each one in the right part of the paper, rewrite it academically, and ask questions to complete the paper. When you have enough, tap Build the full paper.',
       cPh: 'Type or speak your idea…', cSend: 'Send', cSorting: 'Sorting…', cMove: 'Move to section', cUnsorted: 'Not sorted yet.', cRetry: 'Sort again', cOutline: 'Paper outline', 'sec.other': 'Other',
       cGen: 'Build the full paper', cEmptyWrite: 'No draft yet. Chat first and Talkademic builds the paper.', cOpenChat: 'Open Chat',
@@ -251,14 +255,14 @@
     return h('div', { class: 'card paper-empty' },
       h('span', { class: 'pd-icon' }, '📄'),
       h('h2', { text: t('empty') }), h('p', { class: 'muted', text: t('emptyBody') }),
-      h('button', { type: 'button', class: 'btn btn-primary', onclick: newPaper }, '＋ ', t('start')));
+      h('div', { class: 'tool-row' }, h('button', { type: 'button', class: 'btn btn-primary', onclick: newPaper }, '＋ ', t('start')), importButton()));
   }
 
   function picker(p) {
     const sel = h('select', { id: 'paperSelect', 'aria-label': t('pick'), onchange: e => { openPaper(e.target.value); render(); } },
       store().papers.map(x => h('option', { value: x.id, text: x.title.trim() || t('untitled') })));
     sel.value = p.id;
-    return h('div', { class: 'paper-picker' }, sel, h('button', { type: 'button', class: 'btn btn-outline', onclick: newPaper }, '＋ ', t('new')));
+    return h('div', { class: 'paper-picker' }, sel, h('button', { type: 'button', class: 'btn btn-outline', onclick: newPaper }, '＋ ', t('new')), importButton());
   }
 
   function targetLine(p) {
@@ -896,6 +900,37 @@
       h('div', { class: 'handoff-row' },
         h('button', { type: 'button', class: 'btn btn-outline app-btn', onclick: () => send('chatgpt') }, h('span', { class: 'ai-dot ai-openai', 'aria-hidden': 'true' }), 'ChatGPT'),
         h('button', { type: 'button', class: 'btn btn-outline app-btn', onclick: () => send('claude') }, h('span', { class: 'ai-dot ai-claude', 'aria-hidden': 'true' }), 'Claude')));
+  }
+
+  /* ---------- Import a Word paper (read on the device) ---------- */
+  function importButton() {
+    const input = h('input', { type: 'file', accept: '.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document', hidden: true,
+      onchange: e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (f) importPaper(f); } });
+    return h('span', { class: 'import-wrap' }, h('button', { type: 'button', class: 'btn btn-outline', onclick: () => input.click() }, '📄 ', t('iImport')), input);
+  }
+  function guessLanguage(text) {
+    const w = String(text).toLowerCase().match(/[a-z]+/g) || [];
+    const ms = w.filter(x => ['dan', 'yang', 'ini', 'dalam', 'kajian', 'untuk', 'dengan', 'adalah', 'kepada', 'oleh'].includes(x)).length;
+    const en = w.filter(x => ['the', 'and', 'of', 'in', 'to', 'is', 'that', 'this', 'with', 'for'].includes(x)).length;
+    return ms > en ? 'Bahasa Melayu' : 'English';
+  }
+  async function importPaper(file) {
+    let parsed;
+    try { parsed = await window.TalkademicDocx.read(file); }
+    catch (e) { App.toast(t('ie.' + (e.code || 'not-docx'))); return; }
+    const m = window.TalkademicDocx.toPaper(parsed);
+    const s = store(), now = new Date().toISOString();
+    const all = Object.values(m.sections).join(' ');
+    const p = { id: App.uid(), title: m.title || String(file.name || '').replace(/\.docx$/i, ''), language: guessLanguage(all), keywords: m.keywords,
+      sections: SECTIONS.map(key => ({ key, content: m.sections[key] || '' })), references: m.references, target: null, journals: null, meta: null, fit: null, notes: [], created: now, updated: now };
+    s.papers.unshift(p); s.activePaper = p.id;
+    view.tab = 'write'; view.cite = null;
+    view.section = SECTIONS.find(k => sectionOf(p, k).content.trim()) || 'introduction';
+    App.save(); render();
+    const filled = SECTIONS.filter(k => sectionOf(p, k).content.trim()).length;
+    App.toast(m.recognised
+      ? t('iDone', { t: p.title.slice(0, 60), s: filled, w: fmt(stats(p).words), r: m.references.length }) + (m.skipped ? t('iSkipped', { n: m.skipped }) : '')
+      : t('iNone'));
   }
 
   /* ---------- "My Projects" card ---------- */

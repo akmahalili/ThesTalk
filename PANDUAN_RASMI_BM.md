@@ -99,3 +99,11 @@ Di bawah setiap bahagian paper (tab Tulis):
 
 Di tab **Semak kesediaan**, butang **Minta penilaian ChatGPT / Claude** menghantar seluruh paper untuk dinilai seperti penilai jurnal.
 
+## Import DOCX (v1.5)
+
+Fail Word dibaca terus di peranti dan tidak dimuat naik ke mana-mana.
+
+- **Paper:** Jurnal & Paper → **📄 Import DOCX**. Satu paper baharu dicipta. Tajuk, Abstrak hingga Kesimpulan, kata kunci dan senarai rujukan dikenal pasti secara automatik, dalam BM atau English, sama ada dokumen guna gaya Heading Word ataupun tajuk bernombor atau huruf besar seperti "1.0 PENGENALAN".
+- **Tesis:** Projek → **📄 Import DOCX**. BAB/CHAPTER menjadi bab, dan 1.1, 1.2 menjadi sub-bahagian. Rujukan dimasukkan ke senarai rujukan tesis. Jika tesis sedia ada akan diganti, app akan bertanya dahulu dan menyimpan salinan untuk dibatalkan.
+- Fail **.doc** lama perlu disimpan semula sebagai **.docx** dalam Word.
+

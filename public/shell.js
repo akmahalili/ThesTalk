@@ -33,6 +33,11 @@
       'set.role': 'Peranan (pilihan)', 'set.rolePh': 'cth. Penyelidik PhD, UiTM', 'fab.newPaper': 'Paper baharu', 'ob.welcome': 'Selamat datang ke Talkademic',
       'nav.papers': 'Jurnal & Paper', 'card.papers': 'Jurnal & Paper', 'card.papers.d': 'Tulis artikel, cari jurnal berindeks dan semak sebelum hantar.',
       'nav.projects': 'Projek Saya', 'nav.projectsShort': 'Projek', 'nav.library': 'Perpustakaan', 'nav.settings': 'Tetapan', 'nav.profile': 'Profil',
+      'proj.import': 'Import DOCX',
+      'imp.thesisConfirm': 'Import tesis daripada Word: {c} bab, {w} perkataan, {r} rujukan.', 'imp.thesisReplace': 'Bab tesis sedia ada akan diganti. Salinan disimpan: boleh batal di Profil → Backup & pulih → Batalkan pemulihan terakhir.',
+      'imp.thesisDone': 'Tesis diimport: {c} bab, {r} rujukan. Semak setiap bab di ruang kerja tesis.',
+      'imp.err.old-doc': 'Fail .doc lama tidak disokong. Buka dalam Word dan Simpan Sebagai .docx.', 'imp.err.not-docx': 'Ini bukan fail Word .docx.', 'imp.err.too-large': 'Fail terlalu besar (had 25 MB).',
+      'imp.err.empty': 'Tiada teks ditemui dalam dokumen ini.', 'imp.err.old-browser': 'Pelayar ini terlalu lama untuk import. Kemas kini Chrome atau Safari.', 'imp.err.storage': 'Storan pelayar penuh, jadi tesis tidak dapat diimport.',
       'bk.title': 'Backup & pulih', 'bk.body': 'Semua kerja disimpan dalam pelayar ini sahaja. Simpan fail backup, kemudian pulihkan di telefon atau laptop lain.',
       'bk.save': 'Simpan backup', 'bk.share': 'Kongsi', 'bk.restore': 'Pulih dari fail', 'bk.undo': '↶ Batalkan pemulihan terakhir', 'bk.note': 'Kod akses AI tidak termasuk dalam backup.',
       'bk.last': 'Backup terakhir: {d}', 'bk.never': 'Belum pernah backup.', 'bk.saved': 'Backup disimpan: {f}', 'bk.shareFail': 'Tidak dapat berkongsi. Guna Simpan backup.',
@@ -102,6 +107,11 @@
       'set.role': 'Role (optional)', 'set.rolePh': 'e.g. PhD researcher, UiTM', 'fab.newPaper': 'New paper', 'ob.welcome': 'Welcome to Talkademic',
       'nav.papers': 'Journal Papers', 'card.papers': 'Journal Papers', 'card.papers.d': 'Write articles, find indexed journals and check before submitting.',
       'nav.projects': 'My Projects', 'nav.projectsShort': 'Projects', 'nav.library': 'Library', 'nav.settings': 'Settings', 'nav.profile': 'Profile',
+      'proj.import': 'Import DOCX',
+      'imp.thesisConfirm': 'Import thesis from Word: {c} chapters, {w} words, {r} references.', 'imp.thesisReplace': 'Your current thesis chapters will be replaced. A copy is kept: undo in Profile → Backup & restore → Undo last restore.',
+      'imp.thesisDone': 'Thesis imported: {c} chapters, {r} references. Review each chapter in the thesis workspace.',
+      'imp.err.old-doc': 'Old .doc files are not supported. Open it in Word and Save As .docx.', 'imp.err.not-docx': 'This is not a Word .docx file.', 'imp.err.too-large': 'The file is too large (25 MB limit).',
+      'imp.err.empty': 'No text was found in this document.', 'imp.err.old-browser': 'This browser is too old to import. Update Chrome or Safari.', 'imp.err.storage': 'Browser storage is full, so the thesis could not be imported.',
       'bk.title': 'Backup & restore', 'bk.body': 'All your work is stored only in this browser. Save a backup file, then restore it on another phone or laptop.',
       'bk.save': 'Save backup', 'bk.share': 'Share', 'bk.restore': 'Restore from file', 'bk.undo': '↶ Undo last restore', 'bk.note': 'The AI access code is not included in backups.',
       'bk.last': 'Last backup: {d}', 'bk.never': 'No backup yet.', 'bk.saved': 'Backup saved: {f}', 'bk.shareFail': 'Could not share. Use Save backup instead.',
@@ -931,6 +941,37 @@
   $('#backupUndo').addEventListener('click', undoRestore);
   // An undo copy doubles storage use, so it is dropped after 7 days.
   (() => { const u = readUndo(); if (!u || Date.now() - new Date(u.at).getTime() > 7 * DAY) localStorage.removeItem(UNDO_KEY); })();
+
+  /* ---------- import a Word thesis (read on the device) ---------- */
+  async function importThesis(file) {
+    let parsed;
+    try { parsed = await window.TalkademicDocx.read(file); }
+    catch (e) { App.toast(t('imp.err.' + (e.code || 'not-docx'))); return; }
+    const m = window.TalkademicDocx.toThesis(parsed);
+    if (!m.chapters.length) { App.toast(t('imp.err.empty')); return; }
+    const s = App.state(), n = totals();
+    const w = m.chapters.reduce((a, c) => a + c.sections.reduce((b, x) => b + (String(x.content).match(/\S+/g) || []).length, 0), 0);
+    let msg = t('imp.thesisConfirm').replace('{c}', fmt(m.chapters.length)).replace('{w}', fmt(w)).replace('{r}', fmt(m.references.length));
+    if (n.words) msg += '\n\n' + t('imp.thesisReplace');
+    if (!confirm(msg)) return;
+    App.persist();
+    try { localStorage.setItem(UNDO_KEY, JSON.stringify({ at: new Date().toISOString(), workspace: s, ui: Object.assign({}, ui), preferences: readPrefs() })); } catch (e) { localStorage.removeItem(UNDO_KEY); }
+    const known = new Set((s.references || []).map(r => String(r.apa || '').toLowerCase()));
+    const refs = (s.references || []).slice();
+    for (const r of m.references) {
+      const k = r.apa.toLowerCase();
+      if (known.has(k)) continue;
+      known.add(k);
+      refs.push({ apa: r.apa, doi: r.doi || '', url: r.url || '', title: r.title || '', year: r.year || '', authors: r.authors || [], venue: '', volume: '', issue: '', pages: '', type: 'import', addedAt: new Date().toISOString().slice(0, 10) });
+    }
+    const next = Object.assign({}, s, { chapters: m.chapters, references: refs, activeChapter: m.chapters[0].id, activeSection: m.chapters[0].sections[0].id });
+    if (m.title && !String(s.project && s.project.title || '').trim()) next.project = Object.assign({}, s.project, { title: m.title.slice(0, 300) });
+    if (!BK.validWorkspace(next) || !App.replaceState(next)) { App.toast(t('imp.err.storage')); return; }
+    refresh();
+    App.toast(t('imp.thesisDone').replace('{c}', fmt(m.chapters.length)).replace('{r}', fmt(m.references.length)));
+  }
+  $('#importThesis').addEventListener('click', () => $('#thesisDocx').click());
+  $('#thesisDocx').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (f) importThesis(f); });
 
   /* ---------- refresh hook used by app.js ---------- */
   let refreshTimer = null;

@@ -25,6 +25,14 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 
 Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. Talkademic then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.5-flash-lite`, moving to `gemini-3.1-flash-lite` when a model is busy, missing or over its limit (set `GEMINI_MODEL` to try another model first). On the free tier the Flash-Lite models allow about 500 requests a day each, while Gemini Flash allows only about 20, which is why Flash-Lite is the default. Each conversion with references uses two requests. The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. Voice transcription also runs on Gemini (the browser recording is sent as-is), so the mic works for free; without any AI key the app falls back to the browser's speech recognition. The access code is remembered on the device after a successful unlock.
 
+## Import from Word (v1.5)
+
+`public/docximport.js` reads a `.docx` entirely on the device (nothing is uploaded): the zip is unpacked with the browser's `DecompressionStream`, `word/document.xml` and `word/styles.xml` are parsed, and headings come from Word heading styles in any language (style names or outline levels) or, in files without styles, from short numbered (`1.0`, `2.1`), BAB/CHAPTER, ALL-CAPS or all-bold lines. Tables of contents, acknowledgements and appendices are skipped.
+
+- **Jurnal & Paper → Import DOCX** creates a new paper: Abstract … Conclusion are recognised from English or Malay headings, sub-headings such as "3.2 Data analysis" stay inside their section, `Keywords:` / `Kata kunci:` and the reference list are picked up, author and affiliation lines are left out, and the paper language is detected.
+- **Projects → Import DOCX** imports a thesis: level-1 headings (BAB 1, CHAPTER 2…) become chapters and level-2 headings (1.1, 1.2…) become sections; references are merged into the thesis reference list. It asks before replacing existing chapters and keeps an undo copy (Profile → Backup & restore → Undo last restore).
+- Old `.doc` files get a clear message to save as `.docx` first.
+
 ## Chat-first papers (v1.4)
 
 A paper now opens on **Chat**. Each casual remark (typed or spoken) goes to `POST /api/draft` mode `sort`, which returns the section it belongs to, the element it covers (for example *masalah kajian*), a formal academic sentence, and one follow-up question aimed at the parts of the paper that are still empty. An outline row counts ideas per section, and any bubble can be moved to another section. **Build the full paper** sends the tagged remarks with their formal sentences to the plan step, so concrete details (such as "300 buyers from Shopee and Lazada") survive into the Methodology. Section prompts ask for a set number of paragraphs and keep every detail the researcher gave.

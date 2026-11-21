@@ -339,6 +339,8 @@
             <button id="pdOpen" type="button" class="btn btn-primary" data-go="academic" data-focus="thesis"><span data-i18n="proj.open">Buka ruang kerja tesis</span></button>
             <button id="pdEdit" type="button" class="btn btn-outline" data-i18n="proj.edit">Edit profil tesis</button>
             <button id="pdExport" type="button" class="btn btn-outline">↓ <span data-i18n="export">Eksport DOCX</span></button>
+            <button id="importThesis" type="button" class="btn btn-outline">📄 <span data-i18n="proj.import">Import DOCX</span></button>
+            <input type="file" id="thesisDocx" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
             <button id="newProject" type="button" class="btn btn-outline btn-danger">＋ <span data-i18n="proj.new">Projek baharu</span></button>
           </div>
         </div>
@@ -459,6 +461,7 @@
   <script src="./app.js"></script>
   <script src="./refexport.js"></script>
   <script src="./backup.js"></script>
+  <script src="./docximport.js"></script>
   <script src="./papers.js"></script>
   <script src="./shell.js"></script>
 </body>
