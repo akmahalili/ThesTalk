@@ -830,3 +830,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .uf-margins{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .uf-margins input{min-width:0}
 .uf-order{margin:0 0 14px;font-size:13.5px;line-height:1.6;color:var(--text)}
+/* v3.2.1 the academic draft panel comes on screen after "Convert to academic" */
+#conversionPanel,#conversionResult{scroll-margin-top:118px}
+.conversion-panel.flash{animation:draftFlash 1.6s ease-out 1}
+@keyframes draftFlash{0%{box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 55%,transparent)}100%{box-shadow:0 0 0 0 transparent}}
+@media (prefers-reduced-motion:reduce){.conversion-panel.flash{animation:none;outline:2px solid var(--primary);outline-offset:2px}}
+.insert-target{margin:0 0 8px;font-weight:600;font-size:13px;color:var(--text-2);overflow-wrap:anywhere}
