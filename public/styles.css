@@ -488,3 +488,16 @@ small{font-size:.78em}
   .view,.voice-btn.recording{animation:none}
   .mode-card,.tile{transition:none}
 }
+
+/* v0.6 — voice, read aloud, export */
+.heading-actions{display:inline-flex;align-items:center;gap:12px}
+.speak-btn.speaking{color:var(--danger)}
+.btn.speak-btn.speaking{border-color:var(--danger)}
+.msg-speak{border:0;background:none;color:var(--muted);font-size:12px;padding:3px 4px;border-radius:8px}
+.msg-speak:hover{color:var(--accent-text);background:var(--surface-3)}
+.msg-speak.speaking{color:var(--danger)}
+.casual-panel .compose-left{gap:8px}
+.export-row{display:grid;gap:8px;margin-top:16px;padding-top:14px;border-top:1px dashed var(--border-strong)}
+.small-note{font-size:11.5px;margin:0}
+.switch-row{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--text-2);cursor:pointer}
+.switch-row input{accent-color:var(--primary);width:17px;height:17px;margin:0}

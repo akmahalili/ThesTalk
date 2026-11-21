@@ -10,13 +10,20 @@
   const UI_KEY = 'thestalk_ui_v1';
   const VIEWS = ['home', 'casual', 'academic', 'proofread', 'projects', 'library', 'settings'];
 
-  const ui = Object.assign({ lang: 'ms', theme: 'system', name: '', mode: 'casual', onboarded: false, academicOpen: true }, readUI());
+  const ui = Object.assign({ lang: 'ms', theme: 'system', name: '', mode: 'casual', onboarded: false, academicOpen: true, autoSpeak: false, voiceAutoSend: false }, readUI());
   function readUI() { try { return JSON.parse(localStorage.getItem(UI_KEY) || '{}') || {}; } catch (e) { return {}; } }
   function saveUI() { try { localStorage.setItem(UI_KEY, JSON.stringify(ui)); } catch (e) { /* storage unavailable */ } }
 
   /* ---------- text ---------- */
   const T = {
     ms: {
+      'voice.speak': 'Cakap untuk menaip', 'voice.listening': '🎙 Sedang mendengar… tekan lagi untuk berhenti', 'voice.transcribing': '🎙 Menukar suara kepada teks…',
+      'voice.unsupported': 'Pelayar ini tidak menyokong input suara. Cuba Chrome.', 'voice.denied': 'Akses mikrofon ditolak. Benarkan mikrofon dalam tetapan pelayar.',
+      'tts.listen': 'Dengar', 'tts.listenShort': 'Dengar', 'tts.unsupported': 'Pelayar ini tidak boleh membaca teks dengan suara.', 'tts.empty': 'Tiada teks untuk dibaca.',
+      'tts.sample': 'Hai! Ini suara ThesTalk. Saya boleh bacakan jawapan dan draf tesis anda.', 'tts.hasMs': 'Suara Bahasa Melayu tersedia ✓', 'tts.noMs': 'Suara Bahasa Melayu tidak dijumpai pada peranti ini.',
+      'lib.exportLabel': 'Eksport ke Mendeley / Zotero / EndNote', 'lib.exportHelp': 'Di Mendeley atau Zotero, pilih Import dan pilih fail ini.', 'lib.exportEmpty': 'Belum ada rujukan untuk dieksport.', 'lib.exported': 'Fail {file} dimuat turun.',
+      'set.voice': 'Suara', 'set.autoSpeak': 'Baca jawapan AI secara automatik', 'set.voiceSend': 'Hantar terus selepas saya bercakap (Sembang Santai)', 'set.testVoice': 'Uji suara',
+      'set.voiceHelp': 'Tiada suara BM? Di Android: Tetapan → Teks-ke-pertuturan → Enjin Google → pasang Bahasa Melayu.',
       'brand.tag': 'Sembang • Belajar • Menyelidik',
       'nav.dashboard': 'Dashboard', 'nav.home': 'Utama', 'nav.casual': 'Sembang', 'nav.academic': 'Akademik', 'nav.academicUp': 'AKADEMIK',
       'nav.projects': 'Projek Saya', 'nav.projectsShort': 'Projek', 'nav.library': 'Perpustakaan', 'nav.settings': 'Tetapan', 'nav.profile': 'Profil',
@@ -61,6 +68,13 @@
       'ob.casualT': 'Mod Sembang', 'ob.casualD': 'Sembang santai, idea, inspirasi dan kehidupan harian.', 'ob.acadT': 'Mod Akademik', 'ob.acadD': 'Penyelidikan, tesis, penulisan dan pembelajaran.', 'ob.start': 'Mula'
     },
     en: {
+      'voice.speak': 'Speak to type', 'voice.listening': '🎙 Listening… tap again to stop', 'voice.transcribing': '🎙 Turning speech into text…',
+      'voice.unsupported': 'This browser does not support voice input. Try Chrome.', 'voice.denied': 'Microphone access was blocked. Allow the microphone in your browser settings.',
+      'tts.listen': 'Listen', 'tts.listenShort': 'Listen', 'tts.unsupported': 'This browser cannot read text aloud.', 'tts.empty': 'Nothing to read yet.',
+      'tts.sample': 'Hi! This is the ThesTalk voice. I can read your answers and thesis drafts aloud.', 'tts.hasMs': 'Malay voice available ✓', 'tts.noMs': 'No Malay voice found on this device.',
+      'lib.exportLabel': 'Export to Mendeley / Zotero / EndNote', 'lib.exportHelp': 'In Mendeley or Zotero, choose Import and pick this file.', 'lib.exportEmpty': 'No references to export yet.', 'lib.exported': '{file} downloaded.',
+      'set.voice': 'Voice', 'set.autoSpeak': 'Read AI replies aloud automatically', 'set.voiceSend': 'Send right after I finish speaking (Casual Chat)', 'set.testVoice': 'Test voice',
+      'set.voiceHelp': 'No Malay voice? On Android: Settings → Text-to-speech → Google engine → install Malay.',
       'brand.tag': 'Chat • Learn • Research',
       'nav.dashboard': 'Dashboard', 'nav.home': 'Home', 'nav.casual': 'Chat', 'nav.academic': 'Academic', 'nav.academicUp': 'ACADEMIC',
       'nav.projects': 'My Projects', 'nav.projectsShort': 'Projects', 'nav.library': 'Library', 'nav.settings': 'Settings', 'nav.profile': 'Profile',
@@ -314,7 +328,9 @@
     const col = document.createElement('div'); col.className = 'msg-column';
     const b = document.createElement('div'); b.className = 'message ' + (m.role === 'user' ? 'user-msg' : 'assistant-msg'); b.textContent = m.text;
     const time = document.createElement('div'); time.className = 'message-time'; time.textContent = m.at ? new Date(m.at).toLocaleTimeString(locale(), { hour: '2-digit', minute: '2-digit' }) : 'THESTALK';
-    col.append(b, time); row.append(av, col);
+    col.append(b);
+    if (m.role !== 'user') { const sp = document.createElement('button'); sp.type = 'button'; sp.className = 'msg-speak'; sp.textContent = '🔊'; sp.setAttribute('aria-label', t('tts.listen')); sp.onclick = () => Speech.speak(m.text, sp); col.append(sp); }
+    col.append(time); row.append(av, col);
     return row;
   }
   function renderCasual() {
@@ -342,7 +358,7 @@
       const data = await App.apiPost('/api/chat', { message: val, history, mode: 'casual' });
       if (!data.reply) throw Error('AI did not return a reply.');
       const st = App.state();
-      if (st.casualMessages && st.casualMessages.includes(msg)) { st.casualMessages.push({ id: App.uid(), role: 'assistant', text: data.reply, at: App.date() }); renderCasual(); App.save(); }
+      if (st.casualMessages && st.casualMessages.includes(msg)) { st.casualMessages.push({ id: App.uid(), role: 'assistant', text: data.reply, at: App.date() }); renderCasual(); App.save(); if (ui.autoSpeak) { const btns = $$('#casualMessages .msg-speak'); Speech.speak(data.reply, btns[btns.length - 1]); } }
     } catch (e) { App.toast(e.message || t('casual.noai')); }
     finally { casualBusy = false; $('#casualSend').disabled = false; $('#casualActivity').textContent = ''; }
   }
@@ -392,6 +408,172 @@
     if (!confirm(t('proof.confirm', { section }))) return;
     if (App.insertText(text)) App.toast(t('proof.inserted', { section }));
   });
+
+
+  /* ---------- read aloud (browser speech synthesis, free) ---------- */
+  const Speech = (() => {
+    const synth = window.speechSynthesis;
+    let current = null;
+    const MS_WORDS = new Set(['yang', 'dan', 'untuk', 'ini', 'dengan', 'tidak', 'adalah', 'saya', 'kepada', 'dalam', 'itu', 'boleh', 'akan', 'pada', 'oleh', 'kajian', 'pengguna', 'juga', 'lebih', 'atau', 'anda', 'kita', 'ada', 'dari', 'daripada', 'sebagai', 'bagi', 'ialah', 'mereka', 'secara', 'telah', 'tersebut', 'serta', 'apabila', 'kerana', 'sebab']);
+    function detectLang(text) {
+      const words = String(text).toLowerCase().match(/[a-z]+/g) || [];
+      if (!words.length) return ui.lang === 'en' ? 'en' : 'ms';
+      const hits = words.filter(w => MS_WORDS.has(w)).length;
+      return hits / words.length > 0.06 ? 'ms' : 'en';
+    }
+    function pickVoice(lang) {
+      if (!synth) return null;
+      const voices = synth.getVoices() || [];
+      const prefs = lang === 'ms' ? ['ms-my', 'ms', 'id-id', 'id'] : ['en-gb', 'en-us', 'en'];
+      for (const p of prefs) { const v = voices.find(x => String(x.lang || '').replace('_', '-').toLowerCase().startsWith(p)); if (v) return v; }
+      return null;
+    }
+    function chunks(text) {
+      const out = [];
+      String(text).split(/(?<=[.!?。])\s+|\n+/).forEach(sentence => {
+        let s = sentence.trim();
+        while (s.length > 220) { let cut = s.lastIndexOf(',', 220); if (cut < 80) cut = s.lastIndexOf(' ', 220); if (cut < 40) cut = 220; out.push(s.slice(0, cut + 1)); s = s.slice(cut + 1).trim(); }
+        if (s) out.push(s);
+      });
+      return out;
+    }
+    function stop() { if (synth) synth.cancel(); if (current && current.btn) current.btn.classList.remove('speaking'); current = null; }
+    function speak(text, btn) {
+      if (!synth || typeof SpeechSynthesisUtterance === 'undefined') { App.toast(t('tts.unsupported')); return; }
+      if (current && btn && current.btn === btn) { stop(); return; }
+      stop();
+      const raw = String(text || '').trim();
+      if (!raw) { App.toast(t('tts.empty')); return; }
+      const lang = detectLang(raw);
+      const clean = raw.replace(/\[SOURCE NEEDED\]/gi, lang === 'ms' ? '(sumber diperlukan)' : '(source needed)').replace(/https?:\/\/\S+/g, '').replace(/[*#_`>]/g, '');
+      const voice = pickVoice(lang);
+      const parts = chunks(clean);
+      const me = { btn };
+      current = me;
+      if (btn) btn.classList.add('speaking');
+      parts.forEach((part, i) => {
+        const u = new SpeechSynthesisUtterance(part);
+        if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = lang === 'ms' ? 'ms-MY' : 'en-GB';
+        u.rate = 1;
+        if (i === parts.length - 1) u.onend = u.onerror = () => { if (current === me) stop(); };
+        synth.speak(u);
+      });
+    }
+    const hasMalay = () => !!(synth && (synth.getVoices() || []).some(v => /^(ms|id)/i.test(String(v.lang || ''))));
+    return { speak, stop, hasMalay, supported: !!synth };
+  })();
+  function renderVoiceInfo() {
+    const el = $('#voiceInfo'); if (!el) return;
+    el.textContent = !Speech.supported ? t('tts.unsupported') : Speech.hasMalay() ? t('tts.hasMs') : t('tts.noMs');
+  }
+  if (window.speechSynthesis) window.speechSynthesis.addEventListener('voiceschanged', renderVoiceInfo);
+  $('#speakDraft').addEventListener('click', e => Speech.speak($('#academicOutput').value, e.currentTarget));
+  $('#speakSection').addEventListener('click', e => Speech.speak($('#sectionEditor').value, e.currentTarget));
+  $('#proofSpeak').addEventListener('click', e => Speech.speak($('#proofOutput').value, e.currentTarget));
+  $('#testVoice').addEventListener('click', e => Speech.speak(t('tts.sample'), e.currentTarget));
+  $('#autoSpeak').addEventListener('change', e => { ui.autoSpeak = e.target.checked; saveUI(); });
+  $('#voiceAutoSend').addEventListener('change', e => { ui.voiceAutoSend = e.target.checked; saveUI(); });
+
+  /* 🔊 on academic chat replies (rendered by app.js), plus auto-read of new replies */
+  const assistantCount = () => (App.state().messages || []).filter(m => m.role === 'assistant').length;
+  let seenAssistant = assistantCount();
+  function decorateAcademic() {
+    $$('#messages .message-row:not(.user)').forEach(row => {
+      const msg = row.querySelector('.message');
+      if (!msg || row.querySelector('.msg-speak')) return;
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'msg-speak'; b.textContent = '🔊'; b.setAttribute('aria-label', t('tts.listen'));
+      b.onclick = () => Speech.speak(msg.textContent, b);
+      msg.insertAdjacentElement('afterend', b);
+    });
+    const n = assistantCount();
+    if (n > seenAssistant && ui.autoSpeak) {
+      const list = (App.state().messages || []).filter(m => m.role === 'assistant');
+      const btns = $$('#messages .message-row:not(.user) .msg-speak');
+      Speech.speak(list[list.length - 1].text, btns[btns.length - 1]);
+    }
+    seenAssistant = n;
+  }
+  new MutationObserver(decorateAcademic).observe($('#messages'), { childList: true });
+  decorateAcademic();
+
+  /* ---------- mic in Casual Chat (Gemini/OpenAI transcription, browser fallback) ---------- */
+  let recorder = null, recStream = null, recChunks = [], browserRec = null;
+  function appendText(box, text) {
+    const v = String(text || '').trim(); if (!v) return;
+    box.value = (box.value.trim() ? box.value.trim() + ' ' : '') + v;
+    box.focus();
+  }
+  async function transcribeBlob(blob, type) {
+    const r = await fetch('/api/transcribe', { method: 'POST', headers: { 'Content-Type': type, 'X-ThesTalk-Access': App.accessCode() }, body: blob });
+    let d = {}; try { d = await r.json(); } catch (e) { /* ignore */ }
+    if (!r.ok) throw Error(d.error || 'Transcription failed.');
+    return d.transcript || '';
+  }
+  function afterVoice() { if (ui.voiceAutoSend && $('#casualInput').value.trim()) sendCasual($('#casualInput').value); }
+  async function toggleCasualMic() {
+    const btn = $('#casualMic'), act = $('#casualActivity');
+    if (recorder && recorder.state === 'recording') { recorder.stop(); return; }
+    if (browserRec) { browserRec.stop(); return; }
+    Speech.stop();
+    const canAI = App.aiAvailable() && App.transcriptionOn() && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder;
+    if (canAI) {
+      try {
+        recStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'].find(x => MediaRecorder.isTypeSupported(x)) || '';
+        recorder = new MediaRecorder(recStream, mime ? { mimeType: mime } : undefined);
+        recChunks = [];
+        recorder.ondataavailable = e => { if (e.data && e.data.size) recChunks.push(e.data); };
+        recorder.onstop = async () => {
+          recStream.getTracks().forEach(tr => tr.stop());
+          btn.classList.remove('recording');
+          const type = String(recorder.mimeType || 'audio/webm').split(';')[0];
+          const blob = new Blob(recChunks, { type });
+          recorder = null;
+          if (blob.size < 150) { act.textContent = ''; return; }
+          act.textContent = t('voice.transcribing');
+          try { appendText($('#casualInput'), await transcribeBlob(blob, type)); act.textContent = ''; afterVoice(); }
+          catch (e) { act.textContent = ''; App.toast(e.message); }
+        };
+        recorder.start();
+        btn.classList.add('recording'); act.textContent = t('voice.listening');
+        setTimeout(() => { if (recorder && recorder.state === 'recording') recorder.stop(); }, 90000);
+        return;
+      } catch (e) {
+        if (recStream) recStream.getTracks().forEach(tr => tr.stop());
+        recorder = null;
+        if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError')) { App.toast(t('voice.denied')); return; }
+      }
+    }
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { App.toast(t('voice.unsupported')); return; }
+    browserRec = new SR();
+    browserRec.lang = ui.lang === 'en' ? 'en-US' : 'ms-MY';
+    browserRec.interimResults = false;
+    browserRec.onresult = e => appendText($('#casualInput'), Array.from(e.results).map(r => r[0].transcript).join(' '));
+    browserRec.onerror = e => { if (e && e.error === 'not-allowed') App.toast(t('voice.denied')); };
+    browserRec.onend = () => { browserRec = null; btn.classList.remove('recording'); act.textContent = ''; afterVoice(); };
+    try { browserRec.start(); btn.classList.add('recording'); act.textContent = t('voice.listening'); }
+    catch (e) { browserRec = null; App.toast(t('voice.unsupported')); }
+  }
+  $('#casualMic').addEventListener('click', toggleCasualMic);
+
+  /* ---------- reference export (RIS / BibTeX) ---------- */
+  function sortedReferences() { return (App.state().references || []).slice().sort((a, b) => String(a.apa).localeCompare(String(b.apa))); }
+  function download(name, text, mime) {
+    const url = URL.createObjectURL(new Blob([text], { type: mime }));
+    const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  }
+  function exportRefs(kind) {
+    const refs = sortedReferences();
+    if (!refs.length) { App.toast(t('lib.exportEmpty')); return; }
+    const X = window.ThesTalkRefExport;
+    const file = kind === 'ris' ? 'thestalk-references.ris' : 'thestalk-references.bib';
+    download(file, kind === 'ris' ? X.toRIS(refs) : X.toBibTeX(refs), kind === 'ris' ? 'application/x-research-info-systems' : 'application/x-bibtex');
+    App.toast(t('lib.exported', { file }));
+  }
+  $('#exportRIS').addEventListener('click', () => exportRefs('ris'));
+  $('#exportBib').addEventListener('click', () => exportRefs('bib'));
 
   /* ---------- library ---------- */
   function renderLibraryCount() { $('#libCount').textContent = fmt((App.state().references || []).length); }
@@ -506,6 +688,9 @@
   setMode(ui.mode);
   applyI18n();
   onAI(App.aiAvailable());
+  $('#autoSpeak').checked = !!ui.autoSpeak;
+  $('#voiceAutoSend').checked = !!ui.voiceAutoSend;
+  renderVoiceInfo();
   show(location.hash.slice(1) || 'home');
   if (!ui.onboarded) showOnboarding();
 })();

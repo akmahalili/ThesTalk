@@ -21,7 +21,13 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 
 ## Free AI option (Gemini)
 
-Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. ThesTalk then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.8-flash` (override with `GEMINI_MODEL`; it falls back to `gemini-3.5-flash-lite` if the model is not found). The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. AI voice transcription still needs `OPENAI_API_KEY`; without it the app uses the browser's speech recognition. The access code is remembered on the device after a successful unlock.
+Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. ThesTalk then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.5-flash-lite`, moving to `gemini-3.1-flash-lite` when a model is busy, missing or over its limit (set `GEMINI_MODEL` to try another model first). On the free tier the Flash-Lite models allow about 500 requests a day each, while Gemini Flash allows only about 20, which is why Flash-Lite is the default. Each conversion with references uses two requests. The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. Voice transcription also runs on Gemini (the browser recording is sent as-is), so the mic works for free; without any AI key the app falls back to the browser's speech recognition. The access code is remembered on the device after a successful unlock.
+
+## Voice and export (v0.6)
+
+- 🎙 Mic in Casual Chat and the thesis chat: speech is transcribed by Gemini (free) or OpenAI, mixing Bahasa Melayu and English. Optional "send right after I speak" in Settings → Voice.
+- 🔊 Listen buttons on AI replies, the academic draft, the selected thesis section and proofread text, using the phone's built-in voices (Malay or English is picked automatically). Optional auto-read of replies.
+- References library → **↓ RIS** and **↓ BibTeX** downloads for Mendeley, Zotero and EndNote (authors, journal, volume, issue, pages and DOI included for references found from v0.6 onwards).
 
 ## Real references (v0.4)
 

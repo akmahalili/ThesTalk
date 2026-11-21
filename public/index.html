@@ -197,7 +197,7 @@
             <form id="casualForm" class="chat-form">
               <label class="sr-only" for="casualInput" data-i18n="home.askLabel">Tanya apa sahaja</label>
               <textarea id="casualInput" rows="2" maxlength="6000" data-i18n-ph="home.ask" placeholder="Tanya apa sahaja…"></textarea>
-              <div class="compose-actions"><span id="casualActivity" class="chat-activity" role="status" aria-live="polite"></span><button type="submit" class="send-btn" id="casualSend"><span data-i18n="send">Hantar</span> <svg class="ic"><use href="#ic-send"/></svg></button></div>
+              <div class="compose-actions"><div class="compose-left"><button id="casualMic" type="button" class="icon-btn voice-btn" data-i18n-aria="voice.speak" aria-label="Cakap untuk menaip">🎙</button><span id="casualActivity" class="chat-activity" role="status" aria-live="polite"></span></div><button type="submit" class="send-btn" id="casualSend"><span data-i18n="send">Hantar</span> <svg class="ic"><use href="#ic-send"/></svg></button></div>
             </form>
           </div>
         </div>
@@ -237,9 +237,9 @@
               <div class="draft-area" id="draftArea">
                 <div class="draft-top"><label for="sectionEditor" id="sectionTitleLabel">Selected section</label><span id="wordCount">0 words</span></div>
                 <textarea id="sectionEditor" class="section-editor" data-i18n-ph="ws.editorPh" placeholder="Seksyen tesis anda bermula di sini..."></textarea>
-                <div class="editor-footer"><div class="editor-help" data-i18n="ws.autosave">Perubahan disimpan automatik dalam pelayar ini.</div><button class="btn btn-outline btn-mini" id="historyBtn" type="button">↶ <span data-i18n="ws.history">Sejarah</span></button></div>
+                <div class="editor-footer"><div class="editor-help" data-i18n="ws.autosave">Perubahan disimpan automatik dalam pelayar ini.</div><span class="heading-actions"><button class="btn btn-outline btn-mini speak-btn" id="speakSection" type="button">🔊 <span data-i18n="tts.listenShort">Dengar</span></button><button class="btn btn-outline btn-mini" id="historyBtn" type="button">↶ <span data-i18n="ws.history">Sejarah</span></button></span></div>
               </div>
-              <div class="conversion-panel" id="conversionPanel"><div class="conversion-head"><div><div class="eyebrow" data-i18n="ws.assistant">PEMBANTU PENULISAN AKADEMIK</div><h3 data-i18n="ws.convertTitle">Tukar idea anda kepada penulisan penyelidikan</h3></div><span id="aiMode" class="status-chip">Checking AI…</span><button id="unlockAI" class="btn btn-outline btn-mini" type="button">🔐 <span data-i18n="ai.connect">Sambung AI</span></button></div><p class="conversion-helper" data-i18n="ws.convertHelp">Pilih mesej dalam sembang dan tekan Convert. Draf akademik muncul di sini untuk semakan anda. Tiada apa dimasukkan secara automatik.</p><div class="ref-options" id="refOptions"><label><input type="checkbox" id="withRefs"> 📚 <span data-i18n="ws.withRefs">Cari rujukan jurnal sebenar</span></label><label><input type="checkbox" id="recentRefs"> <span data-i18n="ws.recentRefs">2015 ke atas sahaja</span></label><span id="refsHint" class="ref-hint">Searches OpenAlex for real journal papers and cites them in APA. Needs AI connected.</span></div><div id="conversionEmpty" class="conversion-empty"><div class="conversion-graphic">❝ <span>✦</span></div><strong data-i18n="ws.emptyT">Idea seterusnya bermula di sini</strong><span data-i18n="ws.emptyB">Pilih mesej daripada perbualan untuk menghasilkan draf.</span></div><div id="conversionResult" class="conversion-result" hidden><div class="draft-result-heading"><span id="draftModeBadge" class="status-chip">DRAFT</span><button id="copyDraft" type="button" class="btn-reset text-action">⧉ <span data-i18n="copy">Salin</span></button></div><textarea id="academicOutput" aria-label="Academic draft (editable)" rows="8"></textarea><div class="result-notes" id="draftNotes"></div><div id="draftRefs" class="draft-refs" hidden><div class="eyebrow" data-i18n="ws.refsCited">RUJUKAN DIPETIK · OPENALEX</div><ol id="draftRefList"></ol><details id="draftFound" class="draft-found"><summary><span data-i18n="ws.allFound">Semua kajian ditemui</span> (<span id="draftFoundCount">0</span>)</summary><ul id="draftFoundList"></ul></details></div><div class="conversion-buttons"><button id="insertDraft" type="button" class="btn btn-primary"><span data-i18n="ws.insert">Masukkan ke seksyen terpilih</span> ↗</button><button id="regenerateDraft" type="button" class="btn btn-outline" data-i18n="ws.regenerate">Jana semula</button></div></div></div>
+              <div class="conversion-panel" id="conversionPanel"><div class="conversion-head"><div><div class="eyebrow" data-i18n="ws.assistant">PEMBANTU PENULISAN AKADEMIK</div><h3 data-i18n="ws.convertTitle">Tukar idea anda kepada penulisan penyelidikan</h3></div><span id="aiMode" class="status-chip">Checking AI…</span><button id="unlockAI" class="btn btn-outline btn-mini" type="button">🔐 <span data-i18n="ai.connect">Sambung AI</span></button></div><p class="conversion-helper" data-i18n="ws.convertHelp">Pilih mesej dalam sembang dan tekan Convert. Draf akademik muncul di sini untuk semakan anda. Tiada apa dimasukkan secara automatik.</p><div class="ref-options" id="refOptions"><label><input type="checkbox" id="withRefs"> 📚 <span data-i18n="ws.withRefs">Cari rujukan jurnal sebenar</span></label><label><input type="checkbox" id="recentRefs"> <span data-i18n="ws.recentRefs">2015 ke atas sahaja</span></label><span id="refsHint" class="ref-hint">Searches OpenAlex for real journal papers and cites them in APA. Needs AI connected.</span></div><div id="conversionEmpty" class="conversion-empty"><div class="conversion-graphic">❝ <span>✦</span></div><strong data-i18n="ws.emptyT">Idea seterusnya bermula di sini</strong><span data-i18n="ws.emptyB">Pilih mesej daripada perbualan untuk menghasilkan draf.</span></div><div id="conversionResult" class="conversion-result" hidden><div class="draft-result-heading"><span id="draftModeBadge" class="status-chip">DRAFT</span><span class="heading-actions"><button id="speakDraft" type="button" class="btn-reset text-action speak-btn" data-i18n-aria="tts.listen" aria-label="Dengar">🔊 <span data-i18n="tts.listenShort">Dengar</span></button><button id="copyDraft" type="button" class="btn-reset text-action">⧉ <span data-i18n="copy">Salin</span></button></span></div><textarea id="academicOutput" aria-label="Academic draft (editable)" rows="8"></textarea><div class="result-notes" id="draftNotes"></div><div id="draftRefs" class="draft-refs" hidden><div class="eyebrow" data-i18n="ws.refsCited">RUJUKAN DIPETIK · OPENALEX</div><ol id="draftRefList"></ol><details id="draftFound" class="draft-found"><summary><span data-i18n="ws.allFound">Semua kajian ditemui</span> (<span id="draftFoundCount">0</span>)</summary><ul id="draftFoundList"></ul></details></div><div class="conversion-buttons"><button id="insertDraft" type="button" class="btn btn-primary"><span data-i18n="ws.insert">Masukkan ke seksyen terpilih</span> ↗</button><button id="regenerateDraft" type="button" class="btn btn-outline" data-i18n="ws.regenerate">Jana semula</button></div></div></div>
             </div>
           </section>
         </div>
@@ -253,7 +253,7 @@
           <textarea id="proofInput" rows="8" maxlength="6000" data-i18n-ph="proof.ph" placeholder="Tampal perenggan anda di sini…"></textarea>
           <div class="tool-row"><button id="proofBtn" type="button" class="btn btn-primary"><svg class="ic"><use href="#ic-check"/></svg> <span data-i18n="proof.btn">Semak teks</span></button><span id="proofStatus" class="chat-activity" role="status" aria-live="polite"></span></div>
           <div id="proofResult" class="conversion-result" hidden>
-            <div class="draft-result-heading"><span class="status-chip" data-i18n="proof.result">TEKS DISEMAK</span><button id="proofCopy" type="button" class="btn-reset text-action">⧉ <span data-i18n="copy">Salin</span></button></div>
+            <div class="draft-result-heading"><span class="status-chip" data-i18n="proof.result">TEKS DISEMAK</span><span class="heading-actions"><button id="proofSpeak" type="button" class="btn-reset text-action speak-btn">🔊 <span data-i18n="tts.listenShort">Dengar</span></button><button id="proofCopy" type="button" class="btn-reset text-action">⧉ <span data-i18n="copy">Salin</span></button></span></div>
             <textarea id="proofOutput" rows="8" aria-label="Teks disemak"></textarea>
             <p class="result-notes" data-i18n="proof.note">Semak setiap perubahan sebelum guna. Fakta dan sitasi tidak disahkan oleh semakan ini.</p>
             <div class="conversion-buttons"><button id="proofInsert" type="button" class="btn btn-outline" data-i18n="proof.insert">Masukkan ke seksyen tesis terpilih</button></div>
@@ -286,7 +286,7 @@
         <div class="view-head"><div><h1 id="libraryTitle"><span data-k="nav.library">Perpustakaan</span> <small data-k2="nav.library">Library</small></h1><p data-i18n="lib.sub">Rujukan daripada draf yang anda masukkan ke dalam tesis. Ia ditambah sebagai senarai Rujukan di hujung fail DOCX.</p></div><span class="count-pill" id="libCount">0</span></div>
         <div class="card">
           <div id="refsItems" class="history-items lib-items"></div>
-          <div class="modal-actions"><button id="copyRefs" class="btn btn-outline" type="button">⧉ <span data-i18n="lib.copyAll">Salin semua</span></button><button id="libFind" class="btn btn-primary" type="button" data-go="academic" data-focus="writing"><span data-i18n="lib.find">Cari rujukan untuk idea baharu</span></button></div>
+          <div class="export-row"><span class="field-label" data-i18n="lib.exportLabel">Eksport ke Mendeley / Zotero / EndNote</span><div class="tool-row"><button id="exportRIS" class="btn btn-outline" type="button">↓ RIS</button><button id="exportBib" class="btn btn-outline" type="button">↓ BibTeX</button></div><p class="muted small-note" data-i18n="lib.exportHelp">Di Mendeley atau Zotero, pilih Import dan pilih fail ini.</p></div><div class="modal-actions"><button id="copyRefs" class="btn btn-outline" type="button">⧉ <span data-i18n="lib.copyAll">Salin semua</span></button><button id="libFind" class="btn btn-primary" type="button" data-go="academic" data-focus="writing"><span data-i18n="lib.find">Cari rujukan untuk idea baharu</span></button></div>
         </div>
       </section>
 
@@ -309,6 +309,13 @@
             <h2 data-i18n="set.ai">Sambungan AI</h2>
             <p class="muted" data-i18n="set.aiBody">AI memerlukan pemilik aplikasi menetapkan kunci API di pelayan dan anda memasukkan kod akses.</p>
             <div class="tool-row"><span id="aiStatusMirror" class="status-chip local">…</span><button type="button" class="btn btn-outline" id="connectAI2">🔐 <span data-i18n="ai.connect">Sambung AI</span></button></div>
+          </div>
+          <div class="card setting">
+            <h2 data-i18n="set.voice">Suara</h2>
+            <label class="switch-row"><input type="checkbox" id="autoSpeak"> <span data-i18n="set.autoSpeak">Baca jawapan AI secara automatik</span></label>
+            <label class="switch-row"><input type="checkbox" id="voiceAutoSend"> <span data-i18n="set.voiceSend">Hantar terus selepas saya bercakap (Sembang Santai)</span></label>
+            <div class="tool-row"><button type="button" class="btn btn-outline" id="testVoice">🔊 <span data-i18n="set.testVoice">Uji suara</span></button><span id="voiceInfo" class="muted small-note"></span></div>
+            <p class="muted small-note" data-i18n="set.voiceHelp">Tiada suara BM? Di Android: Tetapan → Teks-ke-pertuturan → Enjin Google → pasang Bahasa Melayu.</p>
           </div>
           <div class="card setting">
             <h2 data-i18n="set.thesis">Profil tesis</h2>
@@ -360,6 +367,7 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="./docx.js"></script>
   <script src="./app.js"></script>
+  <script src="./refexport.js"></script>
   <script src="./shell.js"></script>
 </body>
 </html>
