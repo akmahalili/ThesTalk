@@ -108,6 +108,7 @@
           <button class="nav-sub" type="button" data-go="academic" data-focus="writing" data-k="tile.writing">Penulisan</button>
           <button class="nav-sub" type="button" data-go="proofread" data-k="tile.proof">Semak &amp; Gaya</button>
           <button class="nav-sub" type="button" data-go="papers" data-k="nav.papers">Jurnal &amp; Paper</button>
+          <button class="nav-sub" type="button" data-go="matrix" data-k="nav.matrix">Matriks Literatur</button>
           <button class="nav-sub" type="button" data-go="analysis" data-k="tile.data">Analisis Data</button>
         </div>
         <button class="nav-item" type="button" data-go="projects"><svg class="ic"><use href="#ic-folder"/></svg><span class="dual"><span class="l1" data-k="nav.projects">Projek Saya</span><small class="l2" data-k2="nav.projects">My Projects</small></span></button>
@@ -318,6 +319,7 @@
           <button type="button" class="hub-row" data-go="academic" data-focus="thesis"><span class="hub-ic"><svg class="ic"><use href="#ic-thesis"/></svg></span><span class="hub-text"><strong data-k="hub.thesis">Pembantu Tesis</strong><small data-k2="hub.thesis">Thesis Assistant</small><span data-i18n="hub.thesis.d">Tulis bab tesis dengan sokongan AI.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
           <button type="button" class="hub-row" data-go="academic" data-focus="research"><span class="hub-ic"><svg class="ic"><use href="#ic-search"/></svg></span><span class="hub-text"><strong data-k="hub.research">Pembantu Penyelidikan</strong><small data-k2="hub.research">Research Assistant</small><span data-i18n="hub.research.d">Sembang idea, kemudian tukar kepada tulisan akademik bersitasi.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
           <button type="button" class="hub-row" data-go="papers"><span class="hub-ic"><svg class="ic"><use href="#ic-refs"/></svg></span><span class="hub-text"><strong data-k="nav.papers">Jurnal &amp; Paper</strong><small data-k2="nav.papers">Journal Papers</small><span data-i18n="hub.papers.d">Sembang jadi paper penuh, cari jurnal berindeks, semak sebelum hantar.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
+          <button type="button" class="hub-row" data-go="matrix"><span class="hub-ic"><svg class="ic"><use href="#ic-book"/></svg></span><span class="hub-text"><strong data-k="nav.matrix">Matriks Literatur</strong><small data-k2="nav.matrix">Literature Matrix</small><span data-i18n="hub.matrix.d">Masukkan PDF artikel, dapat matriks, fail Excel dan sintesis bersitasi.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
           <button type="button" class="hub-row" data-go="analysis"><span class="hub-ic"><svg class="ic"><use href="#ic-chart"/></svg></span><span class="hub-text"><strong data-k="tile.data">Analisis Data</strong><small data-k2="tile.data">Data Analysis</small><span data-i18n="hub.data.d">Tampal output SmartPLS / SPSS, dapat penerangan dan bahagian Dapatan.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
           <button type="button" class="hub-row" data-go="academic" data-focus="writing"><span class="hub-ic"><svg class="ic"><use href="#ic-pen"/></svg></span><span class="hub-text"><strong data-k="hub.writing">Penulisan Akademik</strong><small data-k2="hub.writing">Academic Writing</small><span data-i18n="hub.writing.d">Tukar idea santai kepada perenggan akademik.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
           <button type="button" class="hub-row" data-go="proofread"><span class="hub-ic"><svg class="ic"><use href="#ic-check"/></svg></span><span class="hub-text"><strong data-k="hub.proof">Semakan Bahasa &amp; Gaya</strong><small data-k2="hub.proof">Proofread &amp; Style</small><span data-i18n="hub.proof.d">Betulkan tatabahasa dan nada akademik.</span></span><svg class="ic hub-chev"><use href="#ic-arrow"/></svg></button>
@@ -328,6 +330,8 @@
       <section class="view" id="view-papers" hidden aria-labelledby="papersTitle"></section>
 
       <section class="view" id="view-analysis" hidden aria-labelledby="analysisTitle"></section>
+
+      <section class="view" id="view-matrix" hidden aria-labelledby="matrixTitle"></section>
 
       <section class="view" id="view-projects" hidden aria-labelledby="projectsTitle">
         <div class="view-head"><div><h1 id="projectsTitle"><span data-k="nav.projects">Projek Saya</span> <small data-k2="nav.projects">My Projects</small></h1><p data-i18n="proj.sub">Satu projek tesis disimpan dalam pelayar ini. Eksport DOCX sebagai sandaran.</p></div></div>
@@ -468,6 +472,7 @@
   <script src="./docximport.js"></script>
   <script src="./papers.js"></script>
   <script src="./analysis.js"></script>
+  <script src="./matrix.js"></script>
   <script src="./shell.js"></script>
 </body>
 </html>

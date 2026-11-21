@@ -117,3 +117,14 @@ Akademik → **Analisis Data**.
 
 Talkademic memberi: penerangan ringkas, semakan ambang (✓ lulus, ✗ tidak lulus, ? semak), jadual keputusan dan bahagian Dapatan gaya APA yang boleh disunting. Sitasi hanya daripada sumber kaedah yang telah disahkan (contohnya Hair et al., 2019; Henseler et al., 2015). Angka diambil terus daripada output; jika tiada, ditanda [NILAI?]. Hasil boleh disalin, dimasukkan ke bahagian Dapatan paper, atau ke bahagian tesis semasa bersama rujukannya.
 
+## Matriks Literatur (v1.8)
+
+Akademik → **Matriks Literatur**.
+
+1. Tulis topik kajian anda (untuk lajur Kaitan) dan pilih bahasa matriks.
+2. Tekan **Tambah PDF** dan pilih satu atau beberapa artikel. Teks dibaca dalam telefon; fail PDF tidak dimuat naik.
+3. Setiap artikel menjadi satu baris: konteks, teori, kaedah, sampel, analisis, dapatan, jurang/limitasi dan kaitan. Rujukan disahkan di OpenAlex ("✓ Disahkan OpenAlex"); jika tidak dijumpai, ditanda "Semak rujukan".
+4. Ketik mana-mana sel untuk menyunting. PDF imbasan (gambar) tiada teks, jadi guna **Tampal teks**.
+5. **Muat turun Excel** untuk fail .xlsx, atau **Tambah semua ke rujukan tesis**.
+6. **Sintesis & cari jurang** memberi tema, jurang kajian dan petikan tinjauan literatur bersitasi APA yang boleh dimasukkan ke tesis atau paper.
+
