@@ -33,6 +33,7 @@
       'set.role': 'Peranan (pilihan)', 'set.rolePh': 'cth. Penyelidik PhD, UiTM', 'fab.newPaper': 'Paper baharu', 'ob.welcome': 'Selamat datang ke Talkademic',
       'nav.papers': 'Jurnal & Paper', 'card.papers': 'Jurnal & Paper', 'card.papers.d': 'Tulis artikel, cari jurnal berindeks dan semak sebelum hantar.',
       'nav.projects': 'Projek Saya', 'nav.projectsShort': 'Projek', 'nav.library': 'Perpustakaan', 'nav.settings': 'Tetapan', 'nav.profile': 'Profil',
+      'del.one': 'Padam', 'del.confirm': 'Padam mesej ini dan balasannya daripada sejarah sembang?', 'del.done': 'Dipadam.', 'del.hide': 'Buang dari senarai', 'recent.clear': 'Kosongkan aktiviti', 'recent.confirmClear': 'Kosongkan semua aktiviti terkini? Ini memadam semua mesej Sembang Santai dan Sembang Akademik. Bab tesis dan paper tidak terjejas.',
       'proj.import': 'Import DOCX',
       'imp.thesisConfirm': 'Import tesis daripada Word: {c} bab, {w} perkataan, {r} rujukan.', 'imp.thesisReplace': 'Bab tesis sedia ada akan diganti. Salinan disimpan: boleh batal di Profil → Backup & pulih → Batalkan pemulihan terakhir.',
       'imp.thesisDone': 'Tesis diimport: {c} bab, {r} rujukan. Semak setiap bab di ruang kerja tesis.',
@@ -107,6 +108,7 @@
       'set.role': 'Role (optional)', 'set.rolePh': 'e.g. PhD researcher, UiTM', 'fab.newPaper': 'New paper', 'ob.welcome': 'Welcome to Talkademic',
       'nav.papers': 'Journal Papers', 'card.papers': 'Journal Papers', 'card.papers.d': 'Write articles, find indexed journals and check before submitting.',
       'nav.projects': 'My Projects', 'nav.projectsShort': 'Projects', 'nav.library': 'Library', 'nav.settings': 'Settings', 'nav.profile': 'Profile',
+      'del.one': 'Delete', 'del.confirm': 'Delete this message and its reply from the chat history?', 'del.done': 'Deleted.', 'del.hide': 'Remove from list', 'recent.clear': 'Clear activity', 'recent.confirmClear': 'Clear all recent activity? This deletes every Casual Chat and Academic Chat message. Thesis chapters and papers are not affected.',
       'proj.import': 'Import DOCX',
       'imp.thesisConfirm': 'Import thesis from Word: {c} chapters, {w} words, {r} references.', 'imp.thesisReplace': 'Your current thesis chapters will be replaced. A copy is kept: undo in Profile → Backup & restore → Undo last restore.',
       'imp.thesisDone': 'Thesis imported: {c} chapters, {r} references. Review each chapter in the thesis workspace.',
@@ -312,16 +314,30 @@
   function recentItems() {
     const s = App.state();
     const items = [];
-    (s.casualMessages || []).filter(m => m.role === 'user').slice(-5).forEach(m => items.push({ kind: 'casual', text: m.text, at: m.at }));
-    (s.messages || []).filter(m => m.role === 'user').slice(-5).forEach(m => items.push({ kind: 'academic', text: m.text, at: m.at }));
-    if (s.conversion && s.conversion.at && s.conversion.isAI) items.push({ kind: 'draft', text: s.conversion.text, at: s.conversion.at });
+    (s.casualMessages || []).filter(m => m.role === 'user').slice(-5).forEach(m => items.push({ kind: 'casual', text: m.text, at: m.at, msg: m, list: 'casualMessages' }));
+    (s.messages || []).filter(m => m.role === 'user').slice(-5).forEach(m => items.push({ kind: 'academic', text: m.text, at: m.at, msg: m, list: 'messages' }));
+    if (s.conversion && s.conversion.at && s.conversion.isAI && !s.conversion.hideRecent) items.push({ kind: 'draft', text: s.conversion.text, at: s.conversion.at });
     return items.sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 4);
   }
   function icon(id) { const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'ic'); const use = document.createElementNS('http://www.w3.org/2000/svg', 'use'); use.setAttribute('href', '#' + id); svg.appendChild(use); return svg; }
+  /* Deleting a user message also removes the assistant reply that follows it. */
+  function deleteMessage(listName, msg, ask = true) {
+    const s = App.state(), arr = s[listName];
+    if (!Array.isArray(arr)) return;
+    const i = arr.indexOf(msg);
+    if (i < 0 || (ask && !confirm(t('del.confirm')))) return;
+    arr.splice(i, arr[i + 1] && arr[i + 1].role === 'assistant' ? 2 : 1);
+    if (listName === 'messages' && s.selectedMessage === msg.id) s.selectedMessage = null;
+    App.save();
+    if (listName === 'messages' && App.render) App.render();
+    renderCasual(); renderRecent();
+    App.toast(t('del.done'));
+  }
   function renderRecent() {
     const ul = $('#recentList');
     ul.replaceChildren();
     const items = recentItems();
+    $('#clearRecent').hidden = !items.length;
     if (!items.length) { const li = document.createElement('li'); li.className = 'recent-empty'; li.textContent = t('recent.empty'); ul.appendChild(li); return; }
     const map = { casual: ['ic-chat', 'recent.casual', () => go('casual')], academic: ['ic-cap', 'recent.academic', () => go('academic', 'research')], draft: ['ic-pen', 'recent.draft', () => go('academic', 'writing')] };
     items.forEach(it => {
@@ -334,7 +350,10 @@
       const meta = document.createElement('span'); meta.className = 'ra-meta'; meta.textContent = relTime(it.at);
       body.append(title, meta);
       b.append(iconBox, body, icon('ic-arrow'));
-      li.appendChild(b); ul.appendChild(li);
+      const x = document.createElement('button'); x.type = 'button'; x.className = 'ra-del'; x.textContent = '×';
+      x.setAttribute('aria-label', (it.msg ? t('del.one') : t('del.hide')) + ': ' + String(it.text || '').slice(0, 40)); x.title = it.msg ? t('del.one') : t('del.hide');
+      x.onclick = () => { if (it.msg) deleteMessage(it.list, it.msg); else { App.state().conversion.hideRecent = true; App.save(); renderRecent(); } };
+      li.append(b, x); ul.appendChild(li);
     });
   }
   function totals() {
@@ -383,6 +402,7 @@
     const b = document.createElement('div'); b.className = 'message ' + (m.role === 'user' ? 'user-msg' : 'assistant-msg'); b.textContent = m.text;
     const time = document.createElement('div'); time.className = 'message-time'; time.textContent = m.at ? new Date(m.at).toLocaleTimeString(locale(), { hour: '2-digit', minute: '2-digit' }) : 'THESTALK';
     col.append(b);
+    if (m.role === 'user' && m.id) { const del = document.createElement('button'); del.type = 'button'; del.className = 'msg-del'; del.textContent = '×'; del.title = t('del.one'); del.setAttribute('aria-label', t('del.one')); del.onclick = () => deleteMessage('casualMessages', m); col.append(del); }
     if (m.role !== 'user') { const sp = document.createElement('button'); sp.type = 'button'; sp.className = 'msg-speak'; sp.textContent = '🔊'; sp.setAttribute('aria-label', t('tts.listen')); sp.onclick = () => Speech.speak(m.text, sp); col.append(sp); }
     col.append(time); row.append(av, col);
     return row;
@@ -418,6 +438,14 @@
   }
   $('#casualForm').addEventListener('submit', e => { e.preventDefault(); sendCasual($('#casualInput').value); });
   $('#casualInput').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendCasual(e.target.value); } });
+  $('#clearRecent').addEventListener('click', () => {
+    if (!confirm(t('recent.confirmClear'))) return;
+    const s = App.state();
+    s.casualMessages = []; s.messages = []; s.selectedMessage = null;
+    if (s.conversion) s.conversion.hideRecent = true;
+    App.save(); if (App.render) App.render(); renderCasual(); renderRecent();
+    App.toast(t('del.done'));
+  });
   $('#clearCasual').addEventListener('click', () => {
     const s = App.state();
     if (!s.casualMessages || !s.casualMessages.length) return;

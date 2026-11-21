@@ -217,3 +217,18 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   .paper-chat{max-height:52vh}
 }
 @media (prefers-reduced-motion: reduce){.pc-typing{animation:none}}
+
+/* ---------- v1.6 layout safety + delete controls ---------- */
+/* Grid and flex children may shrink below their content, so a long line can never widen the page
+   (a 916px-wide page on a 390px phone made the browser zoom out and pushed the bottom bar away). */
+.main-content,.view,.home-grid>*,.card,.panel{min-width:0}
+.main-content{overflow-x:clip}
+@media (max-width:899px){.home-grid{grid-template-columns:minmax(0,1fr)}}
+.recent-list li{display:flex;align-items:center;gap:6px;min-width:0}
+.recent-list li>button:first-child{flex:1;min-width:0}
+.ra-del,.msg-del{flex:none;width:34px;height:34px;border:0;border-radius:10px;background:transparent;color:var(--muted);font-size:20px;line-height:1;cursor:pointer}
+.ra-del:hover,.msg-del:hover,.ra-del:focus-visible,.msg-del:focus-visible{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger)}
+.msg-del{width:26px;height:26px;font-size:16px;align-self:flex-end;opacity:.6}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.recent-list .ra-del{width:36px;height:36px;padding:0;border:0;background:transparent;display:grid;place-items:center;border-radius:10px;flex:0 0 36px}
+.recent-list .ra-del:hover,.recent-list .ra-del:focus-visible{background:color-mix(in srgb,var(--danger) 12%,transparent);border:0}
