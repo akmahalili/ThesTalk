@@ -326,3 +326,70 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   .mx-table .mx-x{position:absolute;top:6px;right:6px;border:0;padding:0;width:auto}
   .mx-table tr td:last-of-type{border-bottom:0}
 }
+
+/* v2.0 Sasaran & Peringatan */
+.home-grid .goal-card{grid-column:1 / -1;padding:12px 14px}
+.goal-home{display:grid;grid-template-columns:64px minmax(0,1fr) 20px;gap:14px;align-items:center;width:100%;text-align:left;color:inherit}
+.gh-ring,.gt-ring{position:relative;display:grid;place-items:center}
+.gh-ring .goal-ring{width:64px;height:64px}
+.gh-pct{position:absolute;font-weight:700;font-size:14px;color:var(--text)}
+.gh-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.gh-text strong{font-size:16px}
+.gh-text small{color:var(--muted);font-size:12.5px}
+.gh-meta{font-size:13px;color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gh-due.soon{color:#b45309;font-weight:600}
+.gh-cta{font-size:12.5px;color:var(--accent-text);font-weight:600}
+.gh-chev .ic{width:18px;height:18px;color:var(--muted)}
+.goal-ring .gr-track{fill:none;stroke:var(--surface-3);stroke-width:8}
+.goal-ring .gr-fill{fill:none;stroke:var(--primary);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
+.goal-ring .gr-fill.done{stroke:#16a34a}
+@media (prefers-reduced-motion:reduce){.goal-ring .gr-fill{transition:none}}
+#view-goals .card{margin-bottom:14px}
+#view-goals .view-head h1 small{font-weight:500;color:var(--muted);font-size:.55em}
+.gt-main{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.gt-ring .goal-ring{width:132px;height:132px}
+.gt-num{position:absolute;display:flex;flex-direction:column;align-items:center;text-align:center}
+.gt-num strong{font-size:28px;line-height:1.1;font-variant-numeric:tabular-nums}
+.gt-num small{font-size:11px;color:var(--muted);max-width:90px}
+.gt-side{flex:1 1 160px;min-width:0}
+.gt-side p{margin:0 0 6px}
+.gt-streak{font-size:18px;font-weight:700}
+.gt-left{color:var(--text-2)}
+.gt-week{position:relative;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin:18px 0 14px;padding-top:16px}
+.gw-day{display:flex;flex-direction:column;align-items:center;gap:0}
+.gw-val{font-size:10.5px;color:var(--muted);height:16px;line-height:16px;font-variant-numeric:tabular-nums}
+.gw-bar{position:relative;width:100%;max-width:34px;height:72px;border-radius:8px;background:var(--surface-2);overflow:hidden}
+.gw-bar span{position:absolute;left:0;right:0;bottom:0;background:var(--primary-soft-2);border-radius:8px}
+.gw-day.met .gw-bar span{background:var(--primary)}
+.gw-lbl{font-size:11.5px;color:var(--muted);height:16px;line-height:16px;margin-top:6px}
+.gw-day.now .gw-lbl{color:var(--text);font-weight:700}
+.gw-target{position:absolute;left:0;right:0;border-top:2px dashed var(--signal);opacity:.8;pointer-events:none}
+.check-row{display:flex;align-items:center;gap:10px;font-size:14px;align-self:end;padding-bottom:10px}
+.check-row input{width:18px;height:18px;accent-color:var(--primary)}
+.dl-list{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column}
+.dl-list li{display:grid;grid-template-columns:52px minmax(0,1fr) auto 28px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.dl-count{display:flex;flex-direction:column;align-items:center;justify-content:center;width:52px;height:52px;border-radius:14px;background:var(--primary-soft);color:var(--accent-text)}
+.dl-count strong{font-size:18px;line-height:1.1;font-variant-numeric:tabular-nums}
+.dl-count small{font-size:10.5px}
+.dl-list li.soon .dl-count{background:rgba(217,119,6,.16);color:#b45309}
+.dl-list li.past{opacity:.6}
+.dl-text{display:flex;flex-direction:column;min-width:0}
+.dl-text strong{overflow-wrap:anywhere}
+.dl-text small{color:var(--muted);font-size:12.5px}
+.dl-form{display:grid;grid-template-columns:minmax(0,1fr) 160px auto;gap:8px;align-items:center}
+.dl-form input{min-width:0;width:100%;box-sizing:border-box}
+.rem-time{flex:0 0 140px}
+:root[data-theme="dark"] .gh-due.soon,:root[data-theme="dark"] .dl-list li.soon .dl-count{color:#fbbf24}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .gh-due.soon,:root:not([data-theme="light"]) .dl-list li.soon .dl-count{color:#fbbf24}}
+@media (max-width:560px){
+  .dl-form{grid-template-columns:minmax(0,1fr) auto}
+  .dl-form input[type=text]{grid-column:1 / -1}
+  .dl-list li{grid-template-columns:48px minmax(0,1fr) 28px}
+  .dl-list li .btn-mini{grid-column:2;justify-self:start}
+  .dl-list li .ref-x{grid-column:3;grid-row:1}
+  .dl-count{width:48px;height:48px}
+}
+.dl-form input,.rem-time input{padding:11px 12px;border:1px solid var(--border-strong);border-radius:11px;font-size:14px;background:var(--surface);color:var(--text);font-family:inherit}
+.dl-form input:focus,.rem-time input:focus{outline:2px solid var(--primary);outline-offset:1px}
+:root[data-theme="dark"] .dl-form input,:root[data-theme="dark"] .rem-time input{color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .dl-form input,:root:not([data-theme="light"]) .rem-time input{color-scheme:dark}}

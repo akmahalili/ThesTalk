@@ -8,7 +8,7 @@
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
   const UI_KEY = 'thestalk_ui_v1';
-  const VIEWS = ['home', 'casual', 'hub', 'academic', 'proofread', 'papers', 'matrix', 'analysis', 'projects', 'library', 'settings'];
+  const VIEWS = ['home', 'casual', 'hub', 'academic', 'proofread', 'papers', 'matrix', 'analysis', 'goals', 'projects', 'library', 'settings'];
 
   const ui = Object.assign({ lang: 'ms', theme: 'system', name: '', mode: 'casual', onboarded: false, academicOpen: true, autoSpeak: false, voiceAutoSend: false, ai: 'gemini' }, readUI());
   function readUI() { try { return JSON.parse(localStorage.getItem(UI_KEY) || '{}') || {}; } catch (e) { return {}; } }
@@ -28,7 +28,7 @@
       'nav.dashboard': 'Dashboard', 'nav.home': 'Utama', 'nav.casual': 'Sembang', 'nav.academic': 'Akademik', 'nav.academicUp': 'AKADEMIK',
       'hub.title': 'Ruang Akademik', 'hub.sub': 'Semua alat akademik di satu tempat.',
       'hub.thesis': 'Pembantu Tesis', 'hub.thesis.d': 'Tulis bab tesis dengan sokongan AI.', 'hub.research': 'Pembantu Penyelidikan', 'hub.research.d': 'Sembang idea, kemudian tukar kepada tulisan akademik bersitasi.',
-      'hub.papers.d': 'Sembang jadi paper penuh, cari jurnal berindeks, semak sebelum hantar.', 'hub.data.d': 'Tampal output SmartPLS / SPSS, dapat penerangan dan bahagian Dapatan.', 'nav.matrix': 'Matriks Literatur', 'hub.matrix.d': 'Masukkan PDF artikel, dapat matriks, fail Excel dan sintesis bersitasi.', 'hub.writing': 'Penulisan Akademik', 'hub.writing.d': 'Tukar idea santai kepada perenggan akademik.',
+      'hub.papers.d': 'Sembang jadi paper penuh, cari jurnal berindeks, semak sebelum hantar.', 'hub.data.d': 'Tampal output SmartPLS / SPSS, dapat penerangan dan bahagian Dapatan.', 'nav.matrix': 'Matriks Literatur', 'nav.goals': 'Sasaran & Peringatan', 'hub.goals.d': 'Sasaran perkataan harian, streak dan kiraan hari ke tarikh akhir.', 'hub.matrix.d': 'Masukkan PDF artikel, dapat matriks, fail Excel dan sintesis bersitasi.', 'hub.writing': 'Penulisan Akademik', 'hub.writing.d': 'Tukar idea santai kepada perenggan akademik.',
       'hub.proof': 'Semakan Bahasa & Gaya', 'hub.proof.d': 'Betulkan tatabahasa dan nada akademik.', 'hub.refs': 'Rujukan & Sitasi', 'hub.refs.d': 'Senarai rujukan tesis, eksport ke Mendeley atau Zotero.',
       'set.role': 'Peranan (pilihan)', 'set.rolePh': 'cth. Penyelidik PhD, UiTM', 'fab.newPaper': 'Paper baharu', 'ob.welcome': 'Selamat datang ke Talkademic',
       'nav.papers': 'Jurnal & Paper', 'card.papers': 'Jurnal & Paper', 'card.papers.d': 'Tulis artikel, cari jurnal berindeks dan semak sebelum hantar.',
@@ -103,7 +103,7 @@
       'nav.dashboard': 'Dashboard', 'nav.home': 'Home', 'nav.casual': 'Chat', 'nav.academic': 'Academic', 'nav.academicUp': 'ACADEMIC',
       'hub.title': 'Academic Workspace', 'hub.sub': 'All your academic tools in one place.',
       'hub.thesis': 'Thesis Assistant', 'hub.thesis.d': 'Write thesis chapters with AI support.', 'hub.research': 'Research Assistant', 'hub.research.d': 'Chat through ideas, then turn them into cited academic writing.',
-      'hub.papers.d': 'Turn chat into a full paper, find indexed journals, check before submitting.', 'hub.data.d': 'Paste SmartPLS / SPSS output, get an explanation and a Results section.', 'nav.matrix': 'Literature Matrix', 'hub.matrix.d': 'Add article PDFs, get a matrix, an Excel file and a cited synthesis.', 'hub.writing': 'Academic Writing', 'hub.writing.d': 'Turn casual ideas into academic paragraphs.',
+      'hub.papers.d': 'Turn chat into a full paper, find indexed journals, check before submitting.', 'hub.data.d': 'Paste SmartPLS / SPSS output, get an explanation and a Results section.', 'nav.matrix': 'Literature Matrix', 'nav.goals': 'Goals & Reminders', 'hub.goals.d': 'Daily word target, streak and countdown to deadlines.', 'hub.matrix.d': 'Add article PDFs, get a matrix, an Excel file and a cited synthesis.', 'hub.writing': 'Academic Writing', 'hub.writing.d': 'Turn casual ideas into academic paragraphs.',
       'hub.proof': 'Proofread & Style', 'hub.proof.d': 'Fix grammar and academic tone.', 'hub.refs': 'Citations & References', 'hub.refs.d': 'Your thesis reference list, export to Mendeley or Zotero.',
       'set.role': 'Role (optional)', 'set.rolePh': 'e.g. PhD researcher, UiTM', 'fab.newPaper': 'New paper', 'ob.welcome': 'Welcome to Talkademic',
       'nav.papers': 'Journal Papers', 'card.papers': 'Journal Papers', 'card.papers.d': 'Write articles, find indexed journals and check before submitting.',
@@ -197,6 +197,7 @@
     try { if (window.ThesTalkPapers) { if (current === 'papers') window.ThesTalkPapers.render(); window.ThesTalkPapers.renderProjectsCard(); } } catch (e) { /* not ready yet */ }
     try { if (window.TalkademicAnalysis && current === 'analysis') window.TalkademicAnalysis.render(); } catch (e) { /* not ready yet */ }
     try { if (window.TalkademicMatrix && current === 'matrix') window.TalkademicMatrix.render(); } catch (e) { /* not ready yet */ }
+    try { if (window.TalkademicGoals) { if (current === 'goals') window.TalkademicGoals.render(); window.TalkademicGoals.home(); } } catch (e) { /* not ready yet */ }
     refresh();
   }
 
@@ -248,9 +249,9 @@
     VIEWS.forEach(v => { const el = $('#view-' + v); if (el) el.hidden = v !== view; });
     const focus = pendingFocus; pendingFocus = null;
     $$('.side-nav .nav-item[data-go]').forEach(b => b.classList.toggle('active', b.dataset.go === view));
-    $('#academicToggle').classList.toggle('active', view === 'academic' || view === 'proofread' || view === 'papers' || view === 'matrix' || view === 'analysis');
+    $('#academicToggle').classList.toggle('active', view === 'academic' || view === 'proofread' || view === 'papers' || view === 'matrix' || view === 'analysis' || view === 'goals');
     $$('.nav-sub').forEach(b => b.classList.toggle('active', (b.dataset.go === view) && (view !== 'academic' || b.dataset.focus === (focus || lastFocus))));
-    const bottomMap = { academic: 'hub', proofread: 'hub', papers: 'hub', analysis: 'hub', matrix: 'hub', library: 'hub' };
+    const bottomMap = { academic: 'hub', proofread: 'hub', papers: 'hub', analysis: 'hub', matrix: 'hub', goals: 'hub', library: 'hub' };
     const bottom = bottomMap[view] || view;
     $$('.bottom-nav button').forEach(b => { const on = b.dataset.go === bottom; b.classList.toggle('active', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     if (view === 'academic') applyFocus(focus);
@@ -259,6 +260,7 @@
     if (view === 'papers' && window.ThesTalkPapers) window.ThesTalkPapers.render();
     if (view === 'analysis' && window.TalkademicAnalysis) window.TalkademicAnalysis.render();
     if (view === 'matrix' && window.TalkademicMatrix) window.TalkademicMatrix.render();
+    if (view === 'goals' && window.TalkademicGoals) window.TalkademicGoals.render();
     refresh();
     closeSearch();
     window.scrollTo({ top: 0 });
@@ -371,6 +373,7 @@
     $('#homeChapters').textContent = fmt(n.chapters);
     $('#homeRefs').textContent = fmt(n.refs);
     renderRecent();
+    try { if (window.TalkademicGoals) window.TalkademicGoals.home(); } catch (e) { /* goals not ready */ }
   }
 
   /* ---------- projects ---------- */

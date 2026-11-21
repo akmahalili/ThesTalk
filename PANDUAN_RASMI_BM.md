@@ -137,3 +137,11 @@ Perpustakaan → **Import RIS / BibTeX** (atau dalam Rujukan paper).
 
 Setiap rujukan ditukar ke format APA 7 (artikel jurnal, buku, bab buku, prosiding, tesis, laman web). Rujukan yang sudah ada (DOI atau tajuk sama) tidak ditambah dua kali.
 
+## Sasaran & Peringatan (v2.0)
+
+Kad di halaman Utama menunjukkan perkataan hari ini berbanding sasaran, streak 🔥 dan tarikh akhir terdekat. Ketik kad itu (atau Akademik → Sasaran & Peringatan) untuk:
+
+- Tetapkan sasaran perkataan harian (lalai 500). Perkataan dikira daripada pertambahan teks dalam tesis dan paper hari ini.
+- Tambah tarikh akhir (contoh: hantar Bab 2, viva). Tekan **📅 Kalendar** untuk masukkan ke kalendar telefon; notifikasi seminggu dan sehari sebelum, jam 9 pagi.
+- **Peringatan menulis harian**: pilih masa, tekan **Tambah ke kalendar telefon**, buka fail itu dan pilih Tambah/Simpan.
+
