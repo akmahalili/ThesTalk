@@ -66,12 +66,12 @@
       tabChat: 'Sembang', cGreet: 'Ceritakan idea kajian anda secara santai, satu demi satu. Saya letak setiap ayat di bahagian paper yang sesuai, tukar jadi ayat akademik, dan tanya soalan untuk lengkapkan paper. Bila cukup, tekan Susun jadi paper penuh.',
       cPh: 'Taip atau cakap idea anda…', cSend: 'Hantar', cSorting: 'Menyusun…', cMove: 'Pindah ke bahagian', cUnsorted: 'Belum disusun.', cRetry: 'Susun semula', cOutline: 'Rangka paper', 'sec.other': 'Lain-lain',
       cGen: 'Susun jadi paper penuh', cEmptyWrite: 'Belum ada draf. Sembang dulu, Talkademic susun jadi paper.', cOpenChat: 'Buka Sembang',
-      xTitle: 'Perhalusi dengan ChatGPT / Claude (langganan anda)', xHow: 'Talkademic salin bahagian ini berserta arahan, kemudian buka ChatGPT atau Claude. Hantar di sana, salin jawapan, kemudian tekan Tampal hasil.',
+      xTitle: 'Perhalusi dengan ChatGPT / Claude / Gemini (akaun anda)', xHow: 'Talkademic salin bahagian ini berserta arahan, kemudian buka ChatGPT, Claude atau Gemini (contohnya akaun Gemini UiTM). Hantar di sana, salin jawapan, kemudian tekan Tampal hasil.', xOpenedGemini: 'Teks dah disalin dan Gemini dibuka. Tekan lama di kotak taip dan pilih Tampal. Tukar ke akaun UiTM di gambar profil jika perlu.', xGeminiNote: 'Gemini dibuka dengan akaun Google yang sedang log masuk. Untuk guna Gemini UiTM, tukar akaun di gambar profil Gemini.',
       xAction: 'Arahan', 'xa.polish': 'Perhalusi untuk jurnal Q1–Q2', 'xa.expand': 'Kembangkan hujah', 'xa.shorten': 'Ringkaskan', 'xa.grammar': 'Semak tatabahasa sahaja', 'xa.translate': 'Terjemah ke bahasa lain',
-      xOpened: 'Teks dah disalin dan {a} dibuka. Kalau kotak taip kosong, tekan lama dan pilih Tampal.', xPaste: 'Tampal hasil', xPasteTitle: 'Hasil dari ChatGPT / Claude', xPastePh: 'Tampal jawapan ChatGPT atau Claude di sini…',
+      xOpened: 'Teks dah disalin dan {a} dibuka. Kalau kotak taip kosong, tekan lama dan pilih Tampal.', xPaste: 'Tampal hasil', xPasteTitle: 'Hasil dari ChatGPT / Claude / Gemini', xPastePh: 'Tampal jawapan ChatGPT, Claude atau Gemini di sini…',
       xFromClip: 'Tampal dari clipboard', xClipFail: 'Tidak dapat baca clipboard. Tekan lama dalam kotak dan pilih Tampal.', xReplace: 'Ganti bahagian', xAppend: 'Tambah di bawah', xCancel: 'Batal',
       xDone: 'Bahagian dikemas kini.', xUndo: '↶ Batal perubahan', xUndone: 'Bahagian dikembalikan.',
-      xUnknown: 'Sitasi ini tiada dalam senarai rujukan paper, mungkin ditambah oleh ChatGPT/Claude. Semak sebelum guna: {c}', xEmpty: 'Bahagian ini masih kosong.',
+      xUnknown: 'Sitasi ini tiada dalam senarai rujukan paper, mungkin ditambah oleh ChatGPT/Claude/Gemini. Semak sebelum guna: {c}', xEmpty: 'Bahagian ini masih kosong.',
       xReviewTitle: 'Minta penilaian ChatGPT / Claude', xReviewBody: 'Salin seluruh paper berserta arahan penilai jurnal, kemudian buka app. Jawapan dibaca di sana.',
       dTitle: 'Sembang → Paper penuh', dBody: 'Taip idea, pendapat atau pemerhatian anda secara santai, satu demi satu (boleh guna mikrofon). Bila cukup, tekan Jana paper penuh: Talkademic susun ikut bahagian jurnal dan masukkan sitasi daripada kajian sebenar secara automatik.',
       dPh: 'cth. I think, gambar close up penting utk org yakin semasa membeli', dAdd: 'Tambah', dMic: 'Cakap untuk menaip', dCount: '{n} idea', dNone: 'Belum ada idea. Mula taip di bawah.',
@@ -142,12 +142,12 @@
       tabChat: 'Chat', cGreet: 'Tell me about your research casually, one idea at a time. I put each one in the right part of the paper, rewrite it academically, and ask questions to complete the paper. When you have enough, tap Build the full paper.',
       cPh: 'Type or speak your idea…', cSend: 'Send', cSorting: 'Sorting…', cMove: 'Move to section', cUnsorted: 'Not sorted yet.', cRetry: 'Sort again', cOutline: 'Paper outline', 'sec.other': 'Other',
       cGen: 'Build the full paper', cEmptyWrite: 'No draft yet. Chat first and Talkademic builds the paper.', cOpenChat: 'Open Chat',
-      xTitle: 'Refine with ChatGPT / Claude (your subscription)', xHow: 'Talkademic copies this section with an instruction, then opens ChatGPT or Claude. Send it there, copy the answer, then tap Paste result.',
+      xTitle: 'Refine with ChatGPT / Claude / Gemini (your account)', xHow: 'Talkademic copies this section with an instruction, then opens ChatGPT, Claude or Gemini (for example your UiTM Gemini account). Send it there, copy the answer, then tap Paste result.', xOpenedGemini: 'Text copied and Gemini opened. Long-press the message box and choose Paste. Switch to your UiTM account from the profile picture if needed.', xGeminiNote: 'Gemini opens with the Google account that is signed in. To use your UiTM Gemini, switch accounts from the profile picture in Gemini.',
       xAction: 'Instruction', 'xa.polish': 'Polish for a Q1–Q2 journal', 'xa.expand': 'Expand the argument', 'xa.shorten': 'Make it shorter', 'xa.grammar': 'Grammar only', 'xa.translate': 'Translate to the other language',
-      xOpened: 'Text copied and {a} opened. If the message box is empty, long-press and choose Paste.', xPaste: 'Paste result', xPasteTitle: 'Result from ChatGPT / Claude', xPastePh: 'Paste the ChatGPT or Claude answer here…',
+      xOpened: 'Text copied and {a} opened. If the message box is empty, long-press and choose Paste.', xPaste: 'Paste result', xPasteTitle: 'Result from ChatGPT / Claude / Gemini', xPastePh: 'Paste the ChatGPT, Claude or Gemini answer here…',
       xFromClip: 'Paste from clipboard', xClipFail: 'Could not read the clipboard. Long-press in the box and choose Paste.', xReplace: 'Replace section', xAppend: 'Add below', xCancel: 'Cancel',
       xDone: 'Section updated.', xUndo: '↶ Undo change', xUndone: 'Section restored.',
-      xUnknown: 'These citations are not in the paper\'s reference list and may have been added by ChatGPT/Claude. Check them before use: {c}', xEmpty: 'This section is still empty.',
+      xUnknown: 'These citations are not in the paper\'s reference list and may have been added by ChatGPT/Claude/Gemini. Check them before use: {c}', xEmpty: 'This section is still empty.',
       xReviewTitle: 'Ask ChatGPT / Claude for a review', xReviewBody: 'Copies the whole paper with journal-reviewer instructions, then opens the app. Read the answer there.',
       dTitle: 'Chat → Full paper', dBody: 'Type your ideas, opinions or observations casually, one at a time (the mic works too). When you have enough, press Generate full paper: Talkademic organises them into journal sections and adds citations from real studies automatically.',
       dPh: 'e.g. I think close-up photos make people confident when buying', dAdd: 'Add', dMic: 'Speak to type', dCount: '{n} ideas', dNone: 'No ideas yet. Start typing below.',
@@ -780,7 +780,9 @@
      not in the paper's reference list. */
   const APPS = {
     chatgpt: { name: 'ChatGPT', url: q => 'https://chatgpt.com/?q=' + encodeURIComponent(q), home: 'https://chatgpt.com/' },
-    claude: { name: 'Claude', url: q => 'https://claude.ai/new?q=' + encodeURIComponent(q), home: 'https://claude.ai/new' }
+    claude: { name: 'Claude', url: q => 'https://claude.ai/new?q=' + encodeURIComponent(q), home: 'https://claude.ai/new' },
+    // Gemini (e.g. the free UiTM / Workspace for Education account) has no prefill link, so the text is pasted.
+    gemini: { name: 'Gemini', url: () => 'https://gemini.google.com/app', home: 'https://gemini.google.com/app' }
   };
   const ACTIONS = {
     polish: 'Polish this section for an indexed Q1–Q2 journal: sharpen the argument, flow, clarity and academic tone.',
@@ -800,7 +802,7 @@
     const a = APPS[app];
     const link = a.url(prompt);
     window.open(link.length <= 6000 ? link : a.home, '_blank', 'noopener');
-    App.toast(t('xOpened', { a: a.name }));
+    App.toast(t(app === 'gemini' ? 'xOpenedGemini' : 'xOpened', { a: a.name }));
   }
   function sectionPrompt(p, key, action) {
     const ms = isMs(p);
@@ -879,6 +881,7 @@
         sel,
         h('button', { type: 'button', class: 'btn btn-outline app-btn app-chatgpt', onclick: () => send('chatgpt') }, h('span', { class: 'ai-dot ai-openai', 'aria-hidden': 'true' }), 'ChatGPT'),
         h('button', { type: 'button', class: 'btn btn-outline app-btn app-claude', onclick: () => send('claude') }, h('span', { class: 'ai-dot ai-claude', 'aria-hidden': 'true' }), 'Claude'),
+        h('button', { type: 'button', class: 'btn btn-outline app-btn app-gemini', onclick: () => send('gemini') }, h('span', { class: 'ai-dot ai-gemini', 'aria-hidden': 'true' }), 'Gemini'),
         h('button', { type: 'button', class: 'btn btn-primary', onclick: () => { view.paste = { paperId: p.id, key, text: '' }; renderBody(); setTimeout(() => { const el = $('#pasteBox'); if (el) el.focus(); }, 0); } }, '📋 ', t('xPaste'))),
       undo, paste);
   }
@@ -915,7 +918,9 @@
       h('p', { class: 'muted small-note', text: t('xReviewBody') }),
       h('div', { class: 'handoff-row' },
         h('button', { type: 'button', class: 'btn btn-outline app-btn', onclick: () => send('chatgpt') }, h('span', { class: 'ai-dot ai-openai', 'aria-hidden': 'true' }), 'ChatGPT'),
-        h('button', { type: 'button', class: 'btn btn-outline app-btn', onclick: () => send('claude') }, h('span', { class: 'ai-dot ai-claude', 'aria-hidden': 'true' }), 'Claude')));
+        h('button', { type: 'button', class: 'btn btn-outline app-btn', onclick: () => send('claude') }, h('span', { class: 'ai-dot ai-claude', 'aria-hidden': 'true' }), 'Claude'),
+        h('button', { type: 'button', class: 'btn btn-outline app-btn', onclick: () => send('gemini') }, h('span', { class: 'ai-dot ai-gemini', 'aria-hidden': 'true' }), 'Gemini')),
+      h('p', { class: 'muted small-note', text: t('xGeminiNote') }));
   }
 
   /* ---------- Import a Word paper (read on the device) ---------- */
