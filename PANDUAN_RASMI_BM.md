@@ -156,6 +156,16 @@ Akademik → **Slaid Pembentangan**.
 5. **Tema reka bentuk** (v2.5): pilih Klasik, Galeri, Bilik Gelap, Tropika, Neon atau Pastel, atau tekan 🎲 Rawak. Tema boleh ditukar bila-bila masa dan mengubah pratonton serta fail PowerPoint.
 6. **Muat turun PowerPoint**: fail .pptx dengan nota penyampai, dan slaid rujukan untuk sumber yang disebut dalam slaid.
 
+## Latihan Viva (v2.9)
+
+Akademik → **Latihan Viva**.
+
+1. Pilih tesis atau paper, jenis sesi (proposal, viva akhir, persidangan), gaya pemeriksa (Mesra, Seimbang, Tegas) dan bilangan soalan.
+2. Tekan **🎓 Mula sesi viva**. Soalan dibuat daripada tesis anda sendiri dan boleh dibacakan dengan suara (🔊).
+3. Jawab dengan menaip atau tekan 🎙 dan bercakap seperti di hadapan panel. Pemasa menunjukkan tempoh jawapan.
+4. **Lihat isi penting** jika buntu. Selepas **Hantar jawapan**, anda dapat skor 1–5, kekuatan, apa yang tertinggal, contoh jawapan yang lebih kuat (daripada tesis anda) dan soalan susulan.
+5. Di akhir sesi: purata skor, skor mengikut bidang, **Ulang soalan lemah**, dan **⬇ Simpan sesi (Word)** untuk ulang kaji.
+
 ## Analisis Soal Selidik (v2.8)
 
 Akademik → **Analisis Soal Selidik**.

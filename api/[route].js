@@ -19,6 +19,7 @@ const ROUTES = {
   survey: () => require('../handlers/survey'),
   sync: () => require('../handlers/sync'),
   transcribe: () => require('../handlers/transcribe'),
+  viva: () => require('../handlers/viva'),
 };
 
 function routeName(req) {
