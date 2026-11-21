@@ -262,7 +262,8 @@
     const sel = h('select', { id: 'paperSelect', 'aria-label': t('pick'), onchange: e => { openPaper(e.target.value); render(); } },
       store().papers.map(x => h('option', { value: x.id, text: x.title.trim() || t('untitled') })));
     sel.value = p.id;
-    return h('div', { class: 'paper-picker' }, sel, h('button', { type: 'button', class: 'btn btn-outline', onclick: newPaper }, '＋ ', t('new')), importButton());
+    return h('div', { class: 'paper-picker' }, sel, h('button', { type: 'button', class: 'btn btn-outline', onclick: newPaper }, '＋ ', t('new')), importButton(),
+      h('button', { type: 'button', class: 'btn btn-outline pp-export', onclick: () => exportDocx(p) }, '↓ ', t('exportDocx')));
   }
 
   function targetLine(p) {
