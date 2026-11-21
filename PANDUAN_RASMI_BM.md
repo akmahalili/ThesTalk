@@ -145,3 +145,13 @@ Kad di halaman Utama menunjukkan perkataan hari ini berbanding sasaran, streak �
 - Tambah tarikh akhir (contoh: hantar Bab 2, viva). Tekan **📅 Kalendar** untuk masukkan ke kalendar telefon; notifikasi seminggu dan sehari sebelum, jam 9 pagi.
 - **Peringatan menulis harian**: pilih masa, tekan **Tambah ke kalendar telefon**, buka fail itu dan pilih Tambah/Simpan.
 
+## Slaid Pembentangan (v2.1)
+
+Akademik → **Slaid Pembentangan**.
+
+1. Pilih sumber (seluruh tesis, satu bab, atau paper), jenis pembentangan (proposal, viva, persidangan, laporan kemajuan, kuliah), masa dan bahasa.
+2. Tekan **Jana slaid**. Setiap slaid ada cadangan gambar dan nota penyampai.
+3. Ketik teks untuk sunting. Tekan **🖼 Tambah gambar** untuk letak gambar sendiri dari telefon (gambar disimpan dalam peranti ini sahaja).
+4. Susun semula dengan ↑ ↓, buang dengan ×.
+5. **Muat turun PowerPoint**: fail .pptx dengan nota penyampai, dan slaid rujukan untuk sumber yang disebut dalam slaid.
+
