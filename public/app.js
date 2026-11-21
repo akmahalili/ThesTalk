@@ -9,6 +9,7 @@ let state=load(),saveTimer=null,toastTimer=null,recognition=null,voiceListening=
 const chapter=()=>state.chapters.find(c=>c.id===state.activeChapter)||state.chapters[0];
 const section=()=>chapter().sections.find(s=>s.id===state.activeSection)||chapter().sections[0];
 function persist(){try{localStorage.setItem(storeKey,JSON.stringify(state));$('#saveStatus').textContent='✓ Saved locally';shellRefresh();}catch(e){$('#saveStatus').textContent='⚠ Save failed';toast('Device storage is full or unavailable. Export a DOCX backup.');}}
+function replaceState(next){clearTimeout(saveTimer);try{localStorage.setItem(storeKey,JSON.stringify(next));}catch(e){return false;}state=next;render();return true;}
 function autoSave(){clearTimeout(saveTimer);$('#saveStatus').textContent='Saving…';saveTimer=setTimeout(persist,400);}
 function toast(txt){const x=$('#toast');x.textContent=txt;x.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>x.classList.remove('show'),4000);}
 function short(s,n=44){return s.length>n?s.slice(0,n-1)+'…':s;}
@@ -115,7 +116,7 @@ async function toggleVoice(){
 }
 
 function insertText(txt){const t=String(txt||'').trim();if(!t)return false;addSnapshot(section());section().content=(section().content?section().content.trim()+'\n\n':'')+t;renderEditor();autoSave();return true;}
-window.ThesTalkApp={accessCode:()=>aiAccessCode,providers:()=>aiProviders,defaultProvider:()=>aiDefault,transcriptionOn:()=>transcriptionOn,state:()=>state,save:autoSave,persist,render,renderRefsList,setMobileTab,openProject,exportDoc,checkAI,aiAvailable:()=>aiAvailable,apiPost,addMessage,insertText,chapter,section,words,wordTotal,toast,uid,date,select:(chId,secId)=>{const ch=state.chapters.find(c=>c.id===chId);if(!ch)return;addSnapshot(section());state.activeChapter=ch.id;state.activeSection=(ch.sections.find(x=>x.id===secId)||ch.sections[0]).id;render();autoSave();}};
+window.ThesTalkApp={replaceState,accessCode:()=>aiAccessCode,providers:()=>aiProviders,defaultProvider:()=>aiDefault,transcriptionOn:()=>transcriptionOn,state:()=>state,save:autoSave,persist,render,renderRefsList,setMobileTab,openProject,exportDoc,checkAI,aiAvailable:()=>aiAvailable,apiPost,addMessage,insertText,chapter,section,words,wordTotal,toast,uid,date,select:(chId,secId)=>{const ch=state.chapters.find(c=>c.id===chId);if(!ch)return;addSnapshot(section());state.activeChapter=ch.id;state.activeSection=(ch.sections.find(x=>x.id===secId)||ch.sections[0]).id;render();autoSave();}};
 if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
 init();
 })();

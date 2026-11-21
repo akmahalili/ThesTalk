@@ -27,7 +27,16 @@
       'brand.tag': 'Sembang • Belajar • Menyelidik',
       'nav.dashboard': 'Dashboard', 'nav.home': 'Utama', 'nav.casual': 'Sembang', 'nav.academic': 'Akademik', 'nav.academicUp': 'AKADEMIK',
       'nav.projects': 'Projek Saya', 'nav.projectsShort': 'Projek', 'nav.library': 'Perpustakaan', 'nav.settings': 'Tetapan', 'nav.profile': 'Profil',
-      'theme.toggle': 'Tukar tema', 'saved.title': 'Disimpan pada peranti ini', 'saved.body': 'Kandungan kekal dalam pelayar ini kecuali anda eksport. Tiada penyegerakan awan.',
+      'bk.title': 'Backup & pulih', 'bk.body': 'Semua kerja disimpan dalam pelayar ini sahaja. Simpan fail backup, kemudian pulihkan di telefon atau laptop lain.',
+      'bk.save': 'Simpan backup', 'bk.share': 'Kongsi', 'bk.restore': 'Pulih dari fail', 'bk.undo': '↶ Batalkan pemulihan terakhir', 'bk.note': 'Kod akses AI tidak termasuk dalam backup.',
+      'bk.last': 'Backup terakhir: {d}', 'bk.never': 'Belum pernah backup.', 'bk.saved': 'Backup disimpan: {f}', 'bk.shareFail': 'Tidak dapat berkongsi. Guna Simpan backup.',
+      'bk.confirm': 'Pulihkan backup "{t}" ({d})?\n{c} bab · {w} perkataan · {r} rujukan\n\nProjek semasa akan diganti. Salinan disimpan supaya anda boleh batalkan.',
+      'bk.unknownDate': 'tarikh tidak diketahui', 'bk.noUndo': 'Ruang storan tidak cukup untuk simpan salinan batal. Teruskan tanpa salinan?',
+      'bk.restored': 'Backup dipulihkan.', 'bk.undoConfirm': 'Kembalikan projek seperti sebelum pemulihan terakhir?', 'bk.undone': 'Pemulihan dibatalkan.',
+      'bk.err.empty': 'Fail itu kosong.', 'bk.err.not-json': 'Ini bukan fail backup ThesTalk.', 'bk.err.not-thestalk': 'Ini bukan fail backup ThesTalk.', 'bk.err.too-large': 'Fail terlalu besar.',
+      'bk.err.newer-format': 'Backup ini dari versi ThesTalk yang lebih baharu. Muat semula app dan cuba lagi.', 'bk.err.storage': 'Storan pelayar penuh, jadi backup tidak dapat dipulihkan.',
+      'bk.nudgeNever': 'Kerja anda hanya ada dalam pelayar ini. Simpan backup supaya tidak hilang.', 'bk.nudgeOld': 'Backup terakhir {n} hari lalu. Simpan yang baharu?', 'bk.saveNow': 'Backup sekarang',
+      'theme.toggle': 'Tukar tema', 'saved.title': 'Disimpan pada peranti ini', 'saved.body': 'Kandungan kekal dalam pelayar ini sahaja. Simpan backup di Tetapan supaya tidak hilang.',
       'search.label': 'Cari dalam ThesTalk', 'search.ph': 'Cari dalam ThesTalk…', 'search.empty': 'Tiada hasil untuk carian ini.',
       'search.casual': 'Sembang', 'search.academic': 'Sembang akademik', 'search.section': 'Seksyen tesis', 'search.ref': 'Rujukan',
       'greet.name': 'Selamat datang, {name} 👋', 'greet': 'Selamat datang 👋', 'home.sub': 'Sahabat anda untuk sembang, belajar dan menyelidik.',
@@ -81,7 +90,16 @@
       'brand.tag': 'Chat • Learn • Research',
       'nav.dashboard': 'Dashboard', 'nav.home': 'Home', 'nav.casual': 'Chat', 'nav.academic': 'Academic', 'nav.academicUp': 'ACADEMIC',
       'nav.projects': 'My Projects', 'nav.projectsShort': 'Projects', 'nav.library': 'Library', 'nav.settings': 'Settings', 'nav.profile': 'Profile',
-      'theme.toggle': 'Switch theme', 'saved.title': 'Saved on this device', 'saved.body': 'Your content stays in this browser unless you export it. No cloud sync.',
+      'bk.title': 'Backup & restore', 'bk.body': 'All your work is stored only in this browser. Save a backup file, then restore it on another phone or laptop.',
+      'bk.save': 'Save backup', 'bk.share': 'Share', 'bk.restore': 'Restore from file', 'bk.undo': '↶ Undo last restore', 'bk.note': 'The AI access code is not included in backups.',
+      'bk.last': 'Last backup: {d}', 'bk.never': 'No backup yet.', 'bk.saved': 'Backup saved: {f}', 'bk.shareFail': 'Could not share. Use Save backup instead.',
+      'bk.confirm': 'Restore backup "{t}" ({d})?\n{c} chapters · {w} words · {r} references\n\nThe current project will be replaced. A copy is kept so you can undo.',
+      'bk.unknownDate': 'unknown date', 'bk.noUndo': 'Not enough storage to keep an undo copy. Continue without it?',
+      'bk.restored': 'Backup restored.', 'bk.undoConfirm': 'Go back to the project as it was before the last restore?', 'bk.undone': 'Restore undone.',
+      'bk.err.empty': 'The file is empty.', 'bk.err.not-json': 'This is not a ThesTalk backup file.', 'bk.err.not-thestalk': 'This is not a ThesTalk backup file.', 'bk.err.too-large': 'The file is too large.',
+      'bk.err.newer-format': 'This backup is from a newer ThesTalk. Reload the app and try again.', 'bk.err.storage': 'Browser storage is full, so the backup could not be restored.',
+      'bk.nudgeNever': 'Your work exists only in this browser. Save a backup so you don\'t lose it.', 'bk.nudgeOld': 'Last backup was {n} days ago. Save a new one?', 'bk.saveNow': 'Back up now',
+      'theme.toggle': 'Switch theme', 'saved.title': 'Saved on this device', 'saved.body': 'Your content stays only in this browser. Save a backup in Settings so you don\'t lose it.',
       'search.label': 'Search in ThesTalk', 'search.ph': 'Search in ThesTalk…', 'search.empty': 'No results for this search.',
       'search.casual': 'Chat', 'search.academic': 'Academic chat', 'search.section': 'Thesis section', 'search.ref': 'Reference',
       'greet.name': 'Welcome, {name} 👋', 'greet': 'Welcome 👋', 'home.sub': 'Your companion for chat, learning and research.',
@@ -151,6 +169,7 @@
     renderIdentity();
     renderCasual();
     if (typeof renderAI === 'function') try { renderAI(); } catch (e) { /* picker not ready yet */ }
+    if (typeof renderBackup === 'function') try { renderBackup(); } catch (e) { /* not ready yet */ }
     refresh();
   }
 
@@ -741,6 +760,102 @@
     go('home');
   });
 
+  /* ---------- backup & restore ---------- */
+  const BK = window.ThesTalkBackup;
+  const UNDO_KEY = 'thestalk_undo_restore_v1';
+  const PREFS_KEY = 'thestalk_preferences_v2';
+  const DAY = 86400000;
+  function readPrefs() { try { return JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; } catch (e) { return {}; } }
+  function readUndo() { try { const u = JSON.parse(localStorage.getItem(UNDO_KEY) || 'null'); return u && BK.validWorkspace(u.workspace) ? u : null; } catch (e) { return null; } }
+  function fmtDate(iso) {
+    const d = new Date(iso);
+    if (isNaN(d)) return '—';
+    return d.toLocaleString(ui.lang === 'en' ? 'en-GB' : 'ms-MY', { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+  }
+  function canShareFiles() {
+    try { return !!(navigator.canShare && navigator.canShare({ files: [new File(['{}'], 'x.json', { type: 'application/json' })] })); } catch (e) { return false; }
+  }
+  function backupFile() {
+    App.persist();
+    const s = App.state(), now = new Date();
+    const text = JSON.stringify(BK.makeBackup(s, ui, readPrefs(), now));
+    return new File([text], BK.backupFilename(s.project.title, now), { type: 'application/json' });
+  }
+  function markBackedUp() { ui.lastBackup = new Date().toISOString(); saveUI(); renderBackup(); }
+  function saveBackup() {
+    const f = backupFile();
+    const url = URL.createObjectURL(f);
+    const a = document.createElement('a');
+    a.href = url; a.download = f.name; a.hidden = true;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    markBackedUp();
+    App.toast(t('bk.saved').replace('{f}', f.name));
+  }
+  async function shareBackup() {
+    const f = backupFile();
+    try { await navigator.share({ files: [f], title: 'ThesTalk backup' }); markBackedUp(); }
+    catch (e) { if (!e || e.name !== 'AbortError') App.toast(t('bk.shareFail')); }
+  }
+  /* Replace the workspace, then reload so every view starts clean from the restored data. */
+  function applyRestore(ws, newUI, prefs, doneKey) {
+    if (!App.replaceState(ws)) {
+      localStorage.removeItem(UNDO_KEY); // free space and try once more
+      if (!App.replaceState(ws)) { App.toast(t('bk.err.storage')); renderBackup(); return; }
+    }
+    Object.assign(ui, newUI || {}, { onboarded: true });
+    saveUI();
+    try { if (prefs && Object.keys(prefs).length) localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch (e) { /* optional */ }
+    try { sessionStorage.setItem('thestalk_flash', t(doneKey)); } catch (e) { /* optional */ }
+    location.reload();
+  }
+  async function restoreFrom(file) {
+    let parsed;
+    try { parsed = BK.parseBackup(await file.text()); }
+    catch (e) { App.toast(t('bk.err.' + (e.code || 'not-thestalk'))); return; }
+    const sm = parsed.summary;
+    const msg = t('bk.confirm').replace('{t}', sm.title || '—').replace('{d}', parsed.exportedAt ? fmtDate(parsed.exportedAt) : t('bk.unknownDate'))
+      .replace('{c}', fmt(sm.chapters)).replace('{w}', fmt(sm.words)).replace('{r}', fmt(sm.references));
+    if (!confirm(msg)) return;
+    try {
+      App.persist();
+      localStorage.setItem(UNDO_KEY, JSON.stringify({ at: new Date().toISOString(), workspace: App.state(), ui: Object.assign({}, ui), preferences: readPrefs() }));
+    } catch (e) {
+      localStorage.removeItem(UNDO_KEY);
+      if (!confirm(t('bk.noUndo'))) return;
+    }
+    applyRestore(parsed.workspace, parsed.ui, parsed.preferences, 'bk.restored');
+  }
+  function undoRestore() {
+    const u = readUndo();
+    if (!u) { localStorage.removeItem(UNDO_KEY); renderBackup(); return; }
+    if (!confirm(t('bk.undoConfirm'))) return;
+    localStorage.removeItem(UNDO_KEY);
+    applyRestore(u.workspace, u.ui, u.preferences, 'bk.undone');
+  }
+  function renderBackup() {
+    const last = $('#backupLast');
+    if (!last) return;
+    last.textContent = ui.lastBackup ? t('bk.last').replace('{d}', fmtDate(ui.lastBackup)) : t('bk.never');
+    $('#backupShare').hidden = !canShareFiles();
+    $('#backupUndo').hidden = !readUndo();
+    // Home reminder: only once there is work to lose, and no backup in the last 7 days.
+    const s = App.state(), n = totals();
+    const hasWork = n.words > 0 || n.refs > 0 || (s.messages || []).length > 0 || (s.casualMessages || []).length > 0;
+    const age = ui.lastBackup ? Math.floor((Date.now() - new Date(ui.lastBackup).getTime()) / DAY) : Infinity;
+    const nudge = $('#backupNudge');
+    nudge.hidden = !(hasWork && age >= 7);
+    if (!nudge.hidden) $('#backupNudgeText').textContent = isFinite(age) ? t('bk.nudgeOld').replace('{n}', age) : t('bk.nudgeNever');
+  }
+  $('#backupSave').addEventListener('click', saveBackup);
+  $('#backupNudgeBtn').addEventListener('click', saveBackup);
+  $('#backupShare').addEventListener('click', shareBackup);
+  $('#backupRestore').addEventListener('click', () => $('#backupFile').click());
+  $('#backupFile').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (f) restoreFrom(f); });
+  $('#backupUndo').addEventListener('click', undoRestore);
+  // An undo copy doubles storage use, so it is dropped after 7 days.
+  (() => { const u = readUndo(); if (!u || Date.now() - new Date(u.at).getTime() > 7 * DAY) localStorage.removeItem(UNDO_KEY); })();
+
   /* ---------- refresh hook used by app.js ---------- */
   let refreshTimer = null;
   function refresh() {
@@ -748,6 +863,7 @@
     refreshTimer = setTimeout(() => {
       renderHome();
       renderLibraryCount();
+      renderBackup();
       if (current === 'projects') renderProjects();
     }, 30);
   }
@@ -761,6 +877,8 @@
   setMode(ui.mode);
   applyI18n();
   onAI(App.aiAvailable());
+  renderBackup();
+  try { const m = sessionStorage.getItem('thestalk_flash'); if (m) { sessionStorage.removeItem('thestalk_flash'); setTimeout(() => App.toast(m), 300); } } catch (e) { /* optional */ }
   $('#autoSpeak').checked = !!ui.autoSpeak;
   $('#voiceAutoSend').checked = !!ui.voiceAutoSend;
   renderVoiceInfo();

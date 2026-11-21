@@ -23,6 +23,10 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 
 Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. ThesTalk then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.5-flash-lite`, moving to `gemini-3.1-flash-lite` when a model is busy, missing or over its limit (set `GEMINI_MODEL` to try another model first). On the free tier the Flash-Lite models allow about 500 requests a day each, while Gemini Flash allows only about 20, which is why Flash-Lite is the default. Each conversion with references uses two requests. The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. Voice transcription also runs on Gemini (the browser recording is sent as-is), so the mic works for free; without any AI key the app falls back to the browser's speech recognition. The access code is remembered on the device after a successful unlock.
 
+## Backup & restore (v0.8)
+
+Everything lives in the browser's local storage, so **Settings → Backup & restore** saves the whole workspace (thesis, chats, references, display settings) as `ThesTalk-backup-<title>-<date>.json`. On Android the **Share** button sends it straight to Drive or WhatsApp. **Restore from file** shows what the backup contains, asks before replacing the current project and keeps an undo copy for 7 days. The AI access code is never written to the file. The dashboard shows a reminder once there is work and no backup in the last 7 days. The file logic is in `public/backup.js` and tested in `tests/backup.test.js`.
+
 ## Choose AI: Gemini, Claude or ChatGPT (v0.7)
 
 Each AI key switches that AI on. Users pick one in **Settings → Choose AI** or from the **✦ pill** in the top bar; the choice is saved on the device and sent with every request in the `X-ThesTalk-AI` header. If the chosen AI has no key, the server falls back to `AI_PROVIDER`, then Gemini, ChatGPT, Claude.

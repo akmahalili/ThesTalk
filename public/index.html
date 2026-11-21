@@ -127,6 +127,10 @@
             <path d="M30 24l5-12 5 12-12-5 12-5z" class="art-spark"/><path d="M170 20l3-7 3 7-7-3 7-3z" class="art-spark"/>
           </svg>
         </div>
+        <div class="backup-nudge" id="backupNudge" hidden>
+          <p><span aria-hidden="true">💾</span> <span id="backupNudgeText"></span></p>
+          <button type="button" class="btn btn-primary" id="backupNudgeBtn" data-i18n="bk.saveNow">Backup sekarang</button>
+        </div>
 
         <div class="mode-switch" role="tablist" aria-label="Mod">
           <button type="button" role="tab" data-mode="casual" aria-selected="true"><span class="l1" data-k="mode.casual">Sembang</span><small class="l2" data-k2="mode.casual">Chat</small></button>
@@ -306,6 +310,19 @@
             <label class="form-field" for="profileName"><span data-i18n="set.name">Nama paparan</span><input id="profileName" maxlength="60" autocomplete="name" data-i18n-ph="set.namePh" placeholder="cth. Nur Akma"></label>
             <button type="submit" class="btn btn-primary" data-i18n="save">Simpan</button>
           </form>
+          <div class="card setting" id="backupCard">
+            <h2 data-i18n="bk.title">Backup &amp; pulih</h2>
+            <p class="muted" data-i18n="bk.body">Semua kerja disimpan dalam pelayar ini sahaja. Simpan fail backup, kemudian pulihkan di telefon atau laptop lain.</p>
+            <p class="backup-last" id="backupLast" aria-live="polite"></p>
+            <div class="tool-row">
+              <button type="button" class="btn btn-primary" id="backupSave"><span aria-hidden="true">⬇</span> <span data-i18n="bk.save">Simpan backup</span></button>
+              <button type="button" class="btn btn-outline" id="backupShare" hidden><span aria-hidden="true">📤</span> <span data-i18n="bk.share">Kongsi</span></button>
+              <button type="button" class="btn btn-outline" id="backupRestore"><span aria-hidden="true">⬆</span> <span data-i18n="bk.restore">Pulih dari fail</span></button>
+            </div>
+            <input type="file" id="backupFile" accept=".json,application/json" hidden>
+            <button type="button" class="btn-reset text-action" id="backupUndo" hidden data-i18n="bk.undo">↶ Batalkan pemulihan terakhir</button>
+            <p class="muted small-note" data-i18n="bk.note">Kod akses AI tidak termasuk dalam backup.</p>
+          </div>
           <div class="card setting">
             <h2 data-i18n="set.lang">Bahasa antara muka</h2>
             <div class="seg-control lang-toggle" role="group" aria-label="Bahasa / Language"><button type="button" data-lang="ms">Bahasa Malaysia</button><button type="button" data-lang="en">English</button></div>
@@ -381,6 +398,7 @@
   <script src="./docx.js"></script>
   <script src="./app.js"></script>
   <script src="./refexport.js"></script>
+  <script src="./backup.js"></script>
   <script src="./shell.js"></script>
 </body>
 </html>

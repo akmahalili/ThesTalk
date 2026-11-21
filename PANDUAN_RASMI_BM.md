@@ -53,3 +53,14 @@ Dalam Chrome, buka URL HTTPS aplikasi → menu ⋮ → **Add to Home screen** / 
 - API memerlukan kod akses dan mempunyai had asas, tetapi belum menyediakan sistem akaun individu, kuota berpusat, atau billing per-user. Jangan buka akses AI tanpa kawalan.
 - Bukti akademik, sitasi, dan dapatan penyelidikan mesti disemak oleh pengguna.
 - `npm test` dan `npm run check` telah diuji; ujian pelayar headless tidak dapat diselesaikan kerana persekitaran menolak akses localhost/file melalui Chromium (`ERR_BLOCKED_BY_ADMINISTRATOR`).
+
+## Backup & pulih (v0.8)
+
+Semua kerja disimpan dalam pelayar sahaja. Untuk elak kehilangan atau untuk pindah ke peranti lain:
+
+1. Pergi ke **Tetapan → Backup & pulih** dan tekan **Simpan backup**. Fail `ThesTalk-backup-…json` akan dimuat turun. Di Android, butang **Kongsi** boleh hantar fail terus ke Google Drive atau WhatsApp.
+2. Di peranti lain, buka ThesTalk dan tekan **Pulih dari fail**, kemudian pilih fail tadi. App akan tunjuk tajuk, bilangan bab, perkataan dan rujukan sebelum menggantikan projek.
+3. Tersilap pilih fail? Tekan **↶ Batalkan pemulihan terakhir** (tersedia selama 7 hari).
+
+Kod akses AI tidak disimpan dalam fail backup. Masukkan semula kod di peranti baharu. Papan pemuka akan mengingatkan anda jika belum backup lebih 7 hari.
+

@@ -529,3 +529,9 @@ small{font-size:.78em}
   .ai-pill{padding:6px 8px 6px 10px;font-size:12.5px}
 }
 .setting .ai-options{align-self:stretch;margin:0}
+
+/* ---------- v0.8 Backup & restore ---------- */
+.backup-last{font-weight:600;font-size:13px;color:var(--text-2)}
+.backup-nudge{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--warn-bg);border:1px solid color-mix(in srgb,var(--warn) 25%,transparent);border-radius:16px;padding:12px 14px;margin:14px 0}
+.backup-nudge p{margin:0;font-size:13px;font-weight:500;color:var(--text);flex:1;min-width:200px}
+.backup-nudge .btn{white-space:nowrap}
