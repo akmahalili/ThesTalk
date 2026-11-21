@@ -776,3 +776,31 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .vv-history li{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
 .vv-history li:last-child{border-bottom:0}
 .vv-hscore{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+
+/* v3.0 Semak Persamaan */
+#view-similarity .card{margin-bottom:14px}
+#view-similarity .view-head h1 small{font-weight:500;color:var(--muted);font-size:.55em}
+.sm-check{display:flex;gap:10px;align-items:center;margin:2px 0 12px;font-size:14px;color:var(--text-2)}
+.sm-check input{width:18px;height:18px}
+.sm-score{border-left:4px solid #17905f}
+.sm-mid{border-left-color:#d97706}.sm-high{border-left-color:#dc2626}
+.sm-big{display:flex;align-items:baseline;gap:12px}
+.sm-pct{font-size:44px;font-weight:800;letter-spacing:-.02em;color:var(--text);font-variant-numeric:tabular-nums}
+.sm-band{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(23,144,95,.14);color:#0f6e48}
+.sm-mid .sm-band{background:rgba(217,119,6,.16);color:#b45309}.sm-high .sm-band{background:rgba(220,38,38,.14);color:#b91c1c}
+.sm-label{margin:2px 0 6px;font-weight:600;color:var(--text-2)}
+.sm-list{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:14px}
+.sm-list li{padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.sm-list li:last-child{border-bottom:0}
+.sm-sent{margin:0;font-size:14.5px;line-height:1.6;color:var(--text)}
+.sm-sent mark{background:rgba(220,38,38,.16);color:inherit;border-radius:3px;padding:0 1px}
+.sm-meta{margin:0;font-size:12.5px;color:var(--text-2)}
+.sm-words{font-weight:700}
+.sm-src{font-style:italic}.sm-src.own{font-style:normal;font-weight:600}
+.sm-para{border:1px dashed var(--border-strong);border-radius:12px;padding:10px 12px;background:var(--surface-2)}
+.sm-para p{margin:0 0 6px;font-size:14.5px;line-height:1.6}
+.sm-list .btn-mini{align-self:flex-start}
+.sm-sources{list-style:none;margin:0;padding:0}
+.sm-sources li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13.5px}
+.sm-sources li:last-child{border-bottom:0}
+:root[data-theme="dark"] .sm-band{color:#4ade80}:root[data-theme="dark"] .sm-mid .sm-band{color:#fbbf24}:root[data-theme="dark"] .sm-high .sm-band{color:#f87171}

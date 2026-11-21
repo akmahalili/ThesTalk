@@ -156,6 +156,18 @@ Akademik → **Slaid Pembentangan**.
 5. **Tema reka bentuk** (v2.5): pilih Klasik, Galeri, Bilik Gelap, Tropika, Neon atau Pastel, atau tekan 🎲 Rawak. Tema boleh ditukar bila-bila masa dan mengubah pratonton serta fail PowerPoint.
 6. **Muat turun PowerPoint**: fail .pptx dengan nota penyampai, dan slaid rujukan untuk sumber yang disebut dalam slaid.
 
+## Semak Persamaan (v3.0)
+
+Akademik → **Semak Persamaan**. Semakan awal sebelum Turnitin.
+
+1. Pilih tesis atau paper. Tanda **Bandingkan juga dengan paper saya yang lain** jika tesis menggunakan semula paper anda.
+2. Tekan **🔍 Semak persamaan**. App mengambil abstrak setiap rujukan anda daripada OpenAlex dan mencari ayat yang sama 8 perkataan atau lebih.
+3. Perkataan yang sama ditanda merah. Sitasi dalam kurungan, petikan dalam tanda "…" dan senarai rujukan tidak dikira.
+4. Tekan **✨ Cadang parafrasa**. App menunjukkan peratus sama sebelum dan selepas. Tekan **Guna ayat ini** untuk menggantikan ayat dalam tesis.
+5. **Diulang antara bahagian** menunjukkan perenggan yang sama muncul di dua bab.
+
+Penting: semakan ini hanya membandingkan dengan abstrak, bukan teks penuh atau laman web, jadi peratus Turnitin sebenar mungkin lebih tinggi. Ikut had persamaan yang ditetapkan oleh fakulti anda.
+
 ## Latihan Viva (v2.9)
 
 Akademik → **Latihan Viva**.

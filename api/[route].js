@@ -14,6 +14,7 @@ const ROUTES = {
   journals: () => require('../handlers/journals'),
   matrix: () => require('../handlers/matrix'),
   paper: () => require('../handlers/paper'),
+  similarity: () => require('../handlers/similarity'),
   slides: () => require('../handlers/slides'),
   status: () => require('../handlers/status'),
   survey: () => require('../handlers/survey'),
