@@ -84,7 +84,7 @@
       'set.aiPick': 'Pilih AI', 'set.aiPickBody': 'Semua AI di sini percuma. Gemini untuk kegunaan harian; Groq (jika disambung) juga menjadi sandaran bila had percuma Gemini habis. Untuk ChatGPT atau Claude yang anda langgan, guna butang Hantar ke ChatGPT / Claude dalam Jurnal & Paper.',
       'set.aiPickRefs': 'Rujukan sebenar tetap dicari dalam OpenAlex, apa pun AI yang dipilih.', 'set.aiPickLocked': 'Sambung AI dahulu (kod akses) untuk memilih AI.',
       'ai.free': 'Percuma', 'ai.paid': 'Kredit API', 'ai.needKey': 'Belum ada API key', 'ai.switched': 'Kini menggunakan {x}',
-      'set.ai': 'Sambungan AI', 'set.aiBody': 'Guna kunci Gemini percuma anda sendiri (dari Google AI Studio). Kunci disimpan dalam peranti ini sahaja, jadi kuota percuma itu milik akaun anda.', 'ai.on': '✦ AI disambung', 'ai.off': 'AI belum aktif',
+      'set.ai': 'Sambungan AI', 'set.aiBody': 'AI memerlukan pemilik aplikasi menetapkan kunci API di pelayan dan anda memasukkan kod akses.', 'ai.on': '✦ AI disambung', 'ai.off': 'AI belum aktif',
       'set.thesis': 'Profil tesis', 'set.thesisBody': 'Tajuk, objektif, soalan kajian, bahasa draf dan gaya sitasi.', 'set.onboard': 'Tunjuk semula pengenalan',
       'pf.title': 'Tajuk tesis', 'pf.uni': 'Universiti / institusi', 'pf.degree': 'Ijazah', 'pf.ro': 'Objektif kajian (satu setiap baris)', 'pf.rq': 'Soalan kajian (satu setiap baris)', 'pf.context': 'Teori / metodologi / konteks penting', 'pf.lang': 'Bahasa draf', 'pf.cite': 'Gaya sitasi',
       'hist.title': 'Pulihkan draf', 'default.name': 'Penyelidik',
@@ -159,7 +159,7 @@
       'set.aiPick': 'Choose AI', 'set.aiPickBody': 'Every AI here is free. Gemini for everyday use; Groq (if connected) is also the backup when Gemini\'s free limit runs out. For your ChatGPT or Claude subscription, use the Send to ChatGPT / Claude button in Journal Papers.',
       'set.aiPickRefs': 'Real references still come from OpenAlex, whichever AI you choose.', 'set.aiPickLocked': 'Connect AI first (access code) to choose an AI.',
       'ai.free': 'Free', 'ai.paid': 'API credits', 'ai.needKey': 'No API key yet', 'ai.switched': 'Now using {x}',
-      'set.ai': 'AI connection', 'set.aiBody': 'Use your own free Gemini key (from Google AI Studio). The key is kept on this device only, so the free quota is your own.', 'ai.on': '✦ AI connected', 'ai.off': 'AI not active',
+      'set.ai': 'AI connection', 'set.aiBody': 'AI needs the app owner to set an API key on the server and you to enter the access code.', 'ai.on': '✦ AI connected', 'ai.off': 'AI not active',
       'set.thesis': 'Thesis profile', 'set.thesisBody': 'Title, objectives, research questions, draft language and citation style.', 'set.onboard': 'Show the welcome screens again',
       'pf.title': 'Thesis title', 'pf.uni': 'University / institution', 'pf.degree': 'Degree', 'pf.ro': 'Research objectives (one per line)', 'pf.rq': 'Research questions (one per line)', 'pf.context': 'Theories / methodology / important context', 'pf.lang': 'Draft language', 'pf.cite': 'Citation style',
       'hist.title': 'Restore a draft', 'default.name': 'Researcher',
@@ -624,7 +624,7 @@
     box.dispatchEvent(new Event('input', { bubbles: true }));
   }
   async function transcribeBlob(blob, type) {
-    const r = await fetch('/api/transcribe', { method: 'POST', headers: Object.assign({ 'Content-Type': type }, App.aiHeaders ? App.aiHeaders() : { 'X-ThesTalk-Access': App.accessCode() }), body: blob });
+    const r = await fetch('/api/transcribe', { method: 'POST', headers: { 'Content-Type': type, 'X-ThesTalk-Access': App.accessCode() }, body: blob });
     let d = {}; try { d = await r.json(); } catch (e) { /* ignore */ }
     if (r.status === 422) return ''; // silence in this segment
     if (!r.ok) throw Error(d.error || 'Transcription failed.');

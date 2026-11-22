@@ -40,12 +40,6 @@ A preview shows the chapters (with topic and word counts), what goes to the prel
 
 For a draft with no clear headings, **✨ Arrange by topic with AI** (`/api/organize`, `lib/organize.js`) sends only the opening words of each paragraph (up to 600) and gets back which paragraphs go into which chapter and section; the app moves the full paragraphs itself, so the text is not rewritten, and any paragraph the AI did not place goes into a "Not yet arranged" section.
 
-## Each user's own AI key (v3.4)
-
-Anyone can use Talkademic with their **own free Gemini key** (Google AI Studio → Create API key), so the free quota is theirs, not the owner's. **Connect AI** (`public/aikeys.js`) explains the three steps, checks the key format (`AIza…`; optional Groq backup key `gsk_…`) and verifies it with one call that lists models (no AI quota used). The key stays in that browser (`localStorage`) and is sent only with that user's AI requests as `X-Talkademic-Gemini-Key` / `X-Talkademic-Groq-Key`.
-
-On the server (`lib/common.js`), each request runs in its own key scope (`withKeys`, AsyncLocalStorage): with the owner's access code the server keys are used as before; otherwise only the user's own keys are used — never the owner's, not even as a fallback (Gemini → Groq only if the user added their own Groq key). Keys are not stored or logged. Voice transcription uses the user's Gemini key. Cloud sync stays owner-only (it uses the owner's storage); other users keep copies with Export DOCX or Backup. The owner still connects with the access code under "App owner?".
-
 ## Rename, delete and arrange chapters and sections (v3.3.1)
 
 My Thesis has **✎ Rename chapter**, **🗑 Delete chapter** and **⚙ Manage chapters & sections** under the chapter title, and ✎ / 🗑 next to the open section. Deleting the last section of a chapter deletes the chapter; the thesis always keeps one chapter and one section (the text is cleared instead). **Manage** (`public/thesismanage.js`) lists every chapter (collapsed, with section and word counts): edit titles, move chapters and sections up or down, move a section to another chapter, merge a chapter into the one above, delete or restore, add chapters and sections; nothing changes until Save. Every change shows an **Undo** bar.

@@ -2,7 +2,7 @@
 /* POST /api/transcribe — speech to text for the mic buttons.
    Uses free Gemini (GEMINI_API_KEY) when it is set, otherwise OpenAI. TRANSCRIBE_PROVIDER=openai forces OpenAI,
    so adding a paid ChatGPT key for writing does not move voice off the free tier. */
-const { json, protect, fail, cap, transcribeGemini, userMode, serverHas, hasKey } = require('../lib/common');
+const { json, protect, fail, cap, transcribeGemini } = require('../lib/common');
 
 const EXTENSIONS = { 'audio/webm': 'webm', 'audio/ogg': 'ogg', 'audio/mp4': 'm4a', 'audio/wav': 'wav', 'audio/mpeg': 'mp3' };
 
@@ -37,15 +37,14 @@ async function transcribeOpenAI(raw, type) {
 
 module.exports = async function handler(req, res) {
   if (!protect(req, res)) return;
-  const openaiOn = !userMode() && serverHas('openai'), geminiOn = hasKey('gemini');
-  if (!openaiOn && !geminiOn) return json(res, 503, { error: 'AI voice needs a Gemini key. Switch voice to Browser.' });
+  if (!process.env.OPENAI_API_KEY && !process.env.GEMINI_API_KEY) return json(res, 503, { error: 'AI voice is not configured on the server. Switch voice to Browser.' });
   try {
     const type = String(req.headers['content-type'] || '').split(';')[0].toLowerCase();
     if (!EXTENSIONS[type]) return json(res, 415, { error: 'Unsupported audio type.' });
     const raw = await readAudio(req);
     if (!raw) return json(res, 413, { error: 'Recording too large. Keep under 3 MB.' });
     if (raw.length < 150 || raw.length > 3_000_000) return json(res, 413, { error: 'Recording is empty or too large.' });
-    const useOpenAI = openaiOn && (!geminiOn || String(process.env.TRANSCRIBE_PROVIDER || '').toLowerCase() === 'openai');
+    const useOpenAI = process.env.OPENAI_API_KEY && (!process.env.GEMINI_API_KEY || String(process.env.TRANSCRIBE_PROVIDER || '').toLowerCase() === 'openai');
     const text = useOpenAI ? await transcribeOpenAI(raw, type) : await transcribeGemini(raw, type);
     const transcript = cap(text, 6000);
     if (!transcript) return json(res, 422, { error: 'No speech detected.' });
