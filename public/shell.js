@@ -34,7 +34,7 @@
       'nav.papers': 'Jurnal & Paper', 'card.papers': 'Jurnal & Paper', 'card.papers.d': 'Tulis artikel, cari jurnal berindeks dan semak sebelum hantar.',
       'nav.projects': 'Projek Saya', 'nav.projectsShort': 'Projek', 'nav.library': 'Perpustakaan', 'nav.settings': 'Tetapan', 'nav.profile': 'Profil',
       'del.one': 'Padam', 'del.confirm': 'Padam mesej ini dan balasannya daripada sejarah sembang?', 'del.done': 'Dipadam.', 'del.hide': 'Buang dari senarai', 'recent.clear': 'Kosongkan aktiviti', 'recent.confirmClear': 'Kosongkan semua aktiviti terkini? Ini memadam semua mesej Sembang Santai dan Sembang Akademik. Bab tesis dan paper tidak terjejas.',
-      'proj.import': 'Import DOCX',
+      'proj.import': 'Import tesis (Word/PDF)', 'ws.import': 'Import', 'ws.importAria': 'Import tesis daripada Word, PDF atau teks',
       'imp.thesisConfirm': 'Import tesis daripada Word: {c} bab, {w} perkataan, {r} rujukan.', 'imp.thesisReplace': 'Bab tesis sedia ada akan diganti. Salinan disimpan: boleh batal di Profil → Backup & pulih → Batalkan pemulihan terakhir.',
       'imp.thesisDone': 'Tesis diimport: {c} bab, {r} rujukan. Semak setiap bab di ruang kerja tesis.',
       'imp.err.old-doc': 'Fail .doc lama tidak disokong. Buka dalam Word dan Simpan Sebagai .docx.', 'imp.err.not-docx': 'Ini bukan fail Word .docx.', 'imp.err.too-large': 'Fail terlalu besar (had 25 MB).',
@@ -109,7 +109,7 @@
       'nav.papers': 'Journal Papers', 'card.papers': 'Journal Papers', 'card.papers.d': 'Write articles, find indexed journals and check before submitting.',
       'nav.projects': 'My Projects', 'nav.projectsShort': 'Projects', 'nav.library': 'Library', 'nav.settings': 'Settings', 'nav.profile': 'Profile',
       'del.one': 'Delete', 'del.confirm': 'Delete this message and its reply from the chat history?', 'del.done': 'Deleted.', 'del.hide': 'Remove from list', 'recent.clear': 'Clear activity', 'recent.confirmClear': 'Clear all recent activity? This deletes every Casual Chat and Academic Chat message. Thesis chapters and papers are not affected.',
-      'proj.import': 'Import DOCX',
+      'proj.import': 'Import thesis (Word/PDF)', 'ws.import': 'Import', 'ws.importAria': 'Import a thesis from Word, PDF or text',
       'imp.thesisConfirm': 'Import thesis from Word: {c} chapters, {w} words, {r} references.', 'imp.thesisReplace': 'Your current thesis chapters will be replaced. A copy is kept: undo in Profile → Backup & restore → Undo last restore.',
       'imp.thesisDone': 'Thesis imported: {c} chapters, {r} references. Review each chapter in the thesis workspace.',
       'imp.err.old-doc': 'Old .doc files are not supported. Open it in Word and Save As .docx.', 'imp.err.not-docx': 'This is not a Word .docx file.', 'imp.err.too-large': 'The file is too large (25 MB limit).',
@@ -1043,8 +1043,19 @@
     refresh();
     App.toast(t('imp.thesisDone').replace('{c}', fmt(m.chapters.length)).replace('{r}', fmt(m.references.length)));
   }
-  $('#importThesis').addEventListener('click', () => $('#thesisDocx').click());
-  $('#thesisDocx').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (f) importThesis(f); });
+  /* Import Tesis (thesisimport.js) shows the chapters by topic before anything changes; this keeps the undo copy. */
+  function replaceWorkspace(next) {
+    const s = App.state();
+    App.persist();
+    try { localStorage.setItem(UNDO_KEY, JSON.stringify({ at: new Date().toISOString(), workspace: s, ui: Object.assign({}, ui), preferences: readPrefs() })); } catch (e) { localStorage.removeItem(UNDO_KEY); }
+    if (!BK.validWorkspace(next) || !App.replaceState(next)) return false;
+    refresh();
+    return true;
+  }
+  const openImport = () => (window.TalkademicThesisImport ? window.TalkademicThesisImport.open() : $('#thesisDocx').click());
+  $('#importThesis').addEventListener('click', openImport);
+  $('#importThesisWs') && $('#importThesisWs').addEventListener('click', openImport);
+  $('#thesisDocx').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (f) (window.TalkademicThesisImport ? window.TalkademicThesisImport.open(f) : importThesis(f)); });
 
   /* ---------- refresh hook used by app.js ---------- */
   let refreshTimer = null;
@@ -1059,7 +1070,7 @@
     }, 30);
   }
 
-  window.ThesTalkShell = { speak: (text, btn) => Speech.speak(text, btn), stopSpeak: () => Speech.stop(), refresh, onAI, go, t, aiChoice, lang: () => ui.lang, mic: toggleMic, micOn: key => !!mic && mic.key === key, syncApply, ui: () => Object.assign({}, ui), prefs: readPrefs };
+  window.ThesTalkShell = { speak: (text, btn) => Speech.speak(text, btn), stopSpeak: () => Speech.stop(), refresh, replaceWorkspace, onAI, go, t, aiChoice, lang: () => ui.lang, mic: toggleMic, micOn: key => !!mic && mic.key === key, syncApply, ui: () => Object.assign({}, ui), prefs: readPrefs };
 
   /* ---------- boot ---------- */
   applyTheme();

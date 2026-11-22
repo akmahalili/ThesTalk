@@ -14,6 +14,7 @@ const ROUTES = {
   framework: () => require('../handlers/framework'),
   journals: () => require('../handlers/journals'),
   matrix: () => require('../handlers/matrix'),
+  organize: () => require('../handlers/organize'),
   paper: () => require('../handlers/paper'),
   ping: () => require('../handlers/ping'),
   similarity: () => require('../handlers/similarity'),

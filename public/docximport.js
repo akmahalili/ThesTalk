@@ -98,7 +98,7 @@
     let title = '';
     const para = p => {
       const text = runText(p, []).join('').replace(/[  ]+/g, ' ').replace(/\t+/g, ' ').trim();
-      if (!text) return;
+      if (!text) { if (p.getElementsByTagNameNS(W, 'drawing').length || p.getElementsByTagNameNS(W, 'pict').length) blocks.push({ h: 0, text: '', image: true }); return; }
       const ppr = kids(p, 'pPr')[0];
       let level = styleLevel(styles, val(ppr && kids(ppr, 'pStyle')[0]));
       const ol = ppr && kids(ppr, 'outlineLvl')[0];
@@ -112,8 +112,9 @@
       if (n.localName === 'p') para(n);
       else if (n.localName === 'tbl') {
         for (const tr of Array.from(n.getElementsByTagNameNS(W, 'tr'))) {
-          const cells = kids(tr, 'tc').map(tc => runText(tc, []).join(' ').replace(/\s+/g, ' ').trim()).filter(Boolean);
-          if (cells.length) blocks.push({ h: 0, text: cells.join(' | '), table: true });
+          const all = kids(tr, 'tc').map(tc => runText(tc, []).join(' ').replace(/\s+/g, ' ').trim());
+          const cells = all.filter(Boolean);
+          if (cells.length) blocks.push({ h: 0, text: cells.join(' | '), table: true, cells: all });
         }
       } else if (n.localName === 'sdt') { // content controls (some templates wrap text in these)
         for (const p of Array.from(n.getElementsByTagNameNS(W, 'p'))) para(p);
@@ -162,8 +163,9 @@
     return 0;
   }
   function withLevels(parsed) {
-    const styled = parsed.blocks.some(b => b.h);
-    return parsed.blocks.map(b => ({ ...b, h: b.h || (styled ? (b.bold && b.text.split(/\s+/).length <= 12 && !/[.?!]$/.test(b.text) ? (sectionKey(b.text) ? 1 : 3) : 0) : guessLevel(b)) }));
+    const blocks = parsed.blocks.filter(b => !b.image);
+    const styled = blocks.some(b => b.h);
+    return blocks.map(b => ({ ...b, h: b.h || (styled ? (b.bold && b.text.split(/\s+/).length <= 12 && !/[.?!]$/.test(b.text) ? (sectionKey(b.text) ? 1 : 3) : 0) : guessLevel(b)) }));
   }
 
   /* ---------- references ---------- */
@@ -262,7 +264,7 @@
     const parts = await unzip(buf, ['word/document.xml', 'word/styles.xml']);
     if (!parts['word/document.xml']) throw err('not-docx');
     const parsed = parseDocument(parts['word/document.xml'], readStyles(parts['word/styles.xml']));
-    if (!parsed.blocks.length) throw err('empty');
+    if (!parsed.blocks.some(b => !b.image)) throw err('empty');
     return parsed;
   }
 

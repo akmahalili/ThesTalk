@@ -296,7 +296,7 @@
           </section>
 
           <section class="panel editor-panel" id="thesisPanel" aria-labelledby="thesisPanelTitle">
-            <div class="panel-heading editor-header"><div><div class="eyebrow" data-i18n="ws.academicSpace">RUANG AKADEMIK ANDA</div><h2 id="thesisPanelTitle"><span data-i18n="ws.builder">Pembina Tesis</span> <span class="builder-mark">✦</span></h2><p id="activeChapterSubtitle">Organize and refine your writing.</p></div><div class="header-tools"><button id="addSection" type="button" class="btn btn-outline">＋ <span data-i18n="ws.section">Seksyen</span></button><button id="saveSection" type="button" class="btn btn-soft" data-i18n="save">Simpan</button></div></div>
+            <div class="panel-heading editor-header"><div><div class="eyebrow" data-i18n="ws.academicSpace">RUANG AKADEMIK ANDA</div><h2 id="thesisPanelTitle"><span data-i18n="ws.builder">Pembina Tesis</span> <span class="builder-mark">✦</span></h2><p id="activeChapterSubtitle">Organize and refine your writing.</p></div><div class="header-tools"><button id="importThesisWs" type="button" class="btn btn-outline" data-i18n-aria="ws.importAria" aria-label="Import tesis">⬆ <span data-i18n="ws.import">Import</span></button><button id="addSection" type="button" class="btn btn-outline">＋ <span data-i18n="ws.section">Seksyen</span></button><button id="saveSection" type="button" class="btn btn-soft" data-i18n="save">Simpan</button></div></div>
             <div class="editor-body">
               <div id="thesisOverview" class="thesis-overview"><div class="overview-top"><div><div class="eyebrow" data-i18n="ws.document">DOKUMEN ANDA</div><h3 id="documentHeading">Chapter 1: Introduction</h3><div id="documentMeta" class="document-meta">Choose a section to start writing.</div></div><span class="draft-pill" data-i18n="draft">DRAF</span></div><div id="sectionsTabs" class="sections-tabs"></div></div>
               <div class="draft-area" id="draftArea">
@@ -385,7 +385,7 @@
             <button id="pdOpen" type="button" class="btn btn-primary" data-go="academic" data-focus="thesis"><span data-i18n="proj.open">Buka ruang kerja tesis</span></button>
             <button id="pdEdit" type="button" class="btn btn-outline" data-i18n="proj.edit">Edit profil tesis</button>
             <button id="pdExport" type="button" class="btn btn-outline">↓ <span data-i18n="export">Eksport DOCX</span></button>
-            <button id="importThesis" type="button" class="btn btn-outline">📄 <span data-i18n="proj.import">Import DOCX</span></button>
+            <button id="importThesis" type="button" class="btn btn-outline">📄 <span data-i18n="proj.import">Import tesis (Word/PDF)</span></button>
             <input type="file" id="thesisDocx" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
             <button id="newProject" type="button" class="btn btn-outline btn-danger">＋ <span data-i18n="proj.new">Projek baharu</span></button>
           </div>
@@ -510,6 +510,8 @@
   <script src="./refimport.js"></script>
   <script src="./backup.js"></script>
   <script src="./docximport.js"></script>
+  <script src="./thesisorganize.js"></script>
+  <script src="./thesisimport.js"></script>
   <script src="./papers.js"></script>
   <script src="./analysis.js"></script>
   <script src="./matrix.js"></script>

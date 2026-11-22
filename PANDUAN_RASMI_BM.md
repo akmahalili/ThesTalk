@@ -99,6 +99,19 @@ Di bawah setiap bahagian paper (tab Tulis):
 
 Di tab **Semak kesediaan**, butang **Minta penilaian ChatGPT / Claude** menghantar seluruh paper untuk dinilai seperti penilai jurnal.
 
+## Import Tesis, disusun ikut topik (v3.3)
+
+Akademik → Tesis Saya → **⬆ Import** (atau Projek Saya → **Import tesis (Word/PDF)**).
+
+1. Pilih fail **Word (.docx)**, **PDF** atau teks, atau tampal teks. Fail dibaca dalam peranti anda sahaja.
+2. App menyusun tesis ikut **bab** (CHAPTER/BAB 1, I, ONE, SATU) dan **seksyen** (1.1, 1.2 …), dan menanda topik setiap bab: Pengenalan, Kajian Literatur, Metodologi, Dapatan, Perbincangan atau Kesimpulan.
+3. Semak pratonton: bab dan seksyen dengan bilangan perkataan, halaman awal yang pergi ke Format Tesis Universiti (abstrak, kata kunci, penghargaan, senarai singkatan, profil pengarang), dan apa yang tidak diimport (isi kandungan, senarai, perakuan, lampiran).
+4. Tekan **Import ke tesis**. Bab sedia ada diganti, tetapi salinan disimpan: boleh batal di Profil → Backup & pulih. Rujukan masuk ke Pustaka.
+
+Draf tanpa tajuk bab/seksyen: tekan **✨ Susun ikut topik dengan AI**. AI hanya melihat permulaan setiap perenggan dan menentukan bab dan seksyen; app memindahkan perenggan penuh, jadi ayat anda tidak diubah. Perenggan yang tidak dapat disusun diletakkan dalam seksyen "Belum disusun".
+
+Petua: Word (.docx) memberi hasil terbaik. Untuk PDF, semak jadual dan rajah selepas import (gambar ditanda supaya mudah dimasukkan semula).
+
 ## Import DOCX (v1.5)
 
 Fail Word dibaca terus di peranti dan tidak dimuat naik ke mana-mana.

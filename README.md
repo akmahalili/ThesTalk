@@ -25,6 +25,21 @@ A responsive, installable web application for voice/text brainstorming, thesis c
 
 Set `GEMINI_API_KEY` (free key from https://aistudio.google.com/apikey) instead of `OPENAI_API_KEY`. Talkademic then uses Google's OpenAI-compatible Gemini endpoint with `gemini-3.5-flash-lite`, moving to `gemini-3.1-flash-lite` when a model is busy, missing or over its limit (set `GEMINI_MODEL` to try another model first). On the free tier the Flash-Lite models allow about 500 requests a day each, while Gemini Flash allows only about 20, which is why Flash-Lite is the default. Each conversion with references uses two requests. The free tier has rate limits, and Google may use free-tier data to improve its products, so avoid pasting confidential data. Voice transcription also runs on Gemini (the browser recording is sent as-is), so the mic works for free; without any AI key the app falls back to the browser's speech recognition. The access code is remembered on the device after a successful unlock.
 
+## Import a thesis, arranged by topic (v3.3)
+
+Academic → My Thesis → **⬆ Import** (or My Projects → **Import thesis (Word/PDF)**). Choose a Word (.docx), PDF or text file, or paste text. The file is read on the device (`public/thesisimport.js`) and arranged by `public/thesisorganize.js`:
+
+- **Chapters** start at `CHAPTER n` / `BAB n` lines (1, I, ONE, SATU), or at the top heading level, numbered `1 …` headings or topic headings when there are none. A chapter heading split over two lines (`CHAPTER 1` / `INTRODUCTION`) is joined. Titles become `Chapter n: Title` (or `Bab n: Tajuk`); a chapter with only a number gets the name of its topic.
+- **Topics**: each chapter is tagged Introduction, Literature Review, Methodology, Findings, Discussion or Conclusion from its title or, failing that, from its section headings (e.g. Research Design, Population and Sampling → Methodology).
+- **Sections** start at level-2 headings or `n.m` numbers; deeper headings (`1.2.1 …`) stay inside the section as heading lines. Numbered list items (`1. To examine …`) are not mistaken for sections. Tables become tab-separated rows (the Word export turns them back into tables); images are marked where they were.
+- **Preliminary pages** go to University Thesis Format: abstract and keywords, abstrak and kata kunci, acknowledgement, list of abbreviations (from a table or `ABC  Expanded` lines), author's profile. Contents, lists, declarations, approval, dedication and copyright pages and appendices are left out and counted (the export makes them again).
+- **References** become library entries (DOI read when present); in a PDF, wrapped lines of one reference are joined.
+- **PDF**: running headers, footers and page numbers are removed; paragraphs are rebuilt from line spacing, short last lines, indents, list items and hyphenated line ends; a larger font marks headings.
+
+A preview shows the chapters (with topic and word counts), what goes to the preliminary pages and what is left out, before anything changes. Importing replaces the chapters (a copy is kept for undo in Profile → Backup & restore), sets the project title and language for a new project, and can fill the preliminary pages and add the references.
+
+For a draft with no clear headings, **✨ Arrange by topic with AI** (`/api/organize`, `lib/organize.js`) sends only the opening words of each paragraph (up to 600) and gets back which paragraphs go into which chapter and section; the app moves the full paragraphs itself, so the text is not rewritten, and any paragraph the AI did not place goes into a "Not yet arranged" section.
+
 ## University thesis formats (v3.2)
 
 Academic → **Format Tesis Universiti**. Choose the university first. Each format is a profile in `public/thesisprofiles.js`, taken from the guideline the university publishes online (the screen links it, with notes on what to confirm where the guideline is silent or inconsistent):
