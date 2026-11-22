@@ -23,6 +23,7 @@
       left: 'Tidak diimport', lContents: 'Isi kandungan dan senarai jadual/rajah ({n} baris)', lFront: 'Perakuan, pengesahan dan halaman lain ({n})', lAppendix: 'Lampiran ({n} perenggan)', lImages: 'Gambar ditanda supaya mudah dimasukkan semula ({n})', leftNote: 'Halaman awal ini dijana semula oleh Format Tesis Universiti.',
       oFront: 'Isi halaman awal dalam Format Tesis Universiti', oRefs: 'Tambah {n} rujukan ke Pustaka', oTitle: 'Guna tajuk ini untuk projek',
       replace: 'Bab tesis sedia ada ({n} perkataan) akan diganti. Salinan disimpan: boleh batal di Profil → Backup & pulih.',
+      modeTitle: 'Tesis sedia ada', modeMatch: 'Ganti {list} sahaja. Bab lain kekal.', modeAll: 'Ganti seluruh tesis ({n} perkataan sekarang)', modeAdd: 'Tambah sebagai bab baharu. Bab sedia ada kekal.', replacing: 'Akan diganti: {list}', undoNote: 'Salinan disimpan: boleh batal di Profil → Backup & pulih.', chLabel: 'Bab',
       ai: '✨ Susun ikut topik dengan AI', aiAgain: '✨ Susun semula dengan AI', aiWorking: 'AI sedang menyusun…', aiTooMany: 'Terlalu banyak perenggan untuk AI ({n}, had 600). Import fail yang ada tajuk bab.',
       go: 'Import ke tesis', cancel: 'Batal', back: '← Pilih fail lain', close: 'Tutup',
       done: 'Tesis diimport: {c} bab, {s} seksyen. Semak setiap bab dalam Tesis Saya.', errType: 'Jenis fail ini tidak disokong. Pilih .docx, .pdf atau .txt.', errPdf: 'PDF ini tidak dapat dibaca (mungkin imbasan gambar tanpa teks).', errEmpty: 'Tiada bab atau perenggan ditemui.',
@@ -41,6 +42,7 @@
       left: 'Not imported', lContents: 'Contents and lists of tables/figures ({n} lines)', lFront: 'Declaration, approval and other pages ({n})', lAppendix: 'Appendices ({n})', lImages: 'Images marked so they are easy to put back ({n})', leftNote: 'University Thesis Format makes these preliminary pages again.',
       oFront: 'Fill the preliminary pages in University Thesis Format', oRefs: 'Add {n} references to the Library', oTitle: 'Use this title for the project',
       replace: 'The current thesis chapters ({n} words) will be replaced. A copy is kept: undo in Profile → Backup & restore.',
+      modeTitle: 'Current thesis', modeMatch: 'Replace {list} only. Other chapters stay.', modeAll: 'Replace the whole thesis ({n} words now)', modeAdd: 'Add as new chapters. Current chapters stay.', replacing: 'Will be replaced: {list}', undoNote: 'A copy is kept: undo in Profile → Backup & restore.', chLabel: 'Chapter',
       ai: '✨ Arrange by topic with AI', aiAgain: '✨ Arrange again with AI', aiWorking: 'The AI is arranging…', aiTooMany: 'Too many paragraphs for the AI ({n}, limit 600). Import a file with chapter headings.',
       go: 'Import into thesis', cancel: 'Cancel', back: '← Choose another file', close: 'Close',
       done: 'Thesis imported: {c} chapters, {s} sections. Check each chapter in My Thesis.', errType: 'This file type is not supported. Choose .docx, .pdf or .txt.', errPdf: 'This PDF could not be read (it may be a scan with no text).', errEmpty: 'No chapters or paragraphs were found.',
@@ -50,6 +52,8 @@
   const t = (k, v) => { let s = (S[lang()] && S[lang()][k]) || S.ms[k] || k; if (v) for (const [a, b] of Object.entries(v)) s = s.split('{' + a + '}').join(String(b)); return s; };
   const fmt = n => Number(n || 0).toLocaleString(lang() === 'en' ? 'en-MY' : 'ms-MY');
   const words = s => (String(s || '').match(/\S+/g) || []).length;
+  /* The number of a chapter: "Chapter 3: …", "BAB TIGA", or "3.1 …" (an earlier import that made sections into chapters). */
+  const numOf = title => O.chapterNumber(title) || Number((String(title || '').trim().match(/^(\d{1,2})(?:\.\d+)*\s/) || [])[1] || 0);
   const thesisWords = () => (App.state().chapters || []).reduce((a, c) => a + (c.sections || []).reduce((b, x) => b + words(x.content), 0), 0);
   function h(tag, props, ...kids) {
     const el = document.createElement(tag);
@@ -169,10 +173,22 @@
     if (!result.chapters.length && !result.paragraphs.length) return fail(t('errEmpty'));
     const s = App.state();
     const title = String(s.project && s.project.title || '').trim();
-    job = { name, result, ai: false, unplaced: 0, useTitle: !!result.title && (!title || /^(my first thesis|tesis pertama saya)$/i.test(title)), useFront: true, useRefs: true };
+    job = { name, result, ai: false, unplaced: 0, useTitle: !!result.title && (!title || /^(my first thesis|tesis pertama saya)$/i.test(title)), useFront: true, useRefs: true, mode: defaultMode(result) };
     preview();
   }
 
+  /* Importing one or two chapters into a thesis that has others: replace only those chapters by number. */
+  function defaultMode(r) {
+    const s = App.state();
+    if (!thesisWords()) return 'all';
+    const nums = new Set(r.chapters.map(c => numOf(c.title)).filter(Boolean));
+    const others = s.chapters.filter(c => !nums.has(numOf(c.title)) && c.sections.some(x => words(x.content)));
+    return nums.size && others.length ? 'match' : 'all';
+  }
+  function matching(r) {
+    const nums = new Set(r.chapters.map(c => numOf(c.title)).filter(Boolean));
+    return { nums: [...nums].sort((a, b) => a - b), old: App.state().chapters.filter(c => nums.has(numOf(c.title))) };
+  }
   function preview() {
     const r = job.result, stats = { c: r.chapters.length, s: r.chapters.reduce((a, c) => a + c.sections.length, 0), w: r.chapters.reduce((a, c) => a + c.sections.reduce((b, x) => b + words(x.content), 0), 0) };
     const current = thesisWords();
@@ -213,13 +229,25 @@
         frontItems.some(([a]) => a !== t('fTitle')) ? check('useFront', t('oFront')) : null,
         r.references.length ? check('useRefs', t('oRefs', { n: fmt(r.references.length) })) : null,
         r.title ? check('useTitle', t('oTitle')) : null),
-      current ? h('p', { class: 'imp-warn', text: t('replace', { n: fmt(current) }) }) : null,
+      current ? modeChooser(r, current) : null,
       h('div', { class: 'modal-actions imp-actions' },
         aiBtn,
         h('button', { type: 'button', class: 'btn btn-outline', disabled: busy, text: t('cancel'), onclick: close }),
         h('button', { type: 'button', class: aiFirst && aiBtn ? 'btn btn-outline imp-go' : 'btn btn-primary imp-go', disabled: busy || !r.chapters.length, text: t('go'), onclick: apply })));
   }
 
+  function modeChooser(r, current) {
+    const m = matching(r);
+    const list = m.nums.map(n => t('chLabel') + ' ' + n).join(', ');
+    const radio = (value, label) => h('label', { class: 'imp-radio' }, h('input', { type: 'radio', name: 'impMode', value, checked: job.mode === value, onchange: () => { job.mode = value; preview(); } }), h('span', { text: label }));
+    const replaced = job.mode === 'all' ? [] : job.mode === 'match' ? m.old.map(c => c.title) : [];
+    return h('fieldset', { class: 'imp-mode' }, h('legend', { text: t('modeTitle') }),
+      m.nums.length ? radio('match', t('modeMatch', { list })) : null,
+      radio('add', t('modeAdd')),
+      radio('all', t('modeAll', { n: fmt(current) })),
+      replaced.length ? h('p', { class: 'muted small-note', text: t('replacing', { list: replaced.join(' · ') }) }) : null,
+      job.mode !== 'add' ? h('p', { class: 'muted small-note', text: t('undoNote') }) : null);
+  }
   async function arrangeWithAI() {
     const r = job.result;
     if (busy || r.paragraphs.length < 3) return;
@@ -240,8 +268,14 @@
   function apply() {
     const r = job.result, s = App.state();
     const had = thesisWords();
-    const chapters = r.chapters.map(c => ({ id: c.id, title: c.title, sections: c.sections.map(x => ({ id: x.id, title: x.title, content: x.content, history: [] })) }));
-    const next = Object.assign({}, s, { chapters, activeChapter: chapters[0].id, activeSection: chapters[0].sections[0].id, conversion: null });
+    const imported = r.chapters.map(c => ({ id: c.id, title: c.title, sections: c.sections.map(x => ({ id: x.id, title: x.title, content: x.content, history: [] })) }));
+    let chapters = imported;
+    if (had && job.mode === 'match') {
+      const nums = new Set(imported.map(c => numOf(c.title)).filter(Boolean));
+      chapters = s.chapters.filter(c => !nums.has(numOf(c.title))).concat(imported).map((c, i) => ({ c, i, n: numOf(c.title) || 999 }))
+        .sort((a, b) => a.n - b.n || a.i - b.i).map(x => x.c);
+    } else if (had && job.mode === 'add') chapters = s.chapters.concat(imported);
+    const next = Object.assign({}, s, { chapters, activeChapter: imported[0].id, activeSection: imported[0].sections[0].id, conversion: null });
     next.project = Object.assign({}, s.project);
     if (job.useTitle && r.title) next.project.title = r.title.slice(0, 300);
     if (!had) next.project.language = r.lang === 'ms' ? 'Bahasa Melayu' : 'English';
@@ -263,7 +297,7 @@
     }
     const ok = shell().replaceWorkspace ? shell().replaceWorkspace(next) : App.replaceState(next);
     if (!ok) { App.toast(shell().t ? shell().t('imp.err.storage') : 'Storage full'); return; }
-    const c = chapters.length, sN = chapters.reduce((a, x) => a + x.sections.length, 0);
+    const c = imported.length, sN = imported.reduce((a, x) => a + x.sections.length, 0);
     close();
     if (shell().go) shell().go('academic');
     if (App.setMobileTab) App.setMobileTab('thesis');

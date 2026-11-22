@@ -154,3 +154,24 @@ test('the organize route: snippets fit, the AI answer is checked', () => {
   assert.deepEqual(c, { chapters: [{ title: 'Chapter 1: Introduction', sections: [{ title: '1.1 Background', paragraphs: [0, 1, 2] }] }], placed: 3 });
   assert.match(LO.prompt({ language: 'English', count: 4 }), /exactly one section/);
 });
+
+test('a chapter file with sections in Heading 1 and no CHAPTER line becomes one chapter named by topic', () => {
+  const P = w => `${w} paragraph explains the quantitative methodology used to study product images on Shopee and Lazada in Malaysia.`;
+  const r = O.organize({ blocks: [
+    { h: 1, text: '3.1 Introduction' }, { h: 0, text: P('Intro') },
+    { h: 1, text: '3.2 Research Design' }, { h: 0, text: P('Design') },
+    { h: 2, text: '3.2.1 Quantitative Approach' }, { h: 0, text: P('Approach') },
+    { h: 1, text: '3.3 Population and Sampling' }, { h: 0, text: P('Sampling') },
+    { h: 1, text: '3.4 Research Instrument' }, { h: 0, text: P('Instrument') }
+  ] });
+  assert.deepEqual(r.chapters.map(c => c.title), ['Chapter 3: Research Methodology']);
+  assert.deepEqual(r.chapters[0].sections.map(s => s.title), ['3.1 Introduction', '3.2 Research Design', '3.3 Population and Sampling', '3.4 Research Instrument']);
+  assert.ok(r.chapters[0].sections[1].content.includes('3.2.1 Quantitative Approach'));
+  assert.equal(r.needsAI, false);
+  // Two chapters in one file, still without CHAPTER lines.
+  const two = O.organize({ blocks: [{ h: 1, text: '1.1 Background of the Study' }, { h: 0, text: P('Background') }, { h: 1, text: '1.2 Problem Statement' }, { h: 0, text: P('Problem') }, { h: 1, text: '2.1 Signalling Theory' }, { h: 0, text: P('Theory') }, { h: 1, text: '2.2 Previous Studies' }, { h: 0, text: P('Past') }] });
+  assert.deepEqual(two.chapters.map(c => c.title), ['Chapter 1: Introduction', 'Chapter 2: Literature Review']);
+  // A Word Title "CHAPTER 3 RESEARCH METHODOLOGY" opens the chapter.
+  const titled = O.organize({ title: 'CHAPTER 3 RESEARCH METHODOLOGY', blocks: [{ h: 1, text: '3.1 Introduction' }, { h: 0, text: P('Intro') }] });
+  assert.deepEqual(titled.chapters.map(c => c.title), ['Chapter 3: Research Methodology']);
+});

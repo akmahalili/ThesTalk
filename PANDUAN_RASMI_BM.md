@@ -112,6 +112,14 @@ Draf tanpa tajuk bab/seksyen: tekan **✨ Susun ikut topik dengan AI**. AI hanya
 
 Petua: Word (.docx) memberi hasil terbaik. Untuk PDF, semak jadual dan rajah selepas import (gambar ditanda supaya mudah dimasukkan semula).
 
+## Namakan, padam dan susun bab (v3.3.1)
+
+Dalam Tesis Saya, di bawah tajuk bab: **✎ Namakan bab**, **🗑 Padam bab** dan **⚙ Urus bab & seksyen**. Di sebelah nama seksyen: ✎ (namakan) dan 🗑 (padam). Selepas setiap perubahan, bar **Batal** muncul untuk mengembalikannya.
+
+**Urus bab & seksyen**: tukar nama, susun naik/turun, pindah seksyen ke bab lain, gabung bab ke bab di atas, padam atau kembalikan. Tiada apa berubah sehingga anda tekan **Simpan perubahan**.
+
+Import satu bab sahaja (contohnya fail Bab 3): pilih **Ganti Bab 3 sahaja. Bab lain kekal.** Bab yang tersalah susun daripada import lama (contohnya "3.1 Introduction" menjadi bab) turut diganti.
+
 ## Import DOCX (v1.5)
 
 Fail Word dibaca terus di peranti dan tidak dimuat naik ke mana-mana.

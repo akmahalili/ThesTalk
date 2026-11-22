@@ -875,3 +875,43 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 /* Thesis Builder header: three buttons (Import, + Section, Save) wrap under the title on phones */
 .editor-header .header-tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
 @media (max-width:560px){.editor-header{flex-wrap:wrap}.editor-header>div:first-child{flex:1 1 100%}.editor-header .header-tools{flex:1 1 100%;justify-content:flex-start}}
+/* v3.3.1 rename, delete and manage chapters and sections */
+.doc-actions{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px}
+.doc-actions .text-action{font-size:13px;padding:6px 0;min-height:32px}
+.draft-top .sec-actions{display:flex;align-items:center;gap:4px;flex:none}
+.draft-top label{min-width:0;overflow-wrap:anywhere}
+.sec-icon{width:34px;height:34px;border-radius:9px;display:inline-grid;place-items:center;font-size:15px;color:var(--text-2);border:1px solid var(--border)}
+.sec-icon:hover{background:color-mix(in srgb,var(--primary) 8%,transparent)}
+.sec-icon.danger:hover{background:color-mix(in srgb,#ef4444 10%,transparent)}
+.sec-icon:focus-visible,.mg-icon:focus-visible,.undo-btn:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+#wordCount{margin-left:6px;white-space:nowrap}
+.undo-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;gap:14px;padding:10px 12px 10px 16px;border-radius:12px;background:#1f1937;color:#fff;box-shadow:var(--shadow-lg);max-width:calc(100% - 24px);font-size:14px}
+.undo-btn{color:#c4b5fd;font-weight:700;padding:6px 10px;border-radius:8px}
+@media (min-width:900px){.undo-bar{bottom:24px}}
+.mg-modal{width:min(100%,760px)}
+.mg-modal h2{margin:0;font-size:20px}
+.mg-body{display:flex;flex-direction:column;gap:10px}
+.mg-ch{border:1px solid var(--border);border-radius:14px;padding:10px;background:var(--surface)}
+.mg-ch.gone{opacity:.6;border-style:dashed}
+.mg-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.mg-title{flex:1 1 220px;min-width:0;font:inherit;padding:8px 10px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text)}
+.mg-ch-row .mg-title{font-weight:700}
+.mg-title:disabled{text-decoration:line-through}
+.mg-w{font-size:12px;color:var(--text-2);white-space:nowrap}
+.mg-tools{display:flex;align-items:center;gap:4px;margin-left:auto}
+.mg-icon{width:36px;height:36px;border-radius:9px;display:inline-grid;place-items:center;border:1px solid var(--border);font-size:15px;color:var(--text)}
+.mg-icon:disabled{opacity:.35}
+.mg-icon.danger{color:#b91c1c}
+.mg-icon.restore{color:var(--primary)}
+.mg-move{max-width:150px;height:36px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);font-size:12.5px}
+.mg-secs{list-style:none;margin:8px 0 0;padding:0 0 0 12px;display:flex;flex-direction:column;gap:6px;border-left:2px solid color-mix(in srgb,var(--primary) 20%,transparent)}
+.mg-sec.gone .mg-title{opacity:.6}
+.mg-add{margin:8px 0 0 12px}
+.mg-addch{align-self:flex-start}
+.imp-mode{margin:14px 0 0;padding:10px 12px;border:1px solid var(--border);border-radius:12px}
+.imp-mode legend{font-weight:700;font-size:14px;padding:0 4px}
+.imp-radio{display:flex;gap:10px;align-items:flex-start;margin:6px 0;font-size:14px;line-height:1.4}
+.imp-radio input{margin-top:3px}
+@media (max-width:520px){.mg-tools{margin-left:0}.mg-title{flex-basis:100%}}
+.mg-toggle{font-size:12.5px;color:var(--primary);font-weight:600;padding:6px 2px;white-space:nowrap}
+.mg-toggle:focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:6px}

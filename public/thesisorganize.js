@@ -150,11 +150,18 @@
     const heads = blocks.map((b, i) => ({ b, i })).filter(x => looksLikeHeading(x.b) && !frontKey(x.b.text) && !isTocEntry(x.b.text));
     const byWord = heads.filter(x => RE_CHAPTER.test(squash(x.b.text)));
     if (byWord.length) return new Set(byWord.map(x => x.i));
-    const styled = heads.filter(x => x.b.h === 1);
+    // "3.1 Introduction" in Heading 1 is a section, not a chapter (chapters are then grouped by their number).
+    const subNumbered = t => { const m = squash(t).match(RE_NUM); return !!m && m[1].includes('.'); };
+    const styled = heads.filter(x => x.b.h === 1 && !subNumbered(x.b.text));
     if (styled.length >= 2) return new Set(styled.map(x => x.i));
-    const numbered = heads.filter(x => { const m = squash(x.b.text).match(RE_NUM); return m && depth(m[1]) === 1; });
+    const numbered = heads.filter(x => {
+      const t = squash(x.b.text), m = t.match(/^(\d{1,2})\.?\s+(\S.*)$/);
+      if (!m || subNumbered(t)) return false;
+      const rest = m[2].replace(/[^A-Za-zÀ-ɏ]/g, '');
+      return !!x.b.h || (rest.length >= 3 && rest === rest.toUpperCase());
+    });
     if (numbered.length >= 2) return new Set(numbered.map(x => x.i));
-    const topical = heads.filter(x => topicOf(x.b.text) && words(x.b.text) <= 8);
+    const topical = heads.filter(x => topicOf(x.b.text) && words(x.b.text) <= 8 && !subNumbered(x.b.text));
     if (topical.length >= 2) {
       const top = Math.min(...topical.map(x => x.b.h || 9));
       return new Set(topical.filter(x => (x.b.h || 9) === top).map(x => x.i));
@@ -166,6 +173,8 @@
   function organize(input, opt) {
     const o = opt || {};
     const blocks = prepare(input && input.blocks);
+    // A Word "Title" such as "CHAPTER 3 RESEARCH METHODOLOGY" opens the chapter.
+    if (input && RE_CHAPTER.test(squash(input.title))) { blocks.unshift({ h: 1, text: squash(input.title) }); input = Object.assign({}, input, { title: '' }); }
     const lang = o.lang || detectLang(blocks);
     const L = LABEL[lang] || LABEL.en;
     const parseRef = o.parseRef || defaultParseRef;
@@ -217,6 +226,17 @@
           newChapter(title, chapterNumber(title), false);
           mode = 'body';
           continue;
+        }
+        if (!starts.size && mode !== 'refs' && !mode.startsWith('front:')) {
+          // No chapter headings: "3.1 …", "3.2 …" make Chapter 3, named after its topic.
+          const num = text.match(RE_NUM);
+          if (num && num[1].includes('.')) {
+            const lead = Number(num[1].split('.')[0]);
+            if (!ch || ch.num !== lead) newChapter('', lead, false);
+            mode = 'body';
+            if (depth(num[1]) <= 2 || !ch.sections.length) newSection(text); else add({ text, sub: true });
+            continue;
+          }
         }
         if (mode === 'start' && !starts.size) {
           // No chapters in the file: numbered or topic headings start the loose part.

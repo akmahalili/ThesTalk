@@ -40,6 +40,12 @@ A preview shows the chapters (with topic and word counts), what goes to the prel
 
 For a draft with no clear headings, **✨ Arrange by topic with AI** (`/api/organize`, `lib/organize.js`) sends only the opening words of each paragraph (up to 600) and gets back which paragraphs go into which chapter and section; the app moves the full paragraphs itself, so the text is not rewritten, and any paragraph the AI did not place goes into a "Not yet arranged" section.
 
+## Rename, delete and arrange chapters and sections (v3.3.1)
+
+My Thesis has **✎ Rename chapter**, **🗑 Delete chapter** and **⚙ Manage chapters & sections** under the chapter title, and ✎ / 🗑 next to the open section. Deleting the last section of a chapter deletes the chapter; the thesis always keeps one chapter and one section (the text is cleared instead). **Manage** (`public/thesismanage.js`) lists every chapter (collapsed, with section and word counts): edit titles, move chapters and sections up or down, move a section to another chapter, merge a chapter into the one above, delete or restore, add chapters and sections; nothing changes until Save. Every change shows an **Undo** bar.
+
+Import now handles a single-chapter file whose sections are in Heading 1 with no CHAPTER line (`3.1 …`, `3.2 …` → *Chapter 3: Research Methodology*), and a Word Title such as `CHAPTER 3 RESEARCH METHODOLOGY`. When the thesis already has text, the import asks how to add it: **replace only the chapters with the same number** (default when other chapters have text; also clears chapters an earlier import made from `3.x` headings), **add as new chapters**, or **replace the whole thesis**.
+
 ## University thesis formats (v3.2)
 
 Academic → **Format Tesis Universiti**. Choose the university first. Each format is a profile in `public/thesisprofiles.js`, taken from the guideline the university publishes online (the screen links it, with notes on what to confirm where the guideline is silent or inconsistent):
