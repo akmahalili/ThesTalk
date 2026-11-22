@@ -2,7 +2,7 @@
 /* One Vercel function serves every /api/<name> route, because the free Hobby plan allows only
    12 functions per deployment. Each route's code lives in handlers/<name>.js and is loaded on
    first use; the static require calls let Vercel bundle every handler. */
-const { json } = require('../lib/common');
+const { json, withKeys } = require('../lib/common');
 const { keepAlive } = require('../lib/keepalive');
 const ROUTES = {
   analysis: () => require('../handlers/analysis'),
@@ -39,7 +39,8 @@ module.exports = async function handler(req, res) {
   if (!Object.prototype.hasOwnProperty.call(ROUTES, name)) return json(res, 404, { error: 'Not found.' });
   const stop = keepAlive(req, res);
   try {
-    return await ROUTES[name]()(req, res);
+    // The student's own AI key (if any) applies to this request only.
+    return await withKeys(req, () => ROUTES[name]()(req, res));
   } catch (e) {
     // Never leave a kept-alive response open.
     if (!res.writableEnded) json(res, 500, { error: 'Server error.' });

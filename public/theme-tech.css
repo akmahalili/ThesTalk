@@ -923,3 +923,18 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 #chaptersNav.is-empty .chapter-link{display:none}
 #chaptersNav.is-empty::before{content:attr(data-empty);font-size:13px;color:var(--text-2);padding:8px 4px}
 .pd-empty{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;color:var(--text-2);font-size:14px}
+/* v3.4 Connect AI with your own key */
+.ak-modal{width:min(100%,560px)}
+.ak-modal h2{margin:0;font-size:20px}
+.ak-steps{margin:0 0 14px;padding-left:22px;display:flex;flex-direction:column;gap:6px;line-height:1.5}
+.ak-steps a,.ak-groq a{color:var(--primary);font-weight:600}
+.ak-row{display:flex;gap:8px;align-items:center}
+.ak-row input{flex:1;min-width:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px}
+.ak-show{font-size:13px;font-weight:600;color:var(--primary);padding:8px 6px}
+.ak-groq{margin:10px 0}
+.ak-groq summary,.ak-owner summary{cursor:pointer;font-size:14px;font-weight:600;padding:6px 0}
+.ak-owner{margin-top:14px;padding-top:10px;border-top:1px solid var(--border)}
+.ak-status{margin:8px 0;font-size:14px;line-height:1.45}
+.ak-status:empty{display:none}
+.ak-status.good{color:#047857}
+.ak-status.bad{color:#b91c1c}

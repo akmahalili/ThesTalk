@@ -1,7 +1,7 @@
 'use strict';
 /* POST /api/sync — { op: "status" | "pull" | "push", id, data?, base?, device?, force? }
    Stores only encrypted workspaces (see lib/sync.js) in the project's private Vercel Blob store. */
-const { json, protect, getBody, fail } = require('../lib/common');
+const { json, protect, getBody, fail, userMode } = require('../lib/common');
 const Y = require('../lib/sync');
 
 function blobStore() {
@@ -25,6 +25,8 @@ function blobStore() {
 
 async function handler(req, res) {
   if (!protect(req, res)) return;
+  // Cloud sync uses the owner's storage: not available with a student's own AI key.
+  if (userMode()) return json(res, 403, { error: 'Cloud sync is only for the app owner. Use Export DOCX or Backup in Profile to keep a copy.', ownerOnly: true });
   try {
     if (!process.env.BLOB_READ_WRITE_TOKEN && !handler.store) return json(res, 503, { error: 'Sync is not set up on this server yet.' });
     const data = getBody(req, Y.MAX_DATA + 2000);

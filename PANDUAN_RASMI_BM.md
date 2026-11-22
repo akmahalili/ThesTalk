@@ -112,6 +112,18 @@ Draf tanpa tajuk bab/seksyen: tekan **✨ Susun ikut topik dengan AI**. AI hanya
 
 Petua: Word (.docx) memberi hasil terbaik. Untuk PDF, semak jadual dan rajah selepas import (gambar ditanda supaya mudah dimasukkan semula).
 
+## Sambung AI dengan kunci sendiri (v3.4)
+
+Setiap pengguna guna **kunci Gemini percuma** sendiri, jadi kuota AI milik akaun Google masing-masing.
+
+1. Tekan **Sambung AI** (di Tetapan, atau butang Connect AI di Akademik).
+2. Buka **Google AI Studio** (aistudio.google.com/apikey), log masuk dan tekan **Create API key**.
+3. Salin kunci (bermula dengan AIza…), tampal dan tekan **Sambung**. App menyemak kunci itu dahulu.
+
+Pilihan: tambah kunci **Groq** percuma (console.groq.com/keys) sebagai sandaran bila had Gemini habis. Kunci disimpan dalam peranti itu sahaja dan tidak disimpan di pelayan. Untuk buang kunci: Sambung AI → **Buang kunci**.
+
+Pemilik app masih boleh masuk dengan kod akses (Sambung AI → "Pemilik app? Masukkan kod akses"). Sync antara peranti hanya untuk pemilik app; pengguna lain simpan salinan dengan Eksport DOCX atau Backup.
+
 ## Namakan, padam dan susun bab (v3.3.1)
 
 Dalam Tesis Saya, di bawah tajuk bab: **✎ Namakan bab**, **🗑 Padam bab** dan **⚙ Urus bab & seksyen**. Di sebelah nama seksyen: ✎ (namakan) dan 🗑 (padam). Selepas setiap perubahan, bar **Batal** muncul untuk mengembalikannya.

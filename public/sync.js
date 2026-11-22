@@ -22,7 +22,7 @@
       conflict: '{dev} menyimpan versi lebih baharu ({d}) sedangkan peranti ini juga ada perubahan. Pilih satu:', useCloud: 'Guna versi {dev}', useLocal: 'Guna versi peranti ini',
       confirmPull: 'Gantikan data dalam peranti ini dengan versi dari {dev} ({d})? Salinan sekarang disimpan untuk Batalkan pemulihan.', confirmJoin: 'Kod ini ada data dari {dev} ({d}). Ambil data itu ke peranti ini? Data sekarang disimpan untuk Batalkan pemulihan.',
       confirmForce: 'Versi peranti ini akan menggantikan versi di awan. Teruskan?', leave: 'Putuskan sync pada peranti ini', confirmLeave: 'Putuskan sync? Data dalam peranti ini kekal. Anda perlukan kod untuk sambung semula.',
-      newer: 'Ada versi lebih baharu dari {dev}. Buka Profil → Sync.', notes: 'Gambar slaid dan kod akses AI tidak disync.', fail: 'Sync gagal: {e}', noCrypto: 'Pelayar ini tidak menyokong penyulitan yang diperlukan. Guna Chrome, Safari atau Edge terkini.',
+      newer: 'Ada versi lebih baharu dari {dev}. Buka Profil → Sync.', notes: 'Gambar slaid dan kod akses AI tidak disync.', ownerOnly: 'Sync antara peranti hanya untuk pemilik app. Untuk simpan salinan tesis anda, guna Eksport DOCX atau Backup di Profil.', fail: 'Sync gagal: {e}', noCrypto: 'Pelayar ini tidak menyokong penyulitan yang diperlukan. Guna Chrome, Safari atau Edge terkini.',
       device: { android: 'telefon Android', iphone: 'iPhone', ipad: 'iPad', windows: 'laptop Windows', mac: 'Mac', linux: 'Linux', device: 'peranti lain' }
     },
     en: {
@@ -36,7 +36,7 @@
       conflict: '{dev} saved a newer version ({d}) while this device also has changes. Choose one:', useCloud: 'Use the {dev} version', useLocal: 'Use this device\'s version',
       confirmPull: 'Replace the data on this device with the version from {dev} ({d})? The current copy is kept for Undo restore.', confirmJoin: 'This code has data from {dev} ({d}). Bring it to this device? The current data is kept for Undo restore.',
       confirmForce: 'This device\'s version will replace the one in the cloud. Continue?', leave: 'Disconnect sync on this device', confirmLeave: 'Disconnect sync? The data on this device stays. You need the code to reconnect.',
-      newer: 'A newer version from {dev} is available. Open Profile → Sync.', notes: 'Slide pictures and the AI access code are not synced.', fail: 'Sync failed: {e}', noCrypto: 'This browser lacks the encryption sync needs. Use a recent Chrome, Safari or Edge.',
+      newer: 'A newer version from {dev} is available. Open Profile → Sync.', notes: 'Slide pictures and the AI access code are not synced.', ownerOnly: 'Sync between devices is only for the app owner. To keep a copy of your thesis, use Export DOCX or Backup in Profile.', fail: 'Sync failed: {e}', noCrypto: 'This browser lacks the encryption sync needs. Use a recent Chrome, Safari or Edge.',
       device: { android: 'Android phone', iphone: 'iPhone', ipad: 'iPad', windows: 'Windows laptop', mac: 'Mac', linux: 'Linux', device: 'another device' }
     }
   };
@@ -189,6 +189,8 @@
     const box = $('#syncCard');
     if (!box) return;
     const st = read();
+    // Sync stores data with the app owner's storage: not offered to people using their own AI key.
+    if (!App.accessCode() && !st.code) { fill(box, h('h2', { text: t('title') }), h('p', { class: 'muted', text: t('ownerOnly') })); return; }
     const head = [h('h2', { text: t('title') }), h('p', { class: 'muted', text: t('body') })];
     if (!st.code) {
       const input = h('input', { type: 'text', placeholder: t('codePh'), autocomplete: 'off', autocapitalize: 'characters', spellcheck: 'false', 'aria-label': t('haveCode'), maxLength: 24 });
