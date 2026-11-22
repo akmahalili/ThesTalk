@@ -7,13 +7,14 @@
   'use strict';
   const App = window.ThesTalkApp;
   const shell = () => window.ThesTalkShell || {};
-  const lang = () => (shell().lang ? shell().lang() : 'ms');
+  const lang = () => { if (shell().lang) return shell().lang(); try { return JSON.parse(localStorage.getItem('thestalk_ui_v1') || '{}').lang || 'ms'; } catch (e) { return 'ms'; } };
   const S = {
     ms: {
       renameCh: '✎ Namakan bab', deleteCh: '🗑 Padam bab', manage: '⚙ Urus bab & seksyen', renameSec: 'Namakan semula seksyen', deleteSec: 'Padam seksyen',
       askCh: 'Nama bab:', askSec: 'Nama seksyen:',
       confirmCh: 'Padam "{t}"? ({s} seksyen, {w} perkataan)', confirmSec: 'Padam seksyen "{t}"? ({w} perkataan)', lastSec: 'Ini seksyen terakhir dalam bab ini, jadi seluruh bab "{t}" akan dipadam. Teruskan?',
       onlyOne: 'Tesis perlu sekurang-kurangnya satu bab dan satu seksyen. Kosongkan teks seksyen ini sahaja?',
+      emptyTitle: 'Tesis kosong', emptyMeta: 'Tiada bab lagi.', emptySub: 'Import tesis anda atau mula menulis.', noChapters: 'Tiada bab lagi', startCh: 'Bab 1: Pengenalan', startSec: '1.1 Latar Belakang Kajian',
       nothing: 'Tiada apa lagi untuk dipadam: tesis sudah kosong. Bab kosong ini kekal sebagai tempat menulis dan akan diganti bila anda import tesis, guna templat atau tambah bab.', templated: 'Templat 5 bab digunakan.',
       deletedCh: 'Bab dipadam.', deletedSec: 'Seksyen dipadam.', renamed: 'Nama ditukar.', cleared: 'Teks seksyen dikosongkan.', undo: 'Batal', undone: 'Dikembalikan.', saved: 'Perubahan disimpan.',
       title: 'Urus bab & seksyen', help: 'Tukar nama, susun, pindah atau padam. Tiada apa berubah sehingga anda tekan Simpan.',
@@ -26,6 +27,7 @@
       askCh: 'Chapter name:', askSec: 'Section name:',
       confirmCh: 'Delete "{t}"? ({s} sections, {w} words)', confirmSec: 'Delete the section "{t}"? ({w} words)', lastSec: 'This is the last section in this chapter, so the whole chapter "{t}" will be deleted. Continue?',
       onlyOne: 'The thesis needs at least one chapter and one section. Clear the text of this section instead?',
+      emptyTitle: 'Empty thesis', emptyMeta: 'No chapters yet.', emptySub: 'Import your thesis or start writing.', noChapters: 'No chapters yet', startCh: 'Chapter 1: Introduction', startSec: '1.1 Background of the Study',
       nothing: 'Nothing left to delete: the thesis is already empty. This empty chapter stays as a place to write and is replaced when you import a thesis, use the template or add a chapter.', templated: 'The 5-chapter template is in place.',
       deletedCh: 'Chapter deleted.', deletedSec: 'Section deleted.', renamed: 'Renamed.', cleared: 'Section text cleared.', undo: 'Undo', undone: 'Restored.', saved: 'Changes saved.',
       title: 'Manage chapters & sections', help: 'Rename, reorder, move or delete. Nothing changes until you press Save.',
@@ -78,7 +80,8 @@
     const name = prompt(t('askCh'), ch.title);
     if (!name || !name.trim() || name.trim() === ch.title) return;
     const next = clone(s);
-    next.chapters.find(c => c.id === ch.id).title = name.trim().slice(0, 200);
+    const target = next.chapters.find(c => c.id === ch.id);
+    target.title = name.trim().slice(0, 200); delete target.placeholder;
     commit(next, t('renamed'));
   }
   function deleteChapter() {
@@ -202,7 +205,7 @@
   function save() {
     const s = App.state();
     let chapters = draft.filter(c => !c.gone).map(c => ({ id: c.id, title: String(c.title || '').trim().slice(0, 200) || t('newCh'), sections: c.sections.filter(x => !x.gone).map(x => ({ id: x.id, title: String(x.title || '').trim().slice(0, 200) || t('newSec'), content: x.content || '', history: x.history || [] })) })).filter(c => c.sections.length);
-    if (!chapters.length) chapters = [{ id: App.uid(), title: (lang() === 'en' ? 'Chapter 1: ' : 'Bab 1: ') + t('newCh'), sections: [{ id: App.uid(), title: '1.1 ' + t('newSec'), content: '', history: [] }] }];
+    if (!chapters.length) chapters = [{ id: App.uid(), placeholder: true, title: (lang() === 'en' ? 'Chapter 1: ' : 'Bab 1: ') + t('newCh'), sections: [{ id: App.uid(), title: '1.1 ' + t('newSec'), content: '', history: [] }] }];
     const next = Object.assign(clone(s), { chapters });
     const keepCh = chapters.find(c => c.id === s.activeChapter) || chapters[0];
     next.activeChapter = keepCh.id;
@@ -212,8 +215,33 @@
   }
 
   /* ---------- an empty thesis: import, or start from the template ---------- */
-  function isEmpty() { const s = App.state(); return s.chapters.length === 1 && s.chapters[0].sections.length <= 1 && !chWords(s.chapters[0]); }
-  function syncEmpty() { const el = document.getElementById('emptyThesis'); if (el) el.hidden = !isEmpty(); }
+  const isEmpty = () => (App.isEmptyThesis ? App.isEmptyThesis() : false);
+  const setText = (id, text) => { const el = document.getElementById(id); if (el && el.textContent !== text) el.textContent = text; };
+  /* Runs after every redraw of the editor: an empty thesis shows as "no chapters", not as "Chapter 1: New chapter". */
+  function syncEmpty() {
+    const empty = isEmpty();
+    const card = document.getElementById('emptyThesis');
+    if (card) card.hidden = !empty;
+    const body = document.querySelector('.editor-body');
+    if (body) body.classList.toggle('is-empty', empty);
+    const nav = document.getElementById('chaptersNav');
+    if (nav) { nav.classList.toggle('is-empty', empty); nav.setAttribute('data-empty', t('noChapters')); }
+    if (!empty) return;
+    setText('documentHeading', t('emptyTitle'));
+    setText('documentMeta', t('emptyMeta'));
+    setText('crumbChapter', '—');
+    setText('activeChapterSubtitle', t('emptySub'));
+    const meta = document.getElementById('sidebarProjectMeta');
+    if (meta && /\b1 chapters?\b/.test(meta.textContent)) meta.textContent = meta.textContent.replace(/\b1 chapters?\b/, '0 chapters');
+  }
+  function startWriting() {
+    if (!isEmpty()) return;
+    const next = clone(App.state());
+    const c = next.chapters[0];
+    delete c.placeholder;
+    c.title = t('startCh'); c.sections[0].title = t('startSec');
+    commit(next, t('renamed'));
+  }
   function useTemplate() {
     if (!isEmpty() || !App.template) return;
     const next = clone(App.state());
@@ -227,7 +255,7 @@
     const on = (id, fn) => { const el = document.getElementById(id); if (el) el.addEventListener('click', fn); };
     on('renameChapter', renameChapter); on('deleteChapter', deleteChapter); on('manageThesis', open); on('manageThesisTop', open);
     on('renameSection', renameSection); on('deleteSection', deleteSection);
-    on('emptyTemplate', useTemplate); on('emptyImport', () => window.TalkademicThesisImport && window.TalkademicThesisImport.open());
+    on('emptyTemplate', useTemplate); on('emptyStart', startWriting); on('emptyImport', () => window.TalkademicThesisImport && window.TalkademicThesisImport.open());
     // The editor redraws the chapter line on every change: keep the empty-thesis card in step.
     const meta = document.getElementById('documentMeta');
     if (meta && window.MutationObserver) new MutationObserver(syncEmpty).observe(meta, { childList: true, characterData: true, subtree: true });

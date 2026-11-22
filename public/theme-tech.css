@@ -918,3 +918,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .empty-thesis{margin-top:12px;padding:12px 14px;border-radius:12px;border:1px dashed color-mix(in srgb,var(--primary) 45%,transparent);background:color-mix(in srgb,var(--primary) 6%,transparent)}
 .empty-thesis p{margin:0 0 10px;font-size:14px;line-height:1.5;color:var(--text)}
 .empty-thesis-actions{display:flex;flex-wrap:wrap;gap:8px}
+/* v3.3.3 empty thesis: no chapter, no section tabs, no editor until the student chooses */
+.editor-body.is-empty .doc-actions,.editor-body.is-empty #sectionsTabs,.editor-body.is-empty #draftArea,.editor-body.is-empty .draft-pill{display:none}
+#chaptersNav.is-empty .chapter-link{display:none}
+#chaptersNav.is-empty::before{content:attr(data-empty);font-size:13px;color:var(--text-2);padding:8px 4px}
+.pd-empty{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;color:var(--text-2);font-size:14px}
