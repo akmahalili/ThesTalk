@@ -118,6 +118,8 @@ Dalam Tesis Saya, di bawah tajuk bab: **✎ Namakan bab**, **🗑 Padam bab** da
 
 **Urus bab & seksyen**: tukar nama, susun naik/turun, pindah seksyen ke bab lain, gabung bab ke bab di atas, padam atau kembalikan. Tiada apa berubah sehingga anda tekan **Simpan perubahan**.
 
+Tesis perlu sekurang-kurangnya satu bab sebagai tempat menulis. Jika semua bab dipadam, satu bab kosong kekal dan kad **Tesis ini kosong** muncul dengan butang **Import tesis** dan **Guna templat 5 bab**. Bab kosong itu diganti apabila anda import, guna templat atau tambah bab.
+
 Import satu bab sahaja (contohnya fail Bab 3): pilih **Ganti Bab 3 sahaja. Bab lain kekal.** Bab yang tersalah susun daripada import lama (contohnya "3.1 Introduction" menjadi bab) turut diganti.
 
 ## Import DOCX (v1.5)

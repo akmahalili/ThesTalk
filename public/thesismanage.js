@@ -14,6 +14,7 @@
       askCh: 'Nama bab:', askSec: 'Nama seksyen:',
       confirmCh: 'Padam "{t}"? ({s} seksyen, {w} perkataan)', confirmSec: 'Padam seksyen "{t}"? ({w} perkataan)', lastSec: 'Ini seksyen terakhir dalam bab ini, jadi seluruh bab "{t}" akan dipadam. Teruskan?',
       onlyOne: 'Tesis perlu sekurang-kurangnya satu bab dan satu seksyen. Kosongkan teks seksyen ini sahaja?',
+      nothing: 'Tiada apa lagi untuk dipadam: tesis sudah kosong. Bab kosong ini kekal sebagai tempat menulis dan akan diganti bila anda import tesis, guna templat atau tambah bab.', templated: 'Templat 5 bab digunakan.',
       deletedCh: 'Bab dipadam.', deletedSec: 'Seksyen dipadam.', renamed: 'Nama ditukar.', cleared: 'Teks seksyen dikosongkan.', undo: 'Batal', undone: 'Dikembalikan.', saved: 'Perubahan disimpan.',
       title: 'Urus bab & seksyen', help: 'Tukar nama, susun, pindah atau padam. Tiada apa berubah sehingga anda tekan Simpan.',
       up: 'Naik', down: 'Turun', del: 'Padam', restore: 'Kembalikan', merge: 'Gabung ke bab atas', moveTo: 'Pindah ke bab…', words: '{n} perkataan', sections: '{n} seksyen',
@@ -25,6 +26,7 @@
       askCh: 'Chapter name:', askSec: 'Section name:',
       confirmCh: 'Delete "{t}"? ({s} sections, {w} words)', confirmSec: 'Delete the section "{t}"? ({w} words)', lastSec: 'This is the last section in this chapter, so the whole chapter "{t}" will be deleted. Continue?',
       onlyOne: 'The thesis needs at least one chapter and one section. Clear the text of this section instead?',
+      nothing: 'Nothing left to delete: the thesis is already empty. This empty chapter stays as a place to write and is replaced when you import a thesis, use the template or add a chapter.', templated: 'The 5-chapter template is in place.',
       deletedCh: 'Chapter deleted.', deletedSec: 'Section deleted.', renamed: 'Renamed.', cleared: 'Section text cleared.', undo: 'Undo', undone: 'Restored.', saved: 'Changes saved.',
       title: 'Manage chapters & sections', help: 'Rename, reorder, move or delete. Nothing changes until you press Save.',
       up: 'Move up', down: 'Move down', del: 'Delete', restore: 'Restore', merge: 'Merge into the chapter above', moveTo: 'Move to chapter…', words: '{n} words', sections: '{n} sections',
@@ -120,7 +122,8 @@
   }
   function clearInstead() {
     const s = App.state(), sec = App.section();
-    if (!words(sec.content) || !confirm(t('onlyOne'))) return;
+    if (!words(sec.content)) { App.toast(t('nothing')); return; }
+    if (!confirm(t('onlyOne'))) return;
     const next = clone(s);
     next.chapters.forEach(c => c.sections.forEach(x => { if (x.id === sec.id) x.content = ''; }));
     commit(next, t('cleared'));
@@ -208,11 +211,27 @@
     commit(next, t('saved'));
   }
 
+  /* ---------- an empty thesis: import, or start from the template ---------- */
+  function isEmpty() { const s = App.state(); return s.chapters.length === 1 && s.chapters[0].sections.length <= 1 && !chWords(s.chapters[0]); }
+  function syncEmpty() { const el = document.getElementById('emptyThesis'); if (el) el.hidden = !isEmpty(); }
+  function useTemplate() {
+    if (!isEmpty() || !App.template) return;
+    const next = clone(App.state());
+    next.chapters = App.template();
+    next.activeChapter = next.chapters[0].id; next.activeSection = next.chapters[0].sections[0].id;
+    commit(next, t('templated'));
+  }
+
   /* ---------- buttons ---------- */
   function wire() {
     const on = (id, fn) => { const el = document.getElementById(id); if (el) el.addEventListener('click', fn); };
     on('renameChapter', renameChapter); on('deleteChapter', deleteChapter); on('manageThesis', open); on('manageThesisTop', open);
     on('renameSection', renameSection); on('deleteSection', deleteSection);
+    on('emptyTemplate', useTemplate); on('emptyImport', () => window.TalkademicThesisImport && window.TalkademicThesisImport.open());
+    // The editor redraws the chapter line on every change: keep the empty-thesis card in step.
+    const meta = document.getElementById('documentMeta');
+    if (meta && window.MutationObserver) new MutationObserver(syncEmpty).observe(meta, { childList: true, characterData: true, subtree: true });
+    syncEmpty();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire); else wire();
 
