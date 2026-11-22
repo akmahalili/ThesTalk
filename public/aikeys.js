@@ -76,8 +76,8 @@
       try {
         const r = await App.setAIKeys({ gemini, groq });
         const c = r.check || {};
-        if (c.gemini === 'invalid') say(t('invalid'));
-        else if (c.groq === 'invalid' && !gemini) say(t('invalidGroq'));
+        // A rejected key is not kept: the previous keys (if any) come back.
+        if (c.gemini === 'invalid' || (c.groq === 'invalid' && !gemini)) { await App.setAIKeys(keys); say(c.gemini === 'invalid' ? t('invalid') : t('invalidGroq')); }
         else if (c.gemini === 'limit') say(t('limit'));
         else if (c.gemini === 'unreachable' || c.groq === 'unreachable') say(t('unreachable'));
         else if (r.available) { say(t('ok'), true); App.toast(t('ok')); setTimeout(close, 900); }
